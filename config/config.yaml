@@ -1,0 +1,28 @@
+general:
+  seed: 42
+  wandb: False
+  ddp: False
+  ncpus: 8
+  gpus: 0
+  world_size: 2
+  device: "cpu"
+  load_trained_model_for_testing: False 
+
+dataset:
+  download_for_first_time: False
+  data_path:  "/data"
+  shuffle: True
+  num_workers: 0
+  pin_memory: False
+
+training:
+  clip: 1
+  batch_size: 32
+  epochs: 1
+  dropout: 0.1
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  betas: [0.9,0.999]
+  early_stopping: 5
+  scheduler_step_size: 50
+  scheduler_gamma: 0.5
