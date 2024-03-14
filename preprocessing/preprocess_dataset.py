@@ -15,6 +15,16 @@ with open("config/config.yaml") as f:
     cfg = Box(yaml.safe_load(f))
 
 if cfg.general.preprocess:
+    # if running for the first time.
+    paths = [
+            "data",
+            "data/raw_data",
+            "data/images"
+        ]
+    for _path in paths:
+        if not os.path.exists(_path):
+            os.mkdir(_path)
+
     # opening files in "w" mode
     questions = open("data/questions.lst","w")
     labels = open("data/labels.lst", "w")
@@ -236,7 +246,7 @@ def create_dataloaders():
     print("building dataloaders...")
 
     # initailizing class Img2MML_dataset: train dataloader
-    imml_train = Img2MML_dataset(train, vocab, tokenizer)
+    imml_train = Img2MML_dataset(train, vocab)
     # creating dataloader
     if cfg.general.ddp:
         train_sampler = DistributedSampler(
@@ -263,7 +273,7 @@ def create_dataloaders():
     )
 
     # initailizing class Img2MML_dataset: val dataloader
-    imml_val = Img2MML_dataset(val, vocab, tokenizer)
+    imml_val = Img2MML_dataset(val, vocab)
 
     if cfg.general.ddp:
         val_sampler = SequentialSampler(imml_val)
@@ -284,7 +294,7 @@ def create_dataloaders():
     )
 
     # initailizing class Img2MML_dataset: test dataloader
-    imml_test = Img2MML_dataset(test, vocab, tokenizer)
+    imml_test = Img2MML_dataset(test, vocab)
     if cfg.general.ddp:
         test_sampler = SequentialSampler(imml_test)
         sampler = test_sampler
@@ -295,7 +305,7 @@ def create_dataloaders():
 
     test_dataloader = DataLoader(
         imml_test,
-        batch_size=cfg.traininig.batch_size,
+        batch_size=cfg.training.batch_size,
         num_workers=cfg.dataset.num_workers,
         shuffle=shuffle,
         sampler=None,
@@ -306,24 +316,18 @@ def create_dataloaders():
     return train_dataloader, test_dataloader, val_dataloader, vocab
 
 
-if __name__ == "__main__":
+def preprocess():
 
     if cfg.general.preprocess:
         # only if preprocess is True
         # will re-download, and re-arrange the dataset.
         # need to be done only first time.
-        paths = [
-            "data",
-            "data/raw_data",
-            "data/images"
-        ]
-        for _path in paths:
-            if not os.path.exists(_path):
-                os.mkdir(_path)
-        
         dataset = download_dataset(name="general")
         rearrange_dataset(dataset)
         questions.close()
         labels.close()
 
-    create_dataloaders()
+    return create_dataloaders()
+
+if __name__ == "__main__":    
+    preprocess()
