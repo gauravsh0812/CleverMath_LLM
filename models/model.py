@@ -7,7 +7,8 @@ class ClevrMath_model(nn.Module):
         self.unet = UNET
         self.roberta = ROBERTA
 
-    def forwrad(self, imgs, qtns):
+    def forward(self, imgs, qtns):
+        
         encoded_imgs = self.unet(imgs)
         encoded_qtns = self.roberta(qtns)
 

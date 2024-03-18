@@ -1,6 +1,8 @@
 import os
 import yaml
 import random
+import time
+import math
 import numpy as np
 import multiprocessing as mp
 from box import Box
@@ -11,7 +13,10 @@ import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 from preprocessing.create_dataloaders import data_loaders
 from models.unet import UNet
+from models.roberta import RobertaEncoder
 from models.model import ClevrMath_model
+from src.training import train
+from src.testing import evaluate
 
 
 with open("config/config.yaml") as f:
@@ -43,14 +48,16 @@ def define_model(vocab, device):
 
     # Image Auto-Encoder 
     UNET = UNet(
-        Cin_UNet=cfg.training.encoder.input_channels, 
+        Cin_UNet=cfg.training.unet_encoder.input_channels, 
         Cout_UNet=len(vocab)
     )
 
     # Text Encoder
-
+    ROBERTA = RobertaEncoder()
 
     model = ClevrMath_model(UNET, ROBERTA)
+
+    return model
 
 def train_model(rank=None):
     # set_random_seed
@@ -109,7 +116,7 @@ def train_model(rank=None):
             test_dataloader,
             val_dataloader,
             vocab,
-        ) = preprocess()
+        ) = data_loaders()
         model = define_model(vocab, device).to(device)
 
     print("MODEL: ")
@@ -118,9 +125,140 @@ def train_model(rank=None):
     # intializing loss function
     criterion = torch.nn.CrossEntropyLoss(ignore_index=vocab.stoi["<pad>"])
 
+    # optimizer
+    optimizer = torch.optim.AdamW(
+        params=model.parameters(),
+        lr=cfg.training.general.learning_rate,
+        weight_decay=cfg.training.general.weight_decay,
+        betas=cfg.training.general.betas,
+    )
+
+    best_valid_loss = float("inf")
+    
+    if not cfg.general.load_trained_model_for_testing:
+        count_es = 0
+        for epoch in range(cfg.training.general.epochs):
+            if count_es <= cfg.training.general.early_stopping:
+                start_time = time.time()
+
+                # training and validation
+                train_loss = train(
+                    model,
+                    train_dataloader,
+                    optimizer,
+                    criterion,
+                    cfg.training.general.clip,
+                    device,
+                    ddp=cfg.general.ddp,
+                    rank=rank,
+                )
+
+                val_loss = evaluate(
+                    model,
+                    cfg.training.general.batch_size,
+                    val_dataloader,
+                    criterion,
+                    device,
+                    vocab,
+                )
+
+                end_time = time.time()
+                # total time spent on training an epoch
+                
+                epoch_mins, epoch_secs = epoch_time(start_time, end_time)
+                
+                # saving the current model for transfer learning
+                if (not cfg.general.ddp) or (cfg.general.ddp and rank == 0):
+                    torch.save(
+                        model.state_dict(),
+                        f"trained_models/latest_model.pt",
+                    )
+
+                if val_loss < best_valid_loss:
+                    best_valid_loss = val_loss
+                    count_es = 0
+                    if (not cfg.general.ddp) or (cfg.general.ddp and rank == 0):
+                        torch.save(
+                            model.state_dict(),
+                            f"trained_models/best_model.pt",
+                        )
+                else:
+                    count_es += 1
+
+                # logging
+                if (not cfg.general.ddp) or (cfg.general.ddp and rank == 0):
+                    print(
+                        f"Epoch: {epoch+1:02} | Time: {epoch_mins}m {epoch_secs}s"
+                    )
+                    print(
+                        f"\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}"
+                    )
+                    print(
+                        f"\t Val. Loss: {val_loss:.3f} |  Val. PPL: {math.exp(val_loss):7.3f}"
+                    )
+
+                    loss_file.write(
+                        f"Epoch: {epoch+1:02} | Time: {epoch_mins}m {epoch_secs}s\n"
+                    )
+                    loss_file.write(
+                        f"\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}\n"
+                    )
+                    loss_file.write(
+                        f"\t Val. Loss: {val_loss:.3f} |  Val. PPL: {math.exp(val_loss):7.3f}\n"
+                    )
+
+            else:
+                print(
+                    f"Terminating the training process as the validation \
+                    loss hasn't been reduced from last {cfg.training.general.early_stopping} epochs."
+                )
+                break
+
+        print(
+            "best model saved as:  ",
+            f"trained_models/best_model.pt",
+        )
+
+    if cfg.general.ddp:
+        dist.destroy_process_group()
+
+    time.sleep(3)
+
+    print(
+        "loading best saved model: ",
+        f"trained_models/best_model.pt",
+    )
+    # loading pre_tained_model
+    model.load_state_dict(
+        torch.load(
+            f"trained_models/best_model.pt"
+        )
+    )
+
+    test_loss = evaluate(
+        model,
+        cfg.training.general.batch_size,
+        test_dataloader,
+        criterion,
+        device,
+        vocab,
+        is_test=True,
+    )
+
+    if (not cfg.general.ddp) or (cfg.general.ddp and rank == 0):
+        print(
+            f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |"
+        )
+        loss_file.write(
+            f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |"
+        )
+
+    # stopping time
+    print(time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
+
 
 def ddp_main(world_size,):    
-    # os.environ["CUDA_VISIBLE_DEVICES"] = gpus
+    os.environ["CUDA_VISIBLE_DEVICES"] = gpus
     mp.spawn(train_model, args=(), nprocs=world_size, join=True)
 
 if __name__ == "__main__":

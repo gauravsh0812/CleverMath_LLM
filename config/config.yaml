@@ -29,5 +29,5 @@ training:
     scheduler_step_size: 50
     scheduler_gamma: 0.5
 
-  encoder: 
+  unet_encoder: 
     input_channels: 3

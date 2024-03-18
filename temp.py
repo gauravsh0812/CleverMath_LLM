@@ -1,7 +1,11 @@
 from PIL import Image
+import os
 
-for i in range(100):
-    img = Image.open(f"data/images/{i}.png")
+c=0
+for i in os.listdir("data/images"):
+    img = Image.open(f"data/images/{i}")
     w,h = img.size
     if w!=480 or h!=320:
-        print([w,h])
+        print(i, [w,h])
+        c+=1
+print(c)

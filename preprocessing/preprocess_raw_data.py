@@ -1,6 +1,7 @@
 import os
 import yaml
 import torch
+
 from box import Box
 from datasets import load_dataset, DownloadConfig, DatasetDict
 from PIL import Image
@@ -20,11 +21,6 @@ paths = [
 for _path in paths:
     if not os.path.exists(_path):
         os.mkdir(_path)
-
-# opening files in "w" mode
-questions = open("data/questions.lst","w")
-labels = open("data/labels.lst", "w")
-templates = open("data/templates.lst", "w")
 
 
 def download_dataset(name):
@@ -103,6 +99,12 @@ def rearrange_dataset(dataset):
 
     print("re-arranging the dataset...")
     count = 0
+    qtns, lbls, tmps = list(),list(),list()
+
+    # opening files in "w" mode
+    questions = open("data/questions.lst","w")
+    labels = open("data/labels.lst", "w")
+    templates = open("data/templates.lst", "w")
     for t in ["train", "test", "validation"]:
         for t_data in dataset[t]: 
             # copying the images
@@ -112,41 +114,96 @@ def rearrange_dataset(dataset):
             # writing the corresponding questions and labels
             # the labels ranges from 0-10
             # the templates are: {addition, adverserail, subtraction, subtraction-multihop}
-            questions.write(f"{t_data['question']} \n")
-            labels.write(f"{t_data['label']} \n")
-            templates.write(f"{t_data['template']} \n")
+
+            questions.write(t_data['question'] + "\n")
+            labels.write(str(t_data['label']) + "\n")
+            templates.write(t_data['template'] + "\n")
+
+    questions.close()
+    labels.close()
+    templates.close()
 
 def preprocess_images(img):
-
-    print("creating image tensors...")
     
     IMAGE = Image.open(f"data/images/{img}")
     
     # checking the size of the image
     w, h = IMAGE.size
-    assert w == 480 and h == 320
+
+    # Desired image size
+    desired_width = 480
+    desired_height = 320
+
+    if w != 480 or h != 320:
+
+        # Original image size
+        original_width, original_height = IMAGE.size
+        
+        # Calculate aspect ratio of the original image
+        aspect_ratio = original_width / original_height
+
+        # Calculate the new dimensions while maintaining the aspect ratio
+        new_width = desired_width
+        new_height = int(new_width / aspect_ratio)
+
+        # Calculate the padding needed to achieve the desired dimensions
+        padding_height = desired_height - new_height
+        padding_top = padding_height // 2
+        padding_bottom = padding_height - padding_top
+
+        # Create a new image with the desired dimensions
+        new_image = Image.new('RGB', (desired_width, desired_height), (255, 255, 255)) # White background
+
+        # Paste the original image onto the new image, centered and padded as needed
+        new_image.paste(IMAGE, (0, padding_top))
+
+        # Save the new image
+        new_image.save(f'data/padded_images/{img}')
+
+        IMAGE = new_image
+
+        # Create an attention mask image
+        mask_image = Image.new('L', (desired_width, desired_height), 0) # 'L' mode for grayscale
+
+        # Fill the original content area with 1
+        mask_image.paste(1, (0, padding_top, desired_width, new_height + padding_top))
+
+        # Save the mask image
+        mask_image.save(f'data/attention_masks/{img}')
+
 
     # convert to tensor
     convert = transforms.ToTensor()
     IMAGE = convert(IMAGE)
 
     # saving the image 
-    torch.save(f"data/image_tensors/{img.split('.')[0]}.pt")
+    torch.save(IMAGE, f"data/image_tensors/{img.split('.')[0]}.pt")
 
 
 def getting_image_tensors():
     """
-    we don't need to crop and pad the image 
-    as they all are of same size i.e. 480,320.
+    we don't need to crop the image but we will 
+    pad them to be of the same size i.e. w=480, h=320.
     And it has a lot of wide spaces near the edges.
     """
+
+    print("creating image tensors...")
+
     images = os.listdir("data/images")
 
     # create an image_tensors folder
     if not os.path.exists("data/image_tensors"):
         os.mkdir("data/image_tensors")
 
-    with Pool(cfg.general.num_cpus) as pool:
+    # to store padded images for reference
+    # and to store the corresponding attention mask
+    if not os.path.exists("data/padded_images"):
+        os.mkdir("data/padded_images")
+    if not os.path.exists("data/attention_masks"):
+        os.mkdir("data/attention_masks")
+    
+
+    with Pool(cfg.general.ncpus) as pool:
         result = pool.map(preprocess_images, images) 
 
     blank_images = [i for i in result if i is not None]
@@ -162,8 +219,8 @@ def preprocess():
     # need to be done only first time.
     dataset = download_dataset(name="general")
     rearrange_dataset(dataset)
-    questions.close()
-    labels.close()
+    # questions.close()
+    # labels.close()
 
     # converting images to tensors
     getting_image_tensors()
