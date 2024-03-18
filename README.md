@@ -12,6 +12,12 @@ pip install torch==2.0.0 torchvision==0.15.1 torchaudio==2.0.1 --index-url https
 pip install -r requirements.txt
 ```
 
+### Dataset
+If running it for the first time, then we need to donwload and preprocess the dataset.
+```
+python preprocessing/preprocess_raw_data.py
+``` 
+
 ### Training
 ```
 python run.py

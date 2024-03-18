@@ -120,6 +120,9 @@ def rearrange_dataset(dataset):
             labels.write(f"{t_data['label']} \n")
             templates.write(f"{t_data['template']} \n")
 
+    
+
+
 class Img2MML_dataset(Dataset):
     def __init__(self, dataframe, vocab):
         self.dataframe = dataframe
@@ -139,39 +142,39 @@ class Img2MML_dataset(Dataset):
 
         return self.dataframe.iloc[index, 0], torch.Tensor(indexed_qtn)
 
-class My_pad_collate(object):
-    """
-    padding mml to max_len, and stacking images
-    return: mml_tensors of shape [batch, max_len]
-            stacked image_tensors [batch]
-    """
+# class My_pad_collate(object):
+#     """
+#     padding mml to max_len, and stacking images
+#     return: mml_tensors of shape [batch, max_len]
+#             stacked image_tensors [batch]
+#     """
 
-    def __init__(self, device, vocab, max_len):
-        self.device = device
-        self.vocab = vocab
-        self.max_len = max_len
-        self.pad_idx = vocab.stoi["<pad>"]
+#     def __init__(self, device, vocab, max_len):
+#         self.device = device
+#         self.vocab = vocab
+#         self.max_len = max_len
+#         self.pad_idx = vocab.stoi["<pad>"]
 
-    def __call__(self, batch):
-        _img, _q, _l = zip(*batch)
-        batch_size = len(_q)
-        padded_questions = (
-            torch.ones([batch_size, self.max_len], dtype=torch.long)
-            * self.pad_idx
-        )
-        for b in range(batch_size):
-            assert len(_q[b]) <= self.max_len
-            padded_questions[b][: len(_q[b])] = _q[b]
+#     def __call__(self, batch):
+#         _img, _q, _l = zip(*batch)
+#         batch_size = len(_q)
+#         padded_questions = (
+#             torch.ones([batch_size, self.max_len], dtype=torch.long)
+#             * self.pad_idx
+#         )
+#         for b in range(batch_size):
+#             assert len(_q[b]) <= self.max_len
+#             padded_questions[b][: len(_q[b])] = _q[b]
     
-        # images tensors
-        _img = torch.Tensor(_img)
-        _l = torch.Tensor(_l, dtype=torch.long)
+#         # images tensors
+#         _img = torch.Tensor(_img)
+#         _l = torch.Tensor(_l, dtype=torch.long)
 
-        return (
-            _img.to(self.device),
-            padded_questions.to(self.device),
+#         return (
+#             _img.to(self.device),
+#             padded_questions.to(self.device),
 
-        )
+#         )
 
 def tokenizer(x):
     return x.split()
@@ -239,9 +242,9 @@ def create_dataloaders():
         vfile.write(f"{vidx} \t {vstr} \n")
     
     # initializing pad collate class
-    mypadcollate = My_pad_collate(cfg.general.device, 
-                                  vocab, 
-                                  max_len)
+    # mypadcollate = My_pad_collate(cfg.general.device, 
+    #                               vocab, 
+    #                               max_len)
 
     print("building dataloaders...")
 
@@ -264,11 +267,11 @@ def create_dataloaders():
         
     train_dataloader = DataLoader(
         imml_train,
-        batch_size=cfg.training.batch_size,
+        batch_size=cfg.training.general.batch_size,
         num_workers=cfg.dataset.num_workers,
         shuffle=shuffle,
         sampler=sampler,
-        collate_fn=mypadcollate,
+        # collate_fn=mypadcollate,
         pin_memory=cfg.dataset.pin_memory,
     )
 
@@ -285,11 +288,11 @@ def create_dataloaders():
 
     val_dataloader = DataLoader(
         imml_val,
-        batch_size=cfg.training.batch_size,
+        batch_size=cfg.training.general.batch_size,
         num_workers=cfg.dataset.num_workers,
         shuffle=shuffle,
         sampler=sampler,
-        collate_fn=mypadcollate,
+        # collate_fn=mypadcollate,
         pin_memory=cfg.dataset.pin_memory,
     )
 
@@ -305,18 +308,18 @@ def create_dataloaders():
 
     test_dataloader = DataLoader(
         imml_test,
-        batch_size=cfg.training.batch_size,
+        batch_size=cfg.training.general.batch_size,
         num_workers=cfg.dataset.num_workers,
         shuffle=shuffle,
         sampler=None,
-        collate_fn=mypadcollate,
+        # collate_fn=mypadcollate,
         pin_memory=cfg.dataset.pin_memory,
     )
 
     return train_dataloader, test_dataloader, val_dataloader, vocab
 
 
-def preprocess():
+def data_loaders():
 
     if cfg.general.preprocess:
         # only if preprocess is True
@@ -327,7 +330,10 @@ def preprocess():
         questions.close()
         labels.close()
 
+        # generate the image_tensors to fasten the process
+        get_image_tensors()
+
     return create_dataloaders()
 
 if __name__ == "__main__":    
-    preprocess()
+    data_loaders()
