@@ -11,6 +11,7 @@ import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 from preprocessing.create_dataloaders import data_loaders
 from models.unet import UNet
+from models.model import ClevrMath_model
 
 
 with open("config/config.yaml") as f:
@@ -49,8 +50,7 @@ def define_model(vocab, device):
     # Text Encoder
 
 
-
-    pass
+    model = ClevrMath_model(UNET, ROBERTA)
 
 def train_model(rank=None):
     # set_random_seed

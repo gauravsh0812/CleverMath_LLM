@@ -1,5 +1,5 @@
-from transformers import RobertaTokenizer
-
+from transformers import RobertaTokenizer, RobertaModel
+import torch.nn as nn
 
 class RobertaEncoder(nn.Module):
 
@@ -7,11 +7,8 @@ class RobertaEncoder(nn.Module):
         super(RobertaEncoder, self).__init__()
 
         self.tokenizer = RobertaTokenizer.from_pretrained("FacebookAI/roberta-base")
+        self.model = RobertaModel.from_pretrained("FacebookAI/roberta-base")
     
 
-    def forward(self, texts):
-        pass
-
-    tokenizer("Hello world")["input_ids"]
-
-    tokenizer(" Hello world")["input_ids"]
+    def forward(self, qtns):
+        print(qtns.shape)

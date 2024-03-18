@@ -19,29 +19,19 @@ def train(
 
     tset = tqdm(iter(train_dataloader))
 
-    for i, (img, qtn, label) in enumerate(tset):
+    for i, (imgs, qtns, labels) in enumerate(tset):
         # qtn: (B, len)  --> the padding will be done in the RobertaEncoder
         # img: (B, in_channel, H, W)
         # label: (B,)
 
-        qtn = qtn.to(device, dtype=torch.long)
+        qtns = qtns.to(device, dtype=torch.long)
+        labels = labels.to(device, dtype=torch.long)
         
         _imgs = list()
-        for im in img:
+        for im in imgs:
             # for vit patch encoder 
             _imgs.append(torch.load(f"data/image_tensors/{int(im.item())}.pt"))
-
-            # for pixel encoders
-            # for vit pixel encoder, _imgs will be same
-            if isGraphPixel:
-                G = torch.load(f"{img_graph_path}/{int(im.item())}.pt")
-                _data_list.append(G)
         
-        if isGraphPixel:
-            batch = Batch.from_data_list(_data_list).to(device)
-        else:
-            batch=None
-
         imgs = torch.stack(_imgs).to(device)
         
         # setting gradients to zero
@@ -49,16 +39,11 @@ def train(
 
         outputs, _ = model(
             imgs,
-            batch,
-            mml,
+            qtns,
         )
-        output_dim = outputs.shape[-1]
 
-        # avoiding <sos> token while Calculating loss
-        mml = mml[:, 1:].contiguous().view(-1)
-        outputs = outputs.contiguous().view(-1, output_dim)
 
-        loss = criterion(outputs, mml)
+        loss = criterion(outputs, labels)
         loss.backward()
 
         torch.nn.utils.clip_grad_norm_(model.parameters(), clip)

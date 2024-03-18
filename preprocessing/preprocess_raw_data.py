@@ -117,6 +117,8 @@ def rearrange_dataset(dataset):
             templates.write(f"{t_data['template']} \n")
 
 def preprocess_images(img):
+
+    print("creating image tensors...")
     
     IMAGE = Image.open(f"data/images/{img}")
     
