@@ -1,4 +1,4 @@
-# CleverMath_LLM
+# ClevrMath_LLM
 
 Keep preprocess in the config "True" if running it for the first time. 
 Once you have run it, there is no need to re-process the dataset. 
@@ -8,6 +8,9 @@ re-do these steps. This can avoided by setting the preprocess param to False in 
 
 ### Requirements 
 ```
+conda create -n clevrmath python=3.10 -y
+source activate clevrmath
+
 pip install torch==2.0.0 torchvision==0.15.1 torchaudio==2.0.1 --index-url https://download.pytorch.org/whl/cu118
 pip install -r requirements.txt
 ```

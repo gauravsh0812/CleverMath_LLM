@@ -32,7 +32,6 @@ def train(
         _imgs = list()
         for im in imgs:
             tnsr = torch.load(f"data/image_tensors/{int(im.item())}.pt")
-            print("imgs shape: ", tnsr.shape)
             _imgs.append(tnsr)
             
         

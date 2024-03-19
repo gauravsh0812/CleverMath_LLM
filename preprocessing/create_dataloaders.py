@@ -72,10 +72,8 @@ def data_loaders():
     t = open("data/templates.lst").readlines()
 
     assert len(q) == len(l) == len(t)
-
-    max_len = max([len(i.split()) for i in q])
-
-    image_num = range(0, len(q))
+    
+    image_num = range(0, 20)#len(q))
 
     # split the image_num into train, test, validate
     train_val_images, test_images = train_test_split(
