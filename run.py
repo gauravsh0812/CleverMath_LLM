@@ -135,18 +135,6 @@ def train_model(rank=None):
 
     best_valid_loss = float("inf")
     
-    # Assuming train_dataloader is already defined and loaded
-    for i, data in enumerate(train_dataloader):
-        # Print the content of the data for each batch
-        print(f"Batch {i}:")
-        for key, value in data.items():
-            print(f"{key}: {value}")
-        # Optionally, break after the first batch to avoid printing too much
-        if i == 0:
-            break
-    
-    exit()
-
     if not cfg.general.load_trained_model_for_testing:
         count_es = 0
         for epoch in range(cfg.training.general.epochs):

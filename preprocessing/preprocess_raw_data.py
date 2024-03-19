@@ -152,7 +152,8 @@ def preprocess_images(img):
         padding_bottom = padding_height - padding_top
 
         # Create a new image with the desired dimensions
-        new_image = Image.new('RGB', (desired_width, desired_height), (255, 255, 255)) # White background
+        # the images are 4D - RGB and Alpha (could be transparency)
+        new_image = Image.new('RGBA', (desired_width, desired_height), (255, 255, 255, 255)) # White background
 
         # Paste the original image onto the new image, centered and padded as needed
         new_image.paste(IMAGE, (0, padding_top))

@@ -19,18 +19,22 @@ def train(
 
     tset = tqdm(iter(train_dataloader))
 
-    for i, (imgs, qtns, labels) in enumerate(tset):
-        # qtn: (B, len)  --> the padding will be done in the RobertaEncoder
+    for i, (imgs, ids, attns, labels) in enumerate(tset):
+        # ids (qtn input ids from tokenizer): (B, max_len) after padding by tokenizer
+        # attn: qtn_attn_mask for padding by tokenizer: (B, max_len)
         # img: (B, in_channel, H, W)
-        # label: (B,)
+        # label: (B,10) --  since total number of classes are 0-10
 
-        qtns = qtns.to(device, dtype=torch.long)
+        ids = ids.to(device)
+        attns = attns.to(device)
         labels = labels.to(device, dtype=torch.long)
         
         _imgs = list()
         for im in imgs:
-            # for vit patch encoder 
-            _imgs.append(torch.load(f"data/image_tensors/{int(im.item())}.pt"))
+            tnsr = torch.load(f"data/image_tensors/{int(im.item())}.pt")
+            print("imgs shape: ", tnsr.shape)
+            _imgs.append(tnsr)
+            
         
         imgs = torch.stack(_imgs).to(device)
         
@@ -39,9 +43,11 @@ def train(
 
         outputs, _ = model(
             imgs,
-            qtns,
+            ids,
+            attns,
         )
 
+        exit()
 
         loss = criterion(outputs, labels)
         loss.backward()
