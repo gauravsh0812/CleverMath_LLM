@@ -1,11 +1,10 @@
-from PIL import Image
-import os
+import torch
 
-c=0
-for i in os.listdir("data/images"):
-    img = Image.open(f"data/images/{i}")
-    w,h = img.size
-    if w!=480 or h!=320:
-        print(i, [w,h])
-        c+=1
-print(c)
+ls = ('10\n', '3\n', '2\n', '5\n')
+lbls = []
+for _l in ls:
+    _l = int(_l.replace("\n",""))
+    z = torch.zeros(10)
+    z[:_l] = 1
+    lbls.append(z)
+print(lbls)
