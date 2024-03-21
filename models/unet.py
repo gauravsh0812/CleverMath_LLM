@@ -34,7 +34,7 @@ class UNet(nn.Module):
         # RED ARROWS in the diagram
         self.maxpool = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        features = [64, 128, 256, 512]
+        features = [64, 128]#, 256, 512]
 
         # Down part or encoder part
         for feat in features:
