@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torchvision.transforms.functional as ttf
+from models.positional_encoding import PositionalEncoding
 
 class DoubleConv2d(nn.Module):
 
@@ -22,7 +23,7 @@ class DoubleConv2d(nn.Module):
 
 class UNet(nn.Module):
 
-    def __init__(self, Cin_UNet, Cout_UNet):
+    def __init__(self, Cin_UNet, Cout_UNet, features, dropout, image_length):
         super(UNet, self).__init__()
 
         # initializing ModuleLists to hold array of steps of nn.Modules
@@ -33,8 +34,6 @@ class UNet(nn.Module):
 
         # RED ARROWS in the diagram
         self.maxpool = nn.MaxPool2d(kernel_size=2, stride=2)
-
-        features = [64, 128]#, 256, 512]
 
         # Down part or encoder part
         for feat in features:
@@ -53,9 +52,8 @@ class UNet(nn.Module):
         # final layer of the U-Net        
         self.final_conv = nn.Conv2d(features[0], features[0], kernel_size=1, stride=1)
         
-        # a linear projection
-        self.lin = nn.Linear(features[0], Cout_UNet)
-
+        # positional encoding
+        self.pe = PositionalEncoding(features[0], dropout, image_length)
 
     def forward(self, x):
 
@@ -90,7 +88,11 @@ class UNet(nn.Module):
 
         # final convolution layer
         x  = self.final_conv(x)
-        print("x shape after unet: ", x.shape)
-        x = self.lin(x)
+        
+        # positional encoding
+        x = torch.flatten(x, 2, -1) # (B, features[0], length)
+        x = x.permute(2, 0, 1)  # (length, B, features[0])
+        x += self.pe(x) # (length, B, features[0])
 
         return x
+    

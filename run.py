@@ -49,7 +49,10 @@ def define_model(vocab, device):
     # Image Auto-Encoder 
     UNET = UNet(
         Cin_UNet=cfg.training.unet_encoder.input_channels, 
-        Cout_UNet=len(vocab)
+        Cout_UNet=len(vocab),
+        features=cfg.training.unet_encoder.features,
+        dropout=cfg.training.general.dropout,
+        image_length=(cfg.dataset.image_width * cfg.dataset.image_height),
     )
 
     # Text Encoder
