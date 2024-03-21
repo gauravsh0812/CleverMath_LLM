@@ -32,7 +32,7 @@ def train(
         
         _imgs = list()
         for im in imgs:
-            tnsr = torch.load(f"data/image_tensors/{int(im.item())}.pt")
+            tnsr = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")
             _imgs.append(tnsr)
             
         
