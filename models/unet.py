@@ -90,6 +90,7 @@ class UNet(nn.Module):
 
         # final convolution layer
         x  = self.final_conv(x)
+        print("x shape after unet: ", x.shape)
         x = self.lin(x)
 
         return x
