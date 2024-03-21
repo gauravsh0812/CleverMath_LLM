@@ -9,5 +9,5 @@ class ClevrMath_model(nn.Module):
 
     def forward(self, imgs, ids, attns):
         encoded_imgs = self.unet(imgs)
-        encoded_qtns = self.roberta(qtns)
+        encoded_qtns = self.roberta(ids, attns)
 

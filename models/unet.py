@@ -23,7 +23,7 @@ class DoubleConv2d(nn.Module):
 
 class UNet(nn.Module):
 
-    def __init__(self, Cin_UNet, Cout_UNet, features, dropout, image_length):
+    def __init__(self, Cin_UNet, features, dropout, image_length):
         super(UNet, self).__init__()
 
         # initializing ModuleLists to hold array of steps of nn.Modules
