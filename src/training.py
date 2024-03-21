@@ -41,12 +41,12 @@ def train(
         # setting gradients to zero
         optimizer.zero_grad()
 
-        outputs, _ = model(
+        output = model(
             imgs,
             ids,
             attns,
         )
-
+        print("output shape: ", output.shape)
         exit()
 
         loss = criterion(outputs, labels)

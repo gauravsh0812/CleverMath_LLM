@@ -43,7 +43,7 @@ class My_pad_collate(object):
         padded_tokenized_qtns = self.tokenizer(_qtns, 
                                  return_tensors="pt", 
                                  padding=True)
-        
+
         # the labels will be stored as tensor
         # 3 will be stored as [0.,0.,0.]
         lbls = []
@@ -63,7 +63,7 @@ class My_pad_collate(object):
             _img.to(self.device),
             input_ids.to(self.device),
             attn_masks.to(self.device),
-            _lbls.to(self.device)
+            _lbls.to(self.device),
         )
 
     

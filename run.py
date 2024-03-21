@@ -57,7 +57,9 @@ def define_model(vocab, device):
     # Text Encoder
     ROBERTA = RobertaEncoder()
 
-    model = ClevrMath_model(UNET, ROBERTA)
+    model = ClevrMath_model(UNET, 
+                            ROBERTA,
+                            cfg.training.unet_encoder.features)
 
     return model
 

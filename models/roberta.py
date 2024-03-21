@@ -6,11 +6,11 @@ class RobertaEncoder(nn.Module):
     def __init__(self):
         super(RobertaEncoder, self).__init__()
         self.model = RobertaModel.from_pretrained("FacebookAI/roberta-base")
-    
 
     def forward(self, ids, attns):
-        print("roberta: ", ids.shape, attns.shape)
+        # shape of ids and attns: (B, L_question)
         outputs = self.model(input_ids=ids,
                              attention_mask=attns)
-        last_hidden_states = outputs.last_hidden_state
-        print("roberta last hid shape: ", last_hidden_states.shape)
+        last_hidden_states = outputs.last_hidden_state # (B, L_question, 768)
+        return last_hidden_states
+        
