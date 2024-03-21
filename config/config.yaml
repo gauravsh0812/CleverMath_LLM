@@ -15,7 +15,7 @@ dataset:
   shuffle: True
   vocab_freq: 5
   num_workers: 4
-  pin_memory: True
+  pin_memory: False
 
 training:
   general:
