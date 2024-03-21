@@ -85,6 +85,7 @@ class UNet(nn.Module):
             x = self.up_side_net[idx](x)
 
         # final convolution layer
+        print("x shape: ", x.shape)
         x  = self.final_conv(x)
 
         return x
