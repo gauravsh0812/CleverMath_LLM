@@ -46,10 +46,8 @@ def train(
             ids,
             attns,
         )
-        print("output shape: ", output.shape)
-        exit()
 
-        loss = criterion(outputs, labels)
+        loss = criterion(output, labels)
         loss.backward()
 
         torch.nn.utils.clip_grad_norm_(model.parameters(), clip)
