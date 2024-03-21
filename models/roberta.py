@@ -12,6 +12,5 @@ class RobertaEncoder(nn.Module):
         print("roberta: ", ids.shape, attns.shape)
         outputs = self.model(input_ids=ids,
                              attention_mask=attns)
-        print("roberta output shape: ", outputs.shape)
         last_hidden_states = outputs.last_hidden_state
         print("roberta last hid shape: ", last_hidden_states.shape)
