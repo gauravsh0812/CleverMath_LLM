@@ -90,5 +90,6 @@ class UNet(nn.Module):
 
         # final convolution layer
         x  = self.final_conv(x)
+        x = self.lin(x)
 
         return x
