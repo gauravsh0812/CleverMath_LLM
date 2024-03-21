@@ -5,7 +5,6 @@ class RobertaEncoder(nn.Module):
 
     def __init__(self):
         super(RobertaEncoder, self).__init__()
-
         self.model = RobertaModel.from_pretrained("FacebookAI/roberta-base")
     
 
