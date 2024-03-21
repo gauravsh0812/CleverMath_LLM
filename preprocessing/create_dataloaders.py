@@ -9,6 +9,9 @@ from torchtext.vocab import Vocab
 from torch.utils.data import SequentialSampler
 from box import Box
 from transformers import RobertaTokenizer
+import torch.multiprocessing as mp
+
+mp.set_start_method('spawn', force=True)
 
 # reading config file
 with open("config/config.yaml") as f:
