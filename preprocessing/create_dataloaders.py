@@ -67,12 +67,12 @@ class My_pad_collate(object):
 def data_loaders():
 
     print("creating dataloaders...")
-    q = open("data/questions.lst").readlines()
-    l = open("data/labels.lst").readlines()
-    t = open("data/templates.lst").readlines()
+    q = open(f"{cfg.dataset.path_to_data}/questions.lst").readlines()
+    l = open(f"{cfg.dataset.path_to_data}/labels.lst").readlines()
+    t = open(f"{cfg.dataset.path_to_data}/templates.lst").readlines()
 
     assert len(q) == len(l) == len(t)
-    
+
     image_num = range(0, 20)#len(q))
 
     # split the image_num into train, test, validate
@@ -100,15 +100,15 @@ def data_loaders():
             val = pd.DataFrame(qi_data, columns=["IMG", "QUESTION", "LABEL"])
     
     
-    print("saving dataset files to data/ folder...")
-    train.to_csv("data/train.csv", index=False)
-    test.to_csv("data/test.csv", index=False)
-    val.to_csv("data/val.csv", index=False)
+    print(f"saving dataset files to {cfg.dataset.path_to_data}/ folder...")
+    train.to_csv(f"{cfg.dataset.path_to_data}/train.csv", index=False)
+    test.to_csv(f"{cfg.dataset.path_to_data}/test.csv", index=False)
+    val.to_csv(f"{cfg.dataset.path_to_data}/val.csv", index=False)
     
     # build vocab
     print("building vocab...")
     vocab = RobertaTokenizer.from_pretrained("FacebookAI/roberta-base").get_vocab()
-    with open("data/vocab.txt", 'w') as f:
+    with open("{cfg.dataset.path_to_data}/vocab.txt", 'w') as f:
         for word, idx in vocab.items():
             f.write(f"{word} {idx}\n")
     

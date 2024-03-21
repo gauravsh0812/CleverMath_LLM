@@ -14,9 +14,9 @@ with open("config/config.yaml") as f:
 
 # if running for the first time.
 paths = [
-        "data",
-        "data/raw_data",
-        "data/images"
+        f"{cfg.dataset.path_to_data}",
+        f"{cfg.dataset.path_to_data}/raw_data",
+        f"{cfg.dataset.path_to_data}/images"
     ]
 for _path in paths:
     if not os.path.exists(_path):
@@ -41,7 +41,7 @@ def download_dataset(name):
 
     print("downloading the dataset if doesn't exists...")
 
-    raw_data_path = "data/raw_data"
+    raw_data_path = f"{cfg.dataset.path_to_data}/raw_data"
 
     dl_config = DownloadConfig(
         resume_download=True, 
@@ -102,13 +102,13 @@ def rearrange_dataset(dataset):
     qtns, lbls, tmps = list(),list(),list()
 
     # opening files in "w" mode
-    questions = open("data/questions.lst","w")
-    labels = open("data/labels.lst", "w")
-    templates = open("data/templates.lst", "w")
+    questions = open(f"{cfg.dataset.path_to_data}/questions.lst","w")
+    labels = open(f"{cfg.dataset.path_to_data}/labels.lst", "w")
+    templates = open(f"{cfg.dataset.path_to_data}/templates.lst", "w")
     for t in ["train", "test", "validation"]:
         for t_data in dataset[t]: 
             # copying the images
-            t_data["image"].save(f"data/images/{count}.png")
+            t_data["image"].save(f"{cfg.dataset.path_to_data}/images/{count}.png")
             count+=1
 
             # writing the corresponding questions and labels
@@ -125,7 +125,7 @@ def rearrange_dataset(dataset):
 
 def preprocess_images(img):
     
-    IMAGE = Image.open(f"data/images/{img}")
+    IMAGE = Image.open(f"{cfg.dataset.path_to_data}/images/{img}")
     
     # checking the size of the image
     w, h = IMAGE.size
@@ -159,7 +159,7 @@ def preprocess_images(img):
         new_image.paste(IMAGE, (0, padding_top))
 
         # Save the new image
-        new_image.save(f'data/padded_images/{img}')
+        new_image.save(f'{cfg.dataset.path_to_data}/padded_images/{img}')
 
         IMAGE = new_image
 
@@ -170,7 +170,7 @@ def preprocess_images(img):
         mask_image.paste(1, (0, padding_top, desired_width, new_height + padding_top))
 
         # Save the mask image
-        mask_image.save(f'data/attention_masks/{img}')
+        mask_image.save(f'{cfg.dataset.path_to_data}/attention_masks/{img}')
 
 
     # convert to tensor
@@ -178,7 +178,7 @@ def preprocess_images(img):
     IMAGE = convert(IMAGE)
 
     # saving the image 
-    torch.save(IMAGE, f"data/image_tensors/{img.split('.')[0]}.pt")
+    torch.save(IMAGE, f"{cfg.dataset.path_to_data}/image_tensors/{img.split('.')[0]}.pt")
 
 
 def getting_image_tensors():
@@ -190,18 +190,18 @@ def getting_image_tensors():
 
     print("creating image tensors...")
 
-    images = os.listdir("data/images")
+    images = os.listdir(f"{cfg.dataset.path_to_data}/images")
 
     # create an image_tensors folder
-    if not os.path.exists("data/image_tensors"):
-        os.mkdir("data/image_tensors")
+    if not os.path.exists(f"{cfg.dataset.path_to_data}/image_tensors"):
+        os.mkdir(f"{cfg.dataset.path_to_data}/image_tensors")
 
     # to store padded images for reference
     # and to store the corresponding attention mask
-    if not os.path.exists("data/padded_images"):
-        os.mkdir("data/padded_images")
-    if not os.path.exists("data/attention_masks"):
-        os.mkdir("data/attention_masks")
+    if not os.path.exists(f"{cfg.dataset.path_to_data}/padded_images"):
+        os.mkdir(f"{cfg.dataset.path_to_data}/padded_images")
+    if not os.path.exists(f"{cfg.dataset.path_to_data}/attention_masks"):
+        os.mkdir(f"{cfg.dataset.path_to_data}/attention_masks")
     
 
     with Pool(cfg.general.ncpus) as pool:
