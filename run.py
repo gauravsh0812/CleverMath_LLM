@@ -144,6 +144,7 @@ def train_model(rank=None):
                 # training and validation
                 train_loss = train(
                     model,
+                    cfg.dataset.path_to_data, 
                     train_dataloader,
                     optimizer,
                     criterion,
@@ -155,6 +156,7 @@ def train_model(rank=None):
 
                 val_loss = evaluate(
                     model,
+                    cfg.dataset.path_to_data,
                     cfg.training.general.batch_size,
                     val_dataloader,
                     criterion,

@@ -4,6 +4,7 @@ from tqdm.auto import tqdm
 
 def train(
     model,
+    data_path, 
     train_dataloader,
     optimizer,
     criterion,
