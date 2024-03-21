@@ -108,7 +108,7 @@ def data_loaders():
     # build vocab
     print("building vocab...")
     vocab = RobertaTokenizer.from_pretrained("FacebookAI/roberta-base").get_vocab()
-    with open("{cfg.dataset.path_to_data}/vocab.txt", 'w') as f:
+    with open("f{cfg.dataset.path_to_data}/vocab.txt", 'w') as f:
         for word, idx in vocab.items():
             f.write(f"{word} {idx}\n")
     
