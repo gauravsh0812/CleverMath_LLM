@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torchvision.transforms.functional as ttf
-from models.positional_encoding import PositionalEncoding
+# from models.positional_encoding import PositionalEncoding
 
 class DoubleConv2d(nn.Module):
 
