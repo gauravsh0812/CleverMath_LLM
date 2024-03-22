@@ -20,6 +20,8 @@ class ClevrMath_model(nn.Module):
         encoded_imgs = self.unet(imgs).permute(1,0,2)  # (B, L=w*h, features[0])
         last_hidden_roberta = self.roberta(ids, attns) # (B, max_len, 768)
 
+        print("hid shape: ", last_hidden_roberta.shape)
+
         # project the outputs 
         encoded_imgs = self.proj1(encoded_imgs) # (B, L, 768)
         encoded_imgs = encoded_imgs.permute(0,2,1) # (B, 768, L)
