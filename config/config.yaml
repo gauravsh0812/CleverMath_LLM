@@ -6,7 +6,7 @@ general:
   gpus: 0
   world_size: 2
   rank: 0
-  device: "cpu"
+  device: "cuda"
   preprocess: False
   load_trained_model_for_testing: False 
 
