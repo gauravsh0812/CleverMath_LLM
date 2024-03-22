@@ -44,8 +44,8 @@ def evaluate(
                     zl = labels[b,:]
                     lbl = [i for i in range(len(zl)) if zl[i]==1.0][0]
 
-                    zo = output[b,-1,:] # last time step (B, 11)
-                    pred = torch.argmax(zo, dim=1)
+                    zo = output[b,-1,:] # last time step (11)
+                    pred = torch.argmax(zo,dim=0)
 
                     test_labels.write(str(lbl) + "\n")
                     test_preds.write(str(pred) + "\n")
