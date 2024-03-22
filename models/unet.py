@@ -50,7 +50,7 @@ class UNet(nn.Module):
             self.up_side_net.append(DoubleConv2d(feat*2, feat))
 
         # final layer of the U-Net        
-        self.final_conv = nn.Conv2d(features[0], Cin_UNet, kernel_size=1, stride=1)
+        self.final_conv = nn.Conv2d(features[0], 4, kernel_size=1, stride=1)
         
         # positional encoding
         # self.pe = PositionalEncoding(Cin_UNet, dropout, image_length)
@@ -92,7 +92,7 @@ class UNet(nn.Module):
         # final convolution layer
         x  = self.final_conv(x)
         print(x.shape)
-        
+
         # saving some random tensors to visualize segmented image
         torch.save(x, "segmented_images/tnsr.pt")
 
