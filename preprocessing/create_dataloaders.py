@@ -103,7 +103,7 @@ def data_loaders():
         qi_data = {
             "IMG": [num for num in t_images],
             "QUESTION": [
-                ("<sos> " + q[num] + " <eos>") for num in t_images
+                ("<sos> " + q[num].replace("\n","").strip() + " <eos>") for num in t_images
             ],
             "LABEL": [l[num] for num in t_images],
         }
