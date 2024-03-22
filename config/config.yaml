@@ -6,12 +6,12 @@ general:
   gpus: 0
   world_size: 2
   rank: 0
-  device: "cuda"
+  device: "cpu"
   preprocess: False
   load_trained_model_for_testing: False 
 
 dataset:
-  path_to_data: "/groups/claytonm/gauravs_data/clevrmath_data/data"
+  path_to_data: "data"
   get_image_tensors: True
   shuffle: True
   vocab_freq: 5

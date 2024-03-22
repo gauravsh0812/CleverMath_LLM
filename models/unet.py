@@ -53,7 +53,7 @@ class UNet(nn.Module):
         self.final_conv = nn.Conv2d(features[0], Cin_UNet, kernel_size=1, stride=1)
         
         # positional encoding
-        self.pe = PositionalEncoding(features[0], dropout, image_length)
+        self.pe = PositionalEncoding(Cin_UNet, dropout, image_length)
 
     def forward(self, x):
 
@@ -91,7 +91,6 @@ class UNet(nn.Module):
 
         # saving some random tensors to visualize segmented image
         torch.save(x, "segmented_images/tnsr.pt")
-        exit()
 
         # positional encoding
         x = torch.flatten(x, 2, -1) # (B, features[0], length)
