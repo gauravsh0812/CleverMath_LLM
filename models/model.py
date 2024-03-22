@@ -20,8 +20,6 @@ class ClevrMath_model(nn.Module):
         encoded_imgs = self.unet(imgs).permute(1,0,2)  # (B, L=w*h, features[0])
         last_hidden_roberta = self.roberta(ids, attns) # (B, max_len, 768)
 
-        print("hid shape: ", last_hidden_roberta.shape)
-
         # project the outputs 
         encoded_imgs = self.proj1(encoded_imgs) # (B, L, 768)
         encoded_imgs = encoded_imgs.permute(0,2,1) # (B, 768, L)
@@ -30,4 +28,10 @@ class ClevrMath_model(nn.Module):
 
         # concat
         output = torch.cat((encoded_imgs, last_hidden_roberta), dim=2) # (B, max_len, 768*2)
+
+        # classifier
+        output = torch.flatten(output, start_dim=2, end_dim=-1)  # (B, -1)
+
+        print(output.shape)
+
         return output
