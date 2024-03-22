@@ -1,7 +1,6 @@
 import os
 import yaml
 import torch
-
 from box import Box
 from datasets import load_dataset, DownloadConfig, DatasetDict
 from PIL import Image
@@ -79,9 +78,9 @@ def download_dataset(name):
       'test':dataset_test
     })
 
-    dataset['train'] = dataset['train'].select(range(1000))
-    dataset['validation'] = dataset['validation'].select(range(200))
-    dataset['test'] = dataset['test'].select(range(200))
+    dataset['train'] = dataset['train'].select(range(10000))
+    dataset['validation'] = dataset['validation'].select(range(2000))
+    dataset['test'] = dataset['test'].select(range(3000))
 
     return dataset
 
@@ -224,7 +223,8 @@ def preprocess():
     # labels.close()
 
     # converting images to tensors
-    getting_image_tensors()
+    if cfg.dataset.get_image_tensors:
+        getting_image_tensors()
 
 if __name__ == "__main__":    
     preprocess()

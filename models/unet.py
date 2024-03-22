@@ -1,3 +1,4 @@
+import random
 import torch
 import torch.nn as nn
 import torchvision.transforms.functional as ttf
@@ -88,7 +89,12 @@ class UNet(nn.Module):
 
         # final convolution layer
         x  = self.final_conv(x)
-        
+
+        # saving some random tensors to visualize segmented image
+        r_num = random.random()
+        if r_num > 0.8:
+            torch.save(x, f"segmented_images/{int(r_num*10)}.pt")
+
         # positional encoding
         x = torch.flatten(x, 2, -1) # (B, features[0], length)
         x = x.permute(2, 0, 1)  # (length, B, features[0])
