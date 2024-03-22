@@ -61,7 +61,6 @@ class UNet(nn.Module):
         skip_connections = []
         for down in self.down_side_net:
             # x channels from feature[i] to feature[i+1]
-            print(x.shape)
             x = down(x)
             # save the skip_connections
             skip_connections.append(x)
@@ -109,6 +108,5 @@ unet = UNet(
     image_length=320*480,
 )
 
-x=torch.load("/groups/claytonm/gauravs_data/clevrmath_data/data/image_tensors/10.pt")
-print(x.shape)
-unet(x)
+x=torch.load("data/image_tensors/10.pt")
+unet(x.unsqueeze(0))
