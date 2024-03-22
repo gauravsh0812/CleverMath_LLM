@@ -61,12 +61,12 @@ class My_pad_collate(object):
                                 max_length=self.max_len)
 
         # the labels will be stored as tensor
-        # 3 will be stored as [0.,0.,0.]
+        # 3 will be stored as [0.,0.,0.,1.]
         lbls = []
         for _l in _lbls:
             _l = int(_l.replace("\n",""))
-            z = torch.zeros(10)
-            z[:_l] = 1
+            z = torch.zeros(11)
+            z[_l] = 1.0
             lbls.append(z)
         
         # tensors

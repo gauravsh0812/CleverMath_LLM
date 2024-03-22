@@ -64,7 +64,8 @@ def define_model(max_len):
                             ROBERTA,
                             features,
                             image_length,
-                            max_len)
+                            max_len,
+                            num_classes=11)
 
     return model
 
