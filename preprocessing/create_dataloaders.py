@@ -53,6 +53,9 @@ class My_pad_collate(object):
     def __call__(self, batch):
         _img, _qtns, _lbls = zip(*batch)
         
+        for _q in _qtns:
+            print(len(_q.split()))
+
         padded_tokenized_qtns = self.tokenizer(
                                 _qtns, 
                                 return_tensors="pt",
@@ -125,6 +128,7 @@ def data_loaders():
 
     # get max_len 
     max_len = get_max_len(train, test, val)    
+    print("the max length: ", max_len)
     
     # build vocab 
     print("building vocab...")
