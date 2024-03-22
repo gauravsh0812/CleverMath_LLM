@@ -67,6 +67,7 @@ class UNet(nn.Module):
             # maxpool i.e. step down in diagram
             x = self.maxpool(x)
 
+            print(x.shape)
 
         # till this step: x size is [B, 512, W, H]
         # run Bottleneck convolution layer: x size will be [B, 1024, W', H']
@@ -86,9 +87,12 @@ class UNet(nn.Module):
             # run 3x3 conv2d layer side ways
             x = self.up_side_net[idx](x)
 
+            print(x.shape)
+
         # final convolution layer
         x  = self.final_conv(x)
-
+        print(x.shape)
+        
         # saving some random tensors to visualize segmented image
         torch.save(x, "segmented_images/tnsr.pt")
 
