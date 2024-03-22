@@ -105,4 +105,6 @@ unet = UNet(Cin_UNet=4,
         features=[64,128,256,512],
         dropout=0.1,
         image_length=320*480)
-unet(torch.load("/groups/claytonm/gauravs_data/clevrmath_data/data/image_tensors/10.pt"))
+x=torch.load("/groups/claytonm/gauravs_data/clevrmath_data/data/image_tensors/10.pt")
+print(x.shape)
+unet(x)
