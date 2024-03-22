@@ -5,7 +5,6 @@ import torch
 def evaluate(
     model,
     data_path,
-    batch_size,
     test_dataloader,
     criterion,
     device,
@@ -40,12 +39,11 @@ def evaluate(
                 # labels: (B, 11)
                 test_labels = open("logs/test_labels.txt", "w")
                 test_preds = open("logs/test_preds.txt", "w")
-                for b in range(batch_size):
+                for b in range(output.shape[0]):
                     zl = labels[b,:]
                     lbl = [i for i in range(len(zl)) if zl[i]==1.0][0]
 
                     zo = output[b,-1,:] # last time step (11)
-                    print(zo)
                     pred = torch.argmax(zo,dim=0)
 
                     test_labels.write(str(lbl) + "\n")

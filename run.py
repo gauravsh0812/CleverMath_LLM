@@ -170,11 +170,9 @@ def train_model(rank=None):
                 val_loss = evaluate(
                     model,
                     cfg.dataset.path_to_data,
-                    cfg.training.general.batch_size,
                     val_dataloader,
                     criterion,
                     device,
-                    vocab,
                 )
 
                 end_time = time.time()
@@ -252,11 +250,10 @@ def train_model(rank=None):
 
     test_loss = evaluate(
         model,
-        cfg.training.general.batch_size,
+        cfg.dataset.path_to_data,
         test_dataloader,
         criterion,
         device,
-        vocab,
         is_test=True,
     )
 
