@@ -92,6 +92,7 @@ class UNet(nn.Module):
         # saving some random tensors to visualize segmented image
         torch.save(x, "segmented_images/tnsr.pt")
 
+        exit()
         # positional encoding
         x = torch.flatten(x, 2, -1) # (B, features[0], length)
         x = x.permute(2, 0, 1)  # (length, B, features[0])
