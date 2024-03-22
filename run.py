@@ -259,12 +259,10 @@ def train_model(rank=None):
 
     if (not cfg.general.ddp) or (cfg.general.ddp and rank == 0):
         print(
-            f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} | \
-                Test Accuracy: {accuracy: .3f}"
+            f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} | Test Accuracy: {accuracy: .3f}"
         )
         loss_file.write(
-            f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} | \
-                Test Accuracy: {accuracy: .3f}"
+            f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} | Test Accuracy: {accuracy: .3f}"
         )
 
     # stopping time
