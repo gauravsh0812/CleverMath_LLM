@@ -1,1 +1,4 @@
 data/
+segmented_images/
+**/__pycache__/
+
