@@ -19,7 +19,7 @@ with open("config/config.yaml") as f:
 
 def get_max_len(train, test, val):
     qtns = train["QUESTION"] + test["QUESTION"] + val["QUESTION"]
-    len("qtns length: ", qtns)
+    print("qtns length: ", qtns)
     c = 0
     for _q in qtns:
         print(_q)
