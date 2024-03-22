@@ -50,7 +50,7 @@ class UNet(nn.Module):
             self.up_side_net.append(DoubleConv2d(feat*2, feat))
 
         # final layer of the U-Net        
-        self.final_conv = nn.Conv2d(features[0], Cin_UNet, kernel_size=1, stride=1)
+        self.final_conv = nn.Conv2d(features[0], features[0], kernel_size=1, stride=1)
         
         # positional encoding
         self.pe = PositionalEncoding(features[0], dropout, image_length)
