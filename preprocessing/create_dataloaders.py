@@ -17,6 +17,15 @@ mp.set_start_method('spawn', force=True)
 with open("config/config.yaml") as f:
     cfg = Box(yaml.safe_load(f))
 
+def get_max_len(train, test, val):
+    qtns = train["QUESTION"] + test["QUESTION"] + val["QUESTION"]
+    c = 0
+    for _q in qtns:
+        l = _q.split()
+        if l > c:
+            c=l
+    return c
+
 class Img2MML_dataset(Dataset):
     def __init__(self, dataframe):
         self.dataframe = dataframe
@@ -33,16 +42,19 @@ class Img2MML_dataset(Dataset):
         
 
 class My_pad_collate(object):
-    def __init__(self, device):
+    def __init__(self, device, max_len):
         self.device = device
+        self.max_len = max_len
         self.tokenizer = RobertaTokenizer.from_pretrained("FacebookAI/roberta-base")
 
     def __call__(self, batch):
         _img, _qtns, _lbls = zip(*batch)
         
-        padded_tokenized_qtns = self.tokenizer(_qtns, 
-                                 return_tensors="pt", 
-                                 padding=True)
+        padded_tokenized_qtns = self.tokenizer(
+                                _qtns, 
+                                return_tensors="pt",
+                                padding="max_length",
+                                max_length=self.max_len)
 
         # the labels will be stored as tensor
         # 3 will be stored as [0.,0.,0.]
@@ -107,16 +119,20 @@ def data_loaders():
     train.to_csv(f"{cfg.dataset.path_to_data}/train.csv", index=False)
     test.to_csv(f"{cfg.dataset.path_to_data}/test.csv", index=False)
     val.to_csv(f"{cfg.dataset.path_to_data}/val.csv", index=False)
+
+    # get max_len 
+    max_len = get_max_len(train, test, val)
+    cfg.dataset.max_len = max_len
     
-    # build vocab
+    # build vocab 
     print("building vocab...")
     vocab = RobertaTokenizer.from_pretrained("FacebookAI/roberta-base").get_vocab()
     with open(f"{cfg.dataset.path_to_data}/vocab.txt", 'w') as f:
         for word, idx in vocab.items():
             f.write(f"{word} {idx}\n")
-    
+
     # initializing pad collate class
-    mypadcollate = My_pad_collate(cfg.general.device)
+    mypadcollate = My_pad_collate(cfg.general.device, max_len)
 
     print("building dataloaders...")
 

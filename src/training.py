@@ -46,6 +46,8 @@ def train(
             ids,
             attns,
         )
+        print("output shape: ", output.shape)
+        exit()
 
         loss = criterion(output, labels)
         loss.backward()

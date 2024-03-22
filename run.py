@@ -47,11 +47,14 @@ def epoch_time(start_time, end_time):
 def define_model(vocab, device):
 
     # Image Auto-Encoder 
+    image_length = (cfg.dataset.image_width * cfg.dataset.image_height)
+    dropout = cfg.training.general.dropout
+    features = cfg.training.unet_encoder.features
     UNET = UNet(
         Cin_UNet=cfg.training.unet_encoder.input_channels, 
-        features=cfg.training.unet_encoder.features,
-        dropout=cfg.training.general.dropout,
-        image_length=(cfg.dataset.image_width * cfg.dataset.image_height),
+        features=features,
+        dropout=dropout,
+        image_length=image_length,
     )
 
     # Text Encoder
@@ -59,7 +62,10 @@ def define_model(vocab, device):
 
     model = ClevrMath_model(UNET, 
                             ROBERTA,
-                            cfg.training.unet_encoder.features)
+                            features,
+                            image_length,
+                            cfg.dataset.max_len,
+                            )
 
     return model
 
