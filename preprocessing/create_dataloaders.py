@@ -21,6 +21,7 @@ def get_max_len(train, test, val):
     qtns = train["QUESTION"] + test["QUESTION"] + val["QUESTION"]
     c = 0
     for _q in qtns:
+        print(_q)
         l = len(_q.split())
         if l > c:
             c=l
