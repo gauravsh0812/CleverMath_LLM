@@ -5,4 +5,5 @@ for _l in lbls:
     z = torch.zeros(11)
     z[_l] = 1.0
     print(z)
-    print(z.shape)
+    
+    print([i for i in range(len(z)) if z[i]==1.0][0])

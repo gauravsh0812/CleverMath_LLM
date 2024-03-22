@@ -4,90 +4,51 @@ import torch
 
 def evaluate(
     model,
-    img_tnsr_path,
-    img_graph_path,
+    data_path,
     batch_size,
     test_dataloader,
     criterion,
     device,
-    vocab,
-    isGraphPixel=True,
     is_test=False,
 ):
     model.eval()
     epoch_loss = 0
 
-    if is_test:
-        mml_seqs = open("logs/test_targets_100K.txt", "w")
-        pred_seqs = open("logs/test_predicted_100K.txt", "w")
-
     with torch.no_grad():
-        for i, (img, mml) in enumerate(test_dataloader):
-            batch_size = mml.shape[0]
-            mml = mml.to(device, dtype=torch.long)
+        for i, (imgs, ids, attns, labels) in enumerate(test_dataloader):
+            ids = ids.to(device)
+            attns = attns.to(device)
+            labels = labels.to(device, dtype=torch.long)
+        
             _imgs = list()
-            
-            _data_list = list()
-            for im in img:
-                # for vit patch encoder 
-                _imgs.append(torch.load(f"{img_tnsr_path}/{int(im.item())}.txt"))
-
-                # for pixel encoders
-                # for vit pixel encoder, _imgs will be same
-                if isGraphPixel:
-                    G = torch.load(f"{img_graph_path}/{int(im.item())}.pt")
-                    _data_list.append(G)
-            
-            if isGraphPixel:
-                batch = Batch.from_data_list(_data_list).to(device)
-            else:
-                batch=None
-
+            for im in imgs:
+                tnsr = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")
+                _imgs.append(tnsr)
             imgs = torch.stack(_imgs).to(device)
 
-            """
-            we will pass "mml" just to provide initial <sos> token.
-            There will no teacher forcing while validation and testing.
-            """
-            outputs, preds = model(
-                imgs,
-                batch,  
-                mml, 
-                is_test=is_test,
-            )  # O: (B, max_len, output_dim), preds: (B, max_len)
+            output = model(imgs,ids,attns)
 
-            if is_test:
-                preds = garbage2pad(preds, vocab, is_test=is_test)
-                output_dim = outputs.shape[-1]
-                mml_reshaped = mml[:, 1:].contiguous().view(-1)
-                outputs_reshaped = outputs.contiguous().view(
-                    -1, output_dim
-                )  # (B * max_len-1, output_dim)
-
-            else:
-                output_dim = outputs.shape[-1]            
-                outputs_reshaped = outputs.contiguous().view(
-                    -1, output_dim
-                )  # (B * max_len-1, output_dim)
-                mml_reshaped = mml[:, 1:].contiguous().view(-1)
-
-            loss = criterion(outputs_reshaped, mml_reshaped)
+            loss = criterion(
+                            output.contiguous().view(-1,output.shape[-1]), 
+                            labels.contiguous().view(-1)
+                            )
 
             epoch_loss += loss.item()
 
             if is_test:
-                for idx in range(batch_size):
-                    # writing target eqn
-                    mml_arr = [vocab.itos[imml] for imml in mml[idx, :]]
-                    mml_seq = " ".join(mml_arr)
-                    mml_seqs.write(mml_seq + "\n")
+                # output: (B, 11, 11)
+                # labels: (B, 11)
+                test_labels = open("logs/test_labels.txt", "w")
+                test_preds = open("logs/test_preds.txt", "w")
+                for b in range(batch_size):
+                    zl = labels[b,:]
+                    lbl = [i for i in range(len(zl)) if zl[i]==1.0][0]
 
-                    # writing pred eqn
-                    pred_arr = [
-                        vocab.itos[ipred] for ipred in preds.int()[idx, :]
-                    ]
-                    pred_seq = " ".join(pred_arr)
-                    pred_seqs.write(pred_seq + "\n")
+                    zo = output[b,-1,:] # last time step (B, 11)
+                    pred = torch.argmax(zo, dim=1)
+
+                    test_labels.write(str(lbl) + "\n")
+                    test_preds.write(str(pred) + "\n")
 
     net_loss = epoch_loss / len(test_dataloader)
     return net_loss
