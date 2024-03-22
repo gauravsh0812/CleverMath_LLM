@@ -52,14 +52,12 @@ class My_pad_collate(object):
 
     def __call__(self, batch):
         _img, _qtns, _lbls = zip(*batch)
-        
-        for _q in _qtns:
-            print(len(_q.split()))
 
         padded_tokenized_qtns = self.tokenizer(
                                 _qtns, 
                                 return_tensors="pt",
                                 padding='max_length',
+                                truncation=True,
                                 max_length=self.max_len)
 
         # the labels will be stored as tensor
