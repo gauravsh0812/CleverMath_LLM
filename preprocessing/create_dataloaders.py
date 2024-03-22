@@ -18,8 +18,10 @@ with open("config/config.yaml") as f:
     cfg = Box(yaml.safe_load(f))
 
 def get_max_len(train, test, val):
-    qtns = train["QUESTION"].to_list()
-    print("qtns length: ", qtns)
+    qtns = train["QUESTION"].to_list() + \
+           test["QUESTION"].to_list() + \
+           val["QUESTION"].to_list()
+    
     c = 0
     for _q in qtns:
         print(_q)
@@ -123,9 +125,7 @@ def data_loaders():
     val.to_csv(f"{cfg.dataset.path_to_data}/val.csv", index=False)
 
     # get max_len 
-    max_len = get_max_len(train, test, val)
-    print("max_len: ", max_len)
-    cfg.dataset.max_len = max_len
+    max_len = get_max_len(train, test, val)    
     
     # build vocab 
     print("building vocab...")
@@ -207,4 +207,8 @@ def data_loaders():
         pin_memory=cfg.dataset.pin_memory,
     )
 
-    return train_dataloader, test_dataloader, val_dataloader, vocab
+    return (train_dataloader, 
+            test_dataloader, 
+            val_dataloader, 
+            vocab, 
+            max_len)

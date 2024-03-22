@@ -44,7 +44,7 @@ def epoch_time(start_time, end_time):
     elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
     return elapsed_mins, elapsed_secs
 
-def define_model(vocab, device):
+def define_model(max_len):
 
     # Image Auto-Encoder 
     image_length = (cfg.dataset.image_width * cfg.dataset.image_height)
@@ -64,8 +64,7 @@ def define_model(vocab, device):
                             ROBERTA,
                             features,
                             image_length,
-                            cfg.dataset.max_len,
-                            )
+                            max_len)
 
     return model
 
@@ -93,8 +92,9 @@ def train_model(rank=None):
                 test_dataloader,
                 val_dataloader,
                 vocab,
+                max_len,
             ) = data_loaders()
-            model = define_model(vocab, device).to(device)
+            model = define_model(max_len).to(device)
 
         elif cfg.general.ddp:
             # create default process group
@@ -107,8 +107,9 @@ def train_model(rank=None):
                 test_dataloader,
                 val_dataloader,
                 vocab,
+                max_len,
             ) = data_loaders()
-            model = define_model(vocab, rank)
+            model = define_model(max_len)
             model = DDP(
                 model.to(f"cuda:{rank}"),
                 device_ids=[rank],
@@ -126,8 +127,9 @@ def train_model(rank=None):
             test_dataloader,
             val_dataloader,
             vocab,
+            max_len,
         ) = data_loaders()
-        model = define_model(vocab, device).to(device)
+        model = define_model(max_len).to(device)
 
     print("MODEL: ")
     print(f"The model has {count_parameters(model)} trainable parameters")

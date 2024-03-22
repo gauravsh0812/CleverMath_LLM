@@ -15,8 +15,6 @@ class ClevrMath_model(nn.Module):
         self.roberta = ROBERTA
         self.proj1 = nn.Linear(features[0], 768)
         self.proj2 = nn.Linear(image_length, max_len)
-        
-
 
     def forward(self, imgs, ids, attns):
         encoded_imgs = self.unet(imgs).permute(1,0,2)  # (B, L=w*h, features[0])
