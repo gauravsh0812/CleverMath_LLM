@@ -20,6 +20,8 @@ If running it for the first time, then we need to donwload and preprocess the da
 ```
 python preprocessing/preprocess_raw_data.py
 ``` 
+To get image tensors, make sure to set "get_image_tensors" True in config file.
+
 
 ### Training
 ```
