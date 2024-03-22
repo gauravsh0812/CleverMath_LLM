@@ -99,12 +99,12 @@ class UNet(nn.Module):
         return x
 
 
-unet = UNet(
-    Cin_UNet=4, 
-    features=[64,128,256,512],
-    dropout=0.1,
-    image_length=320*480,
-)
+# unet = UNet(
+#     Cin_UNet=4, 
+#     features=[64,128,256,512],
+#     dropout=0.1,
+#     image_length=320*480,
+# )
 
-x=torch.load("/groups/claytonm/gauravs_data/clevrmath_data/data/image_tensors/14580.pt")
-unet(x.unsqueeze(0))
+# x=torch.load("/groups/claytonm/gauravs_data/clevrmath_data/data/image_tensors/14580.pt")
+# unet(x.unsqueeze(0))
