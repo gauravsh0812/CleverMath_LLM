@@ -122,6 +122,7 @@ def data_loaders():
 
     # get max_len 
     max_len = get_max_len(train, test, val)
+    print("max_len: ", max_len)
     cfg.dataset.max_len = max_len
     
     # build vocab 
