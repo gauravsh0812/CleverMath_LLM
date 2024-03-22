@@ -14,7 +14,7 @@ class ClevrMath_model(nn.Module):
         super(ClevrMath_model, self).__init__()
         self.unet = UNET
         self.roberta = ROBERTA
-        self.proj1 = nn.Linear(features[0], 768)
+        self.proj1 = nn.Linear(4, 768)
         self.proj2 = nn.Linear(image_length, max_len)
         self.clf1 = nn.Linear(768*2, num_classes)
         self.clf2 = nn.Linear(max_len, num_classes)
