@@ -47,8 +47,6 @@ def train(
             attns,
         )
 
-        print("output from model shape: ", output.shape)
-
         # output: (B, 11, 11)
         # labels: (B, 11)
         loss = criterion(output, labels)
@@ -58,8 +56,6 @@ def train(
         optimizer.step()
 
         epoch_loss += loss.item()
-        print(epoch_loss)
-        exit()
 
         if (not ddp) or (ddp and rank == 0):
             desc = 'Loss: %.4f - Learning Rate: %.6f' % (loss.item(), optimizer.param_groups[0]['lr'])
