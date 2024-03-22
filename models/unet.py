@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torchvision.transforms.functional as ttf
-# from models.positional_encoding import PositionalEncoding
+from models.positional_encoding import PositionalEncoding
 
 class DoubleConv2d(nn.Module):
 
@@ -53,7 +53,7 @@ class UNet(nn.Module):
         self.final_conv = nn.Conv2d(features[0], 4, kernel_size=1, stride=1)
         
         # positional encoding
-        # self.pe = PositionalEncoding(Cin_UNet, dropout, image_length)
+        self.pe = PositionalEncoding(4, dropout, image_length)
 
     def forward(self, x):
 
@@ -66,8 +66,6 @@ class UNet(nn.Module):
             skip_connections.append(x)
             # maxpool i.e. step down in diagram
             x = self.maxpool(x)
-
-            print(x.shape)
 
         # till this step: x size is [B, 512, W, H]
         # run Bottleneck convolution layer: x size will be [B, 1024, W', H']
@@ -87,16 +85,12 @@ class UNet(nn.Module):
             # run 3x3 conv2d layer side ways
             x = self.up_side_net[idx](x)
 
-            print(x.shape)
-
         # final convolution layer
         x  = self.final_conv(x)
-        print(x.shape)
 
         # saving some random tensors to visualize segmented image
         torch.save(x, "segmented_images/tnsr.pt")
 
-        exit()
         # positional encoding
         x = torch.flatten(x, 2, -1) # (B, features[0], length)
         x = x.permute(2, 0, 1)  # (length, B, features[0])
