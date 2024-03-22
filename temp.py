@@ -7,3 +7,5 @@ for _l in lbls:
     print(z)
     
     print([i for i in range(len(z)) if z[i]==1.0][0])
+
+    "/groups/claytonm/gauravs_data/clevrmath_data/"
