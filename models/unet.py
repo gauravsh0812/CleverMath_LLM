@@ -108,5 +108,5 @@ unet = UNet(
     image_length=320*480,
 )
 
-x=torch.load("data/image_tensors/10.pt")
+x=torch.load("/groups/claytonm/gauravs_data/clevrmath_data/data/image_tensors/10.pt")
 unet(x.unsqueeze(0))
