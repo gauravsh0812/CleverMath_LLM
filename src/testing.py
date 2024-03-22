@@ -33,21 +33,28 @@ def evaluate(
                             )
 
             epoch_loss += loss.item()
-
+            
+            accuracy = None
             if is_test:
                 # output: (B, 11, 11)
                 # labels: (B, 11)
                 test_labels = open("logs/test_labels.txt", "w")
                 test_preds = open("logs/test_preds.txt", "w")
-                for b in range(output.shape[0]):
+                N = output.shape[0]
+                correct = 0
+                for b in range(N):
                     zl = labels[b,:]
                     lbl = [i for i in range(len(zl)) if zl[i]==1.0][0]
 
                     zo = output[b,-1,:] # last time step (11)
-                    pred = torch.argmax(zo,dim=0)
+                    pred = torch.argmax(zo,dim=0).item()
 
                     test_labels.write(str(lbl) + "\n")
                     test_preds.write(str(pred) + "\n")
 
+                    if int(pred) == int(lbl): correct+=1
+
+                accuracy = correct / N
+
     net_loss = epoch_loss / len(test_dataloader)
-    return net_loss
+    return net_loss, accuracy

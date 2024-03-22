@@ -167,7 +167,7 @@ def train_model(rank=None):
                     rank=rank,
                 )
 
-                val_loss = evaluate(
+                val_loss,_ = evaluate(
                     model,
                     cfg.dataset.path_to_data,
                     val_dataloader,
@@ -248,7 +248,7 @@ def train_model(rank=None):
         )
     )
 
-    test_loss = evaluate(
+    test_loss, accuracy = evaluate(
         model,
         cfg.dataset.path_to_data,
         test_dataloader,
@@ -259,10 +259,12 @@ def train_model(rank=None):
 
     if (not cfg.general.ddp) or (cfg.general.ddp and rank == 0):
         print(
-            f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |"
+            f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} | \
+                Test Accuracy: {accuracy: .3f}"
         )
         loss_file.write(
-            f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |"
+            f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} | \
+                Test Accuracy: {accuracy: .3f}"
         )
 
     # stopping time
