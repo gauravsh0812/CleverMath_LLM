@@ -53,7 +53,7 @@ class UNet(nn.Module):
         self.final_conv = nn.Conv2d(features[0], Cin_UNet, kernel_size=1, stride=1)
         
         # positional encoding
-        self.pe = PositionalEncoding(Cin_UNet, dropout, image_length)
+        # self.pe = PositionalEncoding(Cin_UNet, dropout, image_length)
 
     def forward(self, x):
 
