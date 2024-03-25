@@ -20,7 +20,7 @@ class ClevrMath_model(nn.Module):
         self.clf2 = nn.Linear(max_len, num_classes)
 
     def forward(self, imgs, ids, attns):
-        encoded_imgs = self.enc(imgs).permute(1,0,2)  # (B, L=w*h, dim)
+        encoded_imgs = self.enc(imgs)  # (B, L=w*h, dim)
         last_hidden_roberta = self.dec(ids, attns) # (B, max_len, 768)        
 
         # project the outputs 

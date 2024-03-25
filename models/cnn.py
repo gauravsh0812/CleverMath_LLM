@@ -113,5 +113,4 @@ class CNN(nn.Module):
         output = torch.flatten(output, 2, -1)  # (B, 512, L=H*W)
         output = output.permute(0, 2, 1)  # (B, L, 512)
         output += self.pe(output)  # (B, L, 512)     
-        print("enc shape: ", output.shape)   
         return self.linear(output)  # (B, L, dec_hid_dim)

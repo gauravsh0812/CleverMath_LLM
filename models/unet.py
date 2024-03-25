@@ -96,7 +96,7 @@ class UNet(nn.Module):
         x = x.permute(2, 0, 1)  # (length, B, features[0])
         x += self.pe(x) # (length, B, features[0])
 
-        return x
+        return x.permute(1,0,2)
 
 
 # unet = UNet(
