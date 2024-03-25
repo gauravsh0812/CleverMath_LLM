@@ -51,7 +51,9 @@ def train(
 
         # output: (B, 11, 11)
         # labels: (B, 11)
-        loss = criterion(output, labels)
+        loss = criterion(output.contiguous().view(-1, output.shape[-1]), 
+                         labels.contiguous().view(-1))
+        
         loss.backward()
 
         torch.nn.utils.clip_grad_norm_(model.parameters(), clip)
