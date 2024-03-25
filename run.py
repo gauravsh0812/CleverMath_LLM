@@ -51,6 +51,7 @@ def define_model(max_len):
     image_length = (cfg.dataset.image_width * cfg.dataset.image_height)
     dropout = cfg.training.general.dropout
     features = cfg.training.unet_encoder.features
+    dim = features[0]
     unet = UNet(
         Cin_UNet=cfg.training.unet_encoder.input_channels, 
         features=features,
@@ -59,6 +60,7 @@ def define_model(max_len):
     )
 
     # CNN encoder 
+    dim = 512
     cnn = CNN(input_channels=cfg.training.cnn_encoder.input_channels, 
               dec_hid_dim=cfg.training.cnn_encoder.hid_dim,
               dropout=dropout,
@@ -72,7 +74,7 @@ def define_model(max_len):
 
     model = ClevrMath_model(encoder, 
                             decoder,
-                            features,
+                            dim,
                             image_length,
                             max_len,
                             num_classes=11)

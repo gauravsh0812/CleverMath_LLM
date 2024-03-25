@@ -4,23 +4,23 @@ import torch.nn as nn
 class ClevrMath_model(nn.Module):
 
     def __init__(self, 
-                 UNET, 
-                 ROBERTA,
-                 features,
+                 encoder, 
+                 decoder,
+                 dim,
                  image_length,
                  max_len,
                  num_classes,
     ):
         super(ClevrMath_model, self).__init__()
-        self.unet = UNET
-        self.roberta = ROBERTA
-        self.proj1 = nn.Linear(4, 768)
+        self.enc = encoder
+        self.dec = decoder
+        self.proj1 = nn.Linear(dim, 768)
         self.proj2 = nn.Linear(image_length, max_len)
         self.clf1 = nn.Linear(768*2, num_classes)
         self.clf2 = nn.Linear(max_len, num_classes)
 
     def forward(self, imgs, ids, attns):
-        encoded_imgs = self.unet(imgs).permute(1,0,2)  # (B, L=w*h, features[0])
+        encoded_imgs = self.unet(imgs).permute(1,0,2)  # (B, L=w*h, dim)
         last_hidden_roberta = self.roberta(ids, attns) # (B, max_len, 768)
 
         # project the outputs 
