@@ -23,8 +23,8 @@ class CNN(nn.Module):
         self.kernel = (3, 3)
         self.padding = (1, 1)
         self.stride = (1, 1)
+        self.pe = PositionalEncoding(512, dropout, image_length)
         self.linear = nn.Linear(512, dec_hid_dim)
-        self.pe = PositionalEncoding(dec_hid_dim, dropout, image_length)
 
         self.cnn_encoder = nn.Sequential(
             # layer 1: [batch, Cin, w, h]
@@ -112,6 +112,5 @@ class CNN(nn.Module):
         output = self.cnn_encoder(src)  # (B, 512, W, H)
         output = torch.flatten(output, 2, -1)  # (B, 512, L=H*W)
         output = output.permute(0, 2, 1)  # (B, L, 512)
-        output += self.pe(output)  # (B, L, 512)
-        print("cnn output shape: ", output.shape)
+        output += self.pe(output)  # (B, L, 512)        
         return self.linear(output)  # (B, L, dec_hid_dim)
