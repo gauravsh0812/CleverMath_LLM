@@ -13,6 +13,7 @@ import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 from preprocessing.create_dataloaders import data_loaders
 from models.unet import UNet
+from models.cnn import CNN
 from models.roberta import RobertaEncoder
 from models.model import ClevrMath_model
 from src.training import train
@@ -50,18 +51,27 @@ def define_model(max_len):
     image_length = (cfg.dataset.image_width * cfg.dataset.image_height)
     dropout = cfg.training.general.dropout
     features = cfg.training.unet_encoder.features
-    UNET = UNet(
+    unet = UNet(
         Cin_UNet=cfg.training.unet_encoder.input_channels, 
         features=features,
         dropout=dropout,
         image_length=image_length,
     )
 
-    # Text Encoder
-    ROBERTA = RobertaEncoder()
+    # CNN encoder 
+    cnn = CNN(input_channels=cfg.training.cnn_encoder.input_channels, 
+              dec_hid_dim=cfg.training.cnn_encoder.hid_dim,
+              dropout=dropout,
+              image_length=image_length)
 
-    model = ClevrMath_model(UNET, 
-                            ROBERTA,
+    # Text Encoder
+    roberta = RobertaEncoder()
+
+    encoder = cfg.training.model_type.encoder
+    decoder = cfg.training.model_type.decoder
+
+    model = ClevrMath_model(encoder, 
+                            decoder,
                             features,
                             image_length,
                             max_len,
