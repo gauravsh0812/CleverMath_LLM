@@ -19,7 +19,7 @@ class CNN(nn.Module):
         """
         super(CNN, self).__init__()
 
-        self.scale = torch.sqrt(torch.FloatTensor([0.5])).to(self.device)
+        self.scale = torch.sqrt(torch.FloatTensor([0.5]))#.to(self.device)
         self.kernel = (3, 3)
         self.padding = (1, 1)
         self.stride = (1, 1)
