@@ -50,11 +50,11 @@ def define_model(max_len):
     encoder = cfg.training.model_type.encoder
     decoder = cfg.training.model_type.decoder
     
-    image_length = (cfg.dataset.image_width * cfg.dataset.image_height)
     dropout = cfg.training.general.dropout
     
     if encoder == "unet":
         # Image Auto-Encoder 
+        image_length = (cfg.dataset.image_width * cfg.dataset.image_height)
         features = cfg.training.unet_encoder.features
         dim = features[0]
         ENC = UNet(
@@ -66,6 +66,7 @@ def define_model(max_len):
 
     elif encoder == "cnn":
         # CNN encoder 
+        image_length = 10
         dim = cfg.training.cnn_encoder.hid_dim
         ENC = CNN(input_channels=cfg.training.cnn_encoder.input_channels, 
                 dec_hid_dim=cfg.training.cnn_encoder.hid_dim,
