@@ -66,7 +66,7 @@ def define_model(max_len):
 
     elif encoder == "cnn":
         # CNN encoder 
-        dim = 512
+        dim = cfg.training.cnn_encoder.hid_dim
         ENC = CNN(input_channels=cfg.training.cnn_encoder.input_channels, 
                 dec_hid_dim=cfg.training.cnn_encoder.hid_dim,
                 dropout=dropout,
