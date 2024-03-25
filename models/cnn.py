@@ -108,9 +108,10 @@ class CNN(nn.Module):
                 elif "bias" in name:
                     nn.init.constant_(param.data, 0)
 
-    def forward(self, src, encoding_type=None):
+    def forward(self, src):
         output = self.cnn_encoder(src)  # (B, 512, W, H)
         output = torch.flatten(output, 2, -1)  # (B, 512, L=H*W)
         output = output.permute(0, 2, 1)  # (B, L, 512)
         output += self.pe(output)  # (B, L, 512)
+        print("cnn output shape: ", output.shape)
         return self.linear(output)  # (B, L, dec_hid_dim)
