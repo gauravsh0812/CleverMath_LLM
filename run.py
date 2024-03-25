@@ -47,30 +47,34 @@ def epoch_time(start_time, end_time):
 
 def define_model(max_len):
 
-    # Image Auto-Encoder 
-    image_length = (cfg.dataset.image_width * cfg.dataset.image_height)
-    dropout = cfg.training.general.dropout
-    features = cfg.training.unet_encoder.features
-    dim = features[0]
-    unet = UNet(
-        Cin_UNet=cfg.training.unet_encoder.input_channels, 
-        features=features,
-        dropout=dropout,
-        image_length=image_length,
-    )
-
-    # CNN encoder 
-    dim = 512
-    cnn = CNN(input_channels=cfg.training.cnn_encoder.input_channels, 
-              dec_hid_dim=cfg.training.cnn_encoder.hid_dim,
-              dropout=dropout,
-              image_length=image_length)
-
-    # Text Encoder
-    roberta = RobertaEncoder()
-
     encoder = cfg.training.model_type.encoder
     decoder = cfg.training.model_type.decoder
+    
+    if encoder == "unet":
+        # Image Auto-Encoder 
+        image_length = (cfg.dataset.image_width * cfg.dataset.image_height)
+        dropout = cfg.training.general.dropout
+        features = cfg.training.unet_encoder.features
+        dim = features[0]
+        unet = UNet(
+            Cin_UNet=cfg.training.unet_encoder.input_channels, 
+            features=features,
+            dropout=dropout,
+            image_length=image_length,
+        )
+
+    elif encoder == "cnn":
+        # CNN encoder 
+        image_length = (cfg.dataset.image_width * cfg.dataset.image_height)
+        dim = 512
+        cnn = CNN(input_channels=cfg.training.cnn_encoder.input_channels, 
+                dec_hid_dim=cfg.training.cnn_encoder.hid_dim,
+                dropout=dropout,
+                image_length=image_length)
+
+    if decoder == "roberta":
+        # Text Encoder
+        roberta = RobertaEncoder()    
 
     model = ClevrMath_model(encoder, 
                             decoder,
