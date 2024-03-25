@@ -17,7 +17,7 @@ class CNN(nn.Module):
         :param dropout: dropout
         :param device: device to be used
         """
-        super(CNN_Encoder, self).__init__()
+        super(CNN, self).__init__()
 
         self.scale = torch.sqrt(torch.FloatTensor([0.5])).to(self.device)
         self.kernel = (3, 3)
