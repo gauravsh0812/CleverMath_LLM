@@ -47,6 +47,8 @@ def train(
             attns,
         )
 
+        print("output shape: ", output.shape)
+
         # output: (B, 11, 11)
         # labels: (B, 11)
         loss = criterion(output, labels)
