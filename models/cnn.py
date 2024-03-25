@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 from models.positional_encoding import PositionalEncoding
 
-class CNN_Encoder(nn.Module):
+class CNN(nn.Module):
     def __init__(self, input_channels, 
                  dec_hid_dim,
                  dropout,
@@ -25,7 +25,7 @@ class CNN_Encoder(nn.Module):
         self.stride = (1, 1)
         self.linear = nn.Linear(512, dec_hid_dim)
         self.pe = PositionalEncoding(dec_hid_dim, dropout, image_length)
-        
+
         self.cnn_encoder = nn.Sequential(
             # layer 1: [batch, Cin, w, h]
             nn.Conv2d(
