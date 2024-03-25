@@ -21,14 +21,12 @@ class ClevrMath_model(nn.Module):
 
     def forward(self, imgs, ids, attns):
         encoded_imgs = self.enc(imgs).permute(1,0,2)  # (B, L=w*h, dim)
-        last_hidden_roberta = self.dec(ids, attns) # (B, max_len, 768)
-
-        print("encoded image shape: ", encoded_imgs.shape)
-        
+        last_hidden_roberta = self.dec(ids, attns) # (B, max_len, 768)        
 
         # project the outputs 
         encoded_imgs = self.proj1(encoded_imgs) # (B, L, 768)
         encoded_imgs = encoded_imgs.permute(0,2,1) # (B, 768, L)
+        print("enc shape: ", encoded_imgs.shape)
         encoded_imgs = self.proj2(encoded_imgs) # (B, 768, max_len)
         encoded_imgs = encoded_imgs.permute(0,2,1) # (B, max_len, 768)
 
