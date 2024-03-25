@@ -25,6 +25,7 @@ class ClevrMath_model(nn.Module):
 
         # project the outputs 
         encoded_imgs = self.proj1(encoded_imgs) # (B, L, 768)
+        print("enc shape: ", encoded_imgs.shape)
         encoded_imgs = encoded_imgs.permute(0,2,1) # (B, 768, L)
         encoded_imgs = self.proj2(encoded_imgs) # (B, 768, max_len)
         encoded_imgs = encoded_imgs.permute(0,2,1) # (B, max_len, 768)
