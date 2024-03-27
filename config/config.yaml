@@ -22,7 +22,7 @@ dataset:
 
 training:
   model_type:
-    encoder: "cnn"
+    encoder: "unet"
     decoder: "roberta"
 
   general:
