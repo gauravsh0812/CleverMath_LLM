@@ -20,4 +20,4 @@ class ClipVisionEncoder(nn.Module):
 
 
 c = ClipVisionEncoder()
-c("data/images/0.png")
+c("0.png")
