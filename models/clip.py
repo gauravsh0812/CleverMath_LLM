@@ -20,4 +20,6 @@ class ClipVisionEncoder(nn.Module):
 
 
 c = ClipVisionEncoder()
-c("0.png")
+h,p = c("0.png")
+print("h: ", h.shape)
+print("p: ", p.shape)
