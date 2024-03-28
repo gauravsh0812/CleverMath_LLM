@@ -24,6 +24,10 @@ training:
   model_type:
     encoder: "unet"
     decoder: "roberta"
+  
+  lmm_model_type:
+    encoder: "clip"
+    decoder: "llama2"
 
   general:
     clip: 1 

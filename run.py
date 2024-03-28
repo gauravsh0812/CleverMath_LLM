@@ -86,6 +86,7 @@ def define_model(max_len):
 
     return model
 
+
 def train_model(rank=None):
     # set_random_seed
     set_random_seed(cfg.general.seed)
