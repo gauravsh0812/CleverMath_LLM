@@ -10,11 +10,11 @@ class Llama2Decoder(nn.Module):
 
     def forward(self, x):
         # x: (B, seq_len), dtype=long
-        output = self.model(input_ids=x.long(),
+        output = self.model(input_ids=x,
                                      output_hidden_states=True)
 
         print(output.shape)
 
 l = Llama2Decoder()
-x = torch.rand((10, 64))
+x = torch.rand(10, 64).long()
 l(x)
