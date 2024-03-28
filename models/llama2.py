@@ -14,7 +14,7 @@ class Llama2Decoder(nn.Module):
         output = self.model(input_ids=x,
                                      output_hidden_states=True)
 
-        print(output.shape)
+        print(output.__dict__())
 
 l = Llama2Decoder()
 # x = torch.rand(10, 64).long()
