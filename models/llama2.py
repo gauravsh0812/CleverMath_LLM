@@ -1,11 +1,11 @@
 import torch.nn as nn
 import torch
-from transformers import LlamaModel, LlamaForSequenceClassification
+from transformers import LlamaForSequenceClassification
 
 class Llama2Decoder(nn.Module):
     def __init__(self,):
         super(Llama2Decoder, self).__init__()
-        self.model = LlamaModel.from_pretrained("meta-llama/Llama-2-7b-hf",
+        self.model = LlamaForSequenceClassification.from_pretrained("meta-llama/Llama-2-7b-hf",
                                                                     token="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")
 
     def forward(self, x):
