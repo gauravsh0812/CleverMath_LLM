@@ -10,7 +10,7 @@ class Llama2Decoder(nn.Module):
 
     def forward(self, x):
         # x: (B, seq_len), dtype=long
-        output = self.model.generate(input_ids=x,
+        output = self.model(input_ids=x,
                                      output_hidden_states=True)
 
         print(output.shape)
