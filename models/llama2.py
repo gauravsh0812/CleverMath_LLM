@@ -1,5 +1,5 @@
 import torch.nn as nn
-import troch
+import torch
 from transformers import LlamaForSequenceClassification
 
 class Llama2Decoder(nn.Module):
@@ -11,4 +11,9 @@ class Llama2Decoder(nn.Module):
         # x: (B, seq_len), dtype=long
         output = self.model.generate(input_ids=x,
                                      output_hidden_states=True)
-  
+
+        print(output.shape)
+
+l = Llama2Decoder()
+x = torch.rand((10, 64))
+l(x)

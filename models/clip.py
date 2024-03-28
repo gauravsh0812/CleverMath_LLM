@@ -16,10 +16,6 @@ class ClipVisionEncoder(nn.Module):
         last_hidden_state = outputs.last_hidden_state
         pooled_output = outputs.pooler_output  # pooled classes states
 
+        # hidden: (B, L, 768)
+        # pooled: (B, 768)
         return last_hidden_state, pooled_output
-
-
-c = ClipVisionEncoder()
-h,p = c("0.png")
-print("h: ", h.shape)
-print("p: ", p.shape)
