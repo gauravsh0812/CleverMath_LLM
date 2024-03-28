@@ -20,4 +20,4 @@ l = Llama2Decoder()
 # x = torch.rand(10, 64).long()
 x = [torch.rand(64).long() for _ in range(10)]
 for _x in x:
-    l(_x)
+    l(_x.unsqueeze(0))
