@@ -32,8 +32,8 @@ def train(
         
         _imgs = list()
         for im in imgs:
-            tnsr = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")
-            _imgs.append(tnsr)
+            _i = f"{data_path}/images/{int(im.item())}.png"
+            _imgs.append(_i)
         
         imgs = torch.stack(_imgs).to(device)
         
