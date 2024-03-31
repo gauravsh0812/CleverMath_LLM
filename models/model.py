@@ -20,6 +20,8 @@ class ClevrMath_model(nn.Module):
 
     def forward(self, imgs, ids, attns, device):
         encoded_imgs,pooled_layers = self.enc(imgs, device)  # (B, L=w*h, dim)
+        print("clip outpus: ", encoded_imgs.shape, pooled_layers.shape)
+        
         last_hidden_roberta = self.dec(ids, attns) # (B, max_len, 768)        
         output = self.adaptor(encoded_imgs,
                                     last_hidden_roberta)  # (B, features[-1])

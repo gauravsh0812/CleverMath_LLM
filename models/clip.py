@@ -19,8 +19,6 @@ class ClipVisionEncoder(nn.Module):
             outputs = self.model(**inputs)
             last_hidden_state = outputs.last_hidden_state
             pooled_output = outputs.pooler_output  # pooled classes states
-            
-            print("clip: ", last_hidden_state.shape, pooled_output.shape)
 
             _hid.append(last_hidden_state.unsqueeze(0))
             _pool.append(pooled_output.unsqueeze(0))
