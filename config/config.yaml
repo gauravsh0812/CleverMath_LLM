@@ -21,13 +21,6 @@ dataset:
   image_height: 320
 
 training:
-  model_type:
-    clip_enc: True
-    lmm_model: True
-    encoder: "clip"
-    decoder1: "roberta"
-    decoder2: "llama2"
-
   general:
     clip: 1 
     batch_size: 10
@@ -39,14 +32,6 @@ training:
     early_stopping: 5
     scheduler_step_size: 50
     scheduler_gamma: 0.5
-
-  unet_encoder: 
-    input_channels: 4
-    features: [64, 128, 256, 512]
-  
-  cnn_encoder:
-    input_channels: 4
-    hid_dim: 256
   
   adaptor:
     in_dim: 768

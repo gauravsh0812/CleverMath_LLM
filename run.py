@@ -12,11 +12,8 @@ import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 from preprocessing.create_dataloaders import data_loaders
-from models.unet import UNet
-from models.cnn import CNN
 from models.clip import ClipVisionEncoder
 from models.roberta import RobertaEncoder
-from models.llama2 import Llama2Decoder
 from models.model import ClevrMath_model
 from models.adaptor import Adaptor
 from src.training import train
@@ -49,53 +46,18 @@ def epoch_time(start_time, end_time):
     return elapsed_mins, elapsed_secs
 
 def define_model(max_len):
-
-    encoder = cfg.training.model_type.encoder
-    decoder1 = cfg.training.model_type.decoder1
-    decoder2 = cfg.training.model_type.decoder2
     
-    dropout = cfg.training.general.dropout
-    
-    if encoder == "unet":
-        # Image Auto-Encoder 
-        image_length = (cfg.dataset.image_width * cfg.dataset.image_height)
-        features = cfg.training.unet_encoder.features
-        dim = features[0]
-        ENC = UNet(
-            Cin_UNet=cfg.training.unet_encoder.input_channels, 
-            features=features,
-            dropout=dropout,
-            image_length=image_length,
-        )
+    ENC = ClipVisionEncoder()
 
-    elif encoder == "cnn":
-        # CNN encoder 
-        image_length = 4800
-        dim = cfg.training.cnn_encoder.hid_dim
-        ENC = CNN(input_channels=cfg.training.cnn_encoder.input_channels, 
-                dec_hid_dim=cfg.training.cnn_encoder.hid_dim,
-                dropout=dropout,
-                image_length=image_length)
-        
-    elif encoder == "clip":
-        ENC = ClipVisionEncoder()
-
-    if decoder1 == "roberta":
-        # Text Encoder
-        DEC1 = RobertaEncoder()    
-    
-    if decoder2 == "llama2":
-        DEC2 = Llama2Decoder()
+    # Text Encoder
+    DEC1 = RobertaEncoder()        
 
     ADA = Adaptor(cfg.training.adaptor.in_dim, 
                   cfg.training.adaptor.features)
 
     model = ClevrMath_model(ENC, 
                             DEC1,
-                            DEC2,
                             ADA,
-                            dim,
-                            image_length,
                             max_len,
                             num_classes=11)
 
@@ -196,7 +158,6 @@ def train_model(rank=None):
                     criterion,
                     cfg.training.general.clip,
                     device,
-                    clip_enc=cfg.training.model_type.clip_enc,
                     ddp=cfg.general.ddp,
                     rank=rank,
                 )
