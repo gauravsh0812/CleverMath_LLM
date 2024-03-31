@@ -21,7 +21,7 @@ class ClipVisionEncoder(nn.Module):
             last_hidden_state = outputs.last_hidden_state
             pooled_output = outputs.pooler_output  # pooled classes states
             
-            print("clip: ", last_hidden_state.shape, pooled_output.shape)
+            # print("clip: ", last_hidden_state.shape, pooled_output.shape)
 
             _hid.append(last_hidden_state.unsqueeze(0))
             _pool.append(pooled_output.unsqueeze(0))
@@ -30,5 +30,5 @@ class ClipVisionEncoder(nn.Module):
         # pooled: (B, 768)
         return torch.stack(_hid).to(device), torch.stack(_pool).to(device)
     
-cve = ClipVisionEncoder()
-cve(["/groups/claytonm/gauravs_data/clevrmath_data/data/images/13704.png"], "cuda")
+# cve = ClipVisionEncoder()
+# cve(["/groups/claytonm/gauravs_data/clevrmath_data/data/images/13704.png"], "cuda")
