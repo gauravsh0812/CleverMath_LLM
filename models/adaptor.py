@@ -12,6 +12,9 @@ class Adaptor(nn.Module):
         self.relu = nn.ReLU()
     
     def forward(self, x_clip, x_roberta):
+
+        print("xclip, xroberta: ", x_clip.shape, x_roberta.shape)
+
         xc = self.relu(self.lin1(x_clip))
         xc = self.relu(self.lin2(xc))
         xc = self.relu(self.lin3(xc))

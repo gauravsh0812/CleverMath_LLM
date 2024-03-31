@@ -14,7 +14,6 @@ class ClipVisionEncoder(nn.Module):
 
         _hid, _pool = list(), list()
         for image_path in image_paths:
-            print("ip: ", image_path)
             image = Image.open(image_path)
             inputs = self.processor(images=image, return_tensors="pt").to(device)
             outputs = self.model(**inputs)
