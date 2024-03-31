@@ -1,23 +1,22 @@
 import torch.nn as nn
 import torch
-from transformers import LlamaForSequenceClassification
+from transformers import LlamaModel
+
 
 class Llama2Decoder(nn.Module):
-    def __init__(self,):
+    def __init__(self,api_key):
         super(Llama2Decoder, self).__init__()
 
-        self.model = LlamaForSequenceClassification.from_pretrained("meta-llama/Llama-2-7b-hf",
-                                                                    token="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")
+        self.model = LlamaModel.from_pretrained("meta-llama/Llama-2-7b-hf",
+                                                                    token=api_key)
 
     def forward(self, x):
         # x: (B, seq_len), dtype=long
         output = self.model(input_ids=x,
-                                     output_hidden_states=True)
+                            output_hidden_states=True)
 
-        print(output)
+        print(output.shape)
 
-l = Llama2Decoder()
-# x = torch.rand(10, 64).long()
-x = [torch.rand(64).long() for _ in range(10)]
-for _x in x:
-    l(_x.unsqueeze(0))
+l = Llama2Decoder("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")
+x = torch.rand(1, 64).long()
+l(x)

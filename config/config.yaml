@@ -22,12 +22,9 @@ dataset:
 
 training:
   model_type:
-    encoder: "unet"
-    decoder: "roberta"
-  
-  lmm_model_type:
     encoder: "clip"
-    decoder: "llama2"
+    decoder1: "roberta"
+    decoder2: "llama2"
 
   general:
     clip: 1 

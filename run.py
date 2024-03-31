@@ -14,7 +14,9 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 from preprocessing.create_dataloaders import data_loaders
 from models.unet import UNet
 from models.cnn import CNN
+from models.clip import ClipVisionEncoder
 from models.roberta import RobertaEncoder
+from models.llama2 import Llama2Decoder
 from models.model import ClevrMath_model
 from src.training import train
 from src.testing import evaluate
@@ -48,7 +50,8 @@ def epoch_time(start_time, end_time):
 def define_model(max_len):
 
     encoder = cfg.training.model_type.encoder
-    decoder = cfg.training.model_type.decoder
+    decoder1 = cfg.training.model_type.decoder1
+    decoder2 = cfg.training.model_type.decoder2
     
     dropout = cfg.training.general.dropout
     
@@ -72,13 +75,20 @@ def define_model(max_len):
                 dec_hid_dim=cfg.training.cnn_encoder.hid_dim,
                 dropout=dropout,
                 image_length=image_length)
+        
+    elif encoder == "clip":
+        ENC = ClipVisionEncoder()
 
-    if decoder == "roberta":
+    if decoder1 == "roberta":
         # Text Encoder
-        DEC = RobertaEncoder()    
+        DEC1 = RobertaEncoder()    
+    
+    if decoder2 == "llama2":
+        DEC2 = Llama2Decoder()
 
     model = ClevrMath_model(ENC, 
-                            DEC,
+                            DEC1,
+                            DEC2,
                             dim,
                             image_length,
                             max_len,
