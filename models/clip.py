@@ -20,8 +20,8 @@ class ClipVisionEncoder(nn.Module):
             last_hidden_state = outputs.last_hidden_state
             pooled_output = outputs.pooler_output  # pooled classes states
 
-            _hid.append(last_hidden_state.unsqueeze(0))
-            _pool.append(pooled_output.unsqueeze(0))
+            _hid.append(last_hidden_state.squeeze(0))
+            _pool.append(pooled_output.squeeze(0))
 
         # hidden: (B, L, 768)
         # pooled: (B, 768)
