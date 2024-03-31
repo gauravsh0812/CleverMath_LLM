@@ -50,13 +50,13 @@ def define_model(max_len):
     ENC = ClipVisionEncoder()
 
     # Text Encoder
-    DEC1 = RobertaEncoder()        
+    DEC = RobertaEncoder()        
 
     ADA = Adaptor(cfg.training.adaptor.in_dim, 
                   cfg.training.adaptor.features)
 
     model = ClevrMath_model(ENC, 
-                            DEC1,
+                            DEC,
                             ADA,
                             max_len,
                             num_classes=11)
