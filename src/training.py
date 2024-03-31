@@ -35,8 +35,6 @@ def train(
             _i = f"{data_path}/images/{int(im.item())}.png"
             _imgs.append(_i)
         
-        imgs = torch.stack(_imgs).to(device)
-        
         # setting gradients to zero
         optimizer.zero_grad()
 
@@ -44,6 +42,7 @@ def train(
             imgs,
             ids,
             attns,
+            device
         )
 
         print("output shape: ", output.shape)

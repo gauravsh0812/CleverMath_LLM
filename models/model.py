@@ -9,6 +9,7 @@ class ClevrMath_model(nn.Module):
                  adaptor,
                  max_len,
                  num_classes,
+                 
     ):
         super(ClevrMath_model, self).__init__()
         self.enc = encoder
@@ -17,8 +18,8 @@ class ClevrMath_model(nn.Module):
         self.clf1 = nn.Linear(64, num_classes)
         self.clf2 = nn.Linear(max_len, num_classes)
 
-    def forward(self, imgs, ids, attns):
-        encoded_imgs = self.enc(imgs)  # (B, L=w*h, dim)
+    def forward(self, imgs, ids, attns, device):
+        encoded_imgs, pooled_layers = self.enc(imgs, device)  # (B, L=w*h, dim)
         last_hidden_roberta = self.dec(ids, attns) # (B, max_len, 768)        
         output = self.adaptor(encoded_imgs,
                                     last_hidden_roberta)  # (B, features[-1])
