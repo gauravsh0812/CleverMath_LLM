@@ -8,6 +8,7 @@ def evaluate(
     test_dataloader,
     criterion,
     device,
+    lmm_enc=False,
     is_test=False,
 ):
     model.eval()

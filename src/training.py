@@ -10,6 +10,7 @@ def train(
     criterion,
     clip,
     device,
+    clip_enc=False,
     ddp=False,
     rank=None,
 ):
@@ -29,14 +30,22 @@ def train(
         ids = ids.to(device)
         attns = attns.to(device)
         labels = labels.to(device, dtype=torch.long)
-        
-        _imgs = list()
-        for im in imgs:
-            tnsr = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")
-            _imgs.append(tnsr)
+
+        if not clip_enc:
+            _imgs = list()
+            for im in imgs:
+                tnsr = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")
+                _imgs.append(tnsr)
             
+            imgs = torch.stack(_imgs).to(device)
         
-        imgs = torch.stack(_imgs).to(device)
+        else:
+            _imgs = list()
+            for im in imgs:
+                _i = f"{data_path}/images/{int(im.item())}.png"
+                _imgs.append(_i)
+            
+            imgs = torch.stack(_imgs).to(device)
         
         # setting gradients to zero
         optimizer.zero_grad()

@@ -18,6 +18,7 @@ from models.clip import ClipVisionEncoder
 from models.roberta import RobertaEncoder
 from models.llama2 import Llama2Decoder
 from models.model import ClevrMath_model
+from models.adaptor import Adaptor
 from src.training import train
 from src.testing import evaluate
 
@@ -86,9 +87,13 @@ def define_model(max_len):
     if decoder2 == "llama2":
         DEC2 = Llama2Decoder()
 
+    ADA = Adaptor(cfg.training.adaptor.in_dim, 
+                  cfg.training.adaptor.features)
+
     model = ClevrMath_model(ENC, 
                             DEC1,
                             DEC2,
+                            ADA,
                             dim,
                             image_length,
                             max_len,
@@ -191,6 +196,7 @@ def train_model(rank=None):
                     criterion,
                     cfg.training.general.clip,
                     device,
+                    clip_enc=cfg.training.model_type.clip_enc,
                     ddp=cfg.general.ddp,
                     rank=rank,
                 )
@@ -201,6 +207,7 @@ def train_model(rank=None):
                     val_dataloader,
                     criterion,
                     device,
+                    clip_enc=cfg.training.model_type.clip_enc,
                 )
 
                 end_time = time.time()
