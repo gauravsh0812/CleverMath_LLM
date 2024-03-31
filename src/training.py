@@ -30,16 +30,16 @@ def train(
         attns = attns.to(device)
         labels = labels.to(device, dtype=torch.long)
         
-        imgs = list()
+        _imgs = list()
         for im in imgs:
             _i = f"{data_path}/images/{int(im.item())}.png"
-            imgs.append(_i)
+            _imgs.append(_i)
         
         # setting gradients to zero
         optimizer.zero_grad()
 
         output = model(
-            imgs,
+            _imgs,
             ids,
             attns,
             device

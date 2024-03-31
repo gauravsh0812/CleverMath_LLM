@@ -19,7 +19,6 @@ class ClevrMath_model(nn.Module):
         self.clf2 = nn.Linear(max_len, num_classes)
 
     def forward(self, imgs, ids, attns, device):
-        print("imgs: ", imgs)
         encoded_imgs,pooled_layers = self.enc(imgs, device)  # (B, L=w*h, dim)
         last_hidden_roberta = self.dec(ids, attns) # (B, max_len, 768)        
         output = self.adaptor(encoded_imgs,
