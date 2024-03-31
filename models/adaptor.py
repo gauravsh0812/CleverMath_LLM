@@ -18,6 +18,7 @@ class Adaptor(nn.Module):
         print("xclip, xroberta: ", x_clip.shape, x_roberta.shape)
 
         xc = self.proj(x_clip.permute(0,2,1)).permute(0,2,1)
+        print("xclip shape: ", xc.shape)
         xc = self.relu(self.lin1(x_clip))
         xc = self.relu(self.lin2(xc))
         xc = self.relu(self.lin3(xc))
