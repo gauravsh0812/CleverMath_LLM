@@ -41,7 +41,7 @@ def evaluate(
             pred_labels = torch.argmax(output, dim=1)
             l = labels.cpu().tolist()
             p = pred_labels.cpu().tolist()
-            accuracy += len([i for i in range(len(p)) if p[i] == l[i]])
+            accuracy += len([i for i in range(len(p)) if p[i] == l[i]])/len(p)
             
     net_loss = epoch_loss / len(test_dataloader)
     accuracy = accuracy / len(test_dataloader)
