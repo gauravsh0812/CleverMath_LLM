@@ -51,7 +51,7 @@ def evaluate(
                 for i in range(len(p)):
                     if p[i] == l[i]:
                        count+=1
-                    labels_file.write(f"{l[i]} \t {p[i]} \n")
+                    labels_file.write(f"{l[i]} \t\t {p[i]} \n")
 
                 accuracy+=count     
 
