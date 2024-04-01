@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class Adaptor(nn.Module):
-    def __init__(self, in_dim, features, num_classes):
+    def __init__(self, in_dim, features, max_len, num_classes):
         super(Adaptor, self).__init__()
 
         # features: [512, 256, 128, 64]
@@ -12,8 +12,8 @@ class Adaptor(nn.Module):
         self.lin4 = nn.Linear(features[2], features[3])
         self.lin5 = nn.Linear(features[3], num_classes)
         self.final = nn.Linear(num_classes*2, num_classes)
-        self.proj_clip = nn.Linear(50,19)
-        self.proj_final = nn.Linear(19*11,num_classes)
+        self.proj_clip = nn.Linear(50,max_len)
+        self.proj_final = nn.Linear(max_len*num_classes,num_classes)
         self.relu = nn.ReLU()
     
     def forward(self, x_clip, x_roberta):

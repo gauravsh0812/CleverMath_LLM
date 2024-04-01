@@ -60,7 +60,8 @@ def define_model(max_len):
 
     ADA = Adaptor(cfg.training.adaptor.in_dim, 
                   cfg.training.adaptor.features,
-                  num_classes=cfg.training.general.num_classes)
+                  max_len,
+                  num_classes=cfg.training.general.num_classes,)
 
     model = ClevrMath_model(ENC, 
                             DEC,
