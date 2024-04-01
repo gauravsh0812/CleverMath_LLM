@@ -12,7 +12,8 @@ class Adaptor(nn.Module):
         self.lin4 = nn.Linear(features[2], features[3])
         self.lin5 = nn.Linear(features[3], num_classes)
         self.final = nn.Linear(num_classes*2, num_classes)
-        self.proj = nn.Linear(50,19)
+        self.proj_clip = nn.Linear(50,19)
+        self.proj_final = nn.Linear(19,num_classes)
         self.relu = nn.ReLU()
     
     def forward(self, x_clip, x_roberta):
@@ -33,5 +34,5 @@ class Adaptor(nn.Module):
         # x_roberta + x
         x = torch.cat((xc,xr), dim=-1)
         x = self.relu(self.final(x))
-        
-        return x   # (B, max_len, 11)
+        x = self.proj_final(x.permute(0,2,1)).permute(0,2,1)
+        return x   # (B, 11, 11)
