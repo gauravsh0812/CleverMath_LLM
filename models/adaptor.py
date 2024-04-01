@@ -35,6 +35,5 @@ class Adaptor(nn.Module):
         x = torch.cat((xc,xr), dim=-1)  
         x = self.relu(self.final(x))  # (B, max_len, num_classes)
         x = torch.flatten(x, start_dim=1, end_dim=-1) # (B, -1)
-        print(x.shape)
         x = self.proj_final(x)
         return x   # (B, 11)
