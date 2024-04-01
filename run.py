@@ -48,9 +48,15 @@ def epoch_time(start_time, end_time):
 def define_model(max_len):
     
     ENC = ClipVisionEncoder()
+    DEC = RobertaEncoder() 
 
-    # Text Encoder
-    DEC = RobertaEncoder()        
+    # freezing the pre-trained models
+    # onnlt training the adaptor layer
+    for param in ENC.parameters():
+        param.requires_grad = False
+
+    for param in DEC.parameters():
+        param.requires_grad = False       
 
     ADA = Adaptor(cfg.training.adaptor.in_dim, 
                   cfg.training.adaptor.features,
