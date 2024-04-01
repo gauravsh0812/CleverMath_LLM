@@ -51,13 +51,14 @@ def train(
         # output: (B, 11, 19)
         # labels: (B, 11)
 
-        if i%50 == 0:
+        if i%100 == 0:
             pred_labels = torch.argmax(output, dim=2)
             max_indices = torch.argmax(pred_labels, dim=1)
             one_hot_encoded = F.one_hot(max_indices, num_classes=11)
 
             print("labels: ", labels)
             print("pred_labels: ", one_hot_encoded)
+            print("========"*4)
 
         # exit()
         loss = criterion(output.contiguous().view(-1, output.shape[-1]), 
