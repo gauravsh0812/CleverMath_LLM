@@ -213,8 +213,9 @@ def train_model(rank=None):
                     print(
                         f"\t Val. Accuracy: {accuracy:.3f}"
                     )
-                    print("labels: ", labels)
-                    print("pred_labels: ", pred_labels)
+                    print("\t labels: ", labels)
+                    print("\t pred_labels: ", pred_labels)
+                    print("=============="*4)
 
                     loss_file.write(
                         f"Epoch: {epoch+1:02} | Time: {epoch_mins}m {epoch_secs}s\n"
