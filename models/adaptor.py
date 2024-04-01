@@ -34,5 +34,5 @@ class Adaptor(nn.Module):
         # x_roberta + x
         x = torch.cat((xc,xr), dim=-1)  
         x = self.relu(self.final(x))  # (B, max_len, num_classes)
-        x = self.proj_final(x.permute(0,2,1)).permute(0,2,1)
-        return x   # (B, 11, 11)
+        # x = self.proj_final(x.permute(0,2,1)).permute(0,2,1)
+        return x.permute(0,2,1)   # (B, 11, 19)

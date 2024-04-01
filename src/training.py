@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import torch
+import torch.nn.functional as F
 from tqdm.auto import tqdm
 
 def train(
@@ -52,9 +53,11 @@ def train(
 
         if i%50 == 0:
             pred_labels = torch.argmax(output, dim=2)
-            # print(torch.max(pred_labels))
-            # print("labels: ", labels)
-            print("pred_labels: ", pred_labels)
+            max_indices = torch.argmax(pred_labels, dim=1)
+            one_hot_encoded = F.one_hot(max_indices, num_classes=11)
+
+            print("labels: ", labels)
+            print("pred_labels: ", one_hot_encoded)
 
         # exit()
         loss = criterion(output.contiguous().view(-1, output.shape[-1]), 
