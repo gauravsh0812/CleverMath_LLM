@@ -14,6 +14,10 @@ def evaluate(
     epoch_loss = 0
     accuracy = 0
 
+    if is_test:
+        labels_file = open("logs/lables.txt","w")
+        labels_file.write("True \t Pred \n")
+
     with torch.no_grad():
         for i, (imgs, ids, attns, labels) in enumerate(test_dataloader):
             ids = ids.to(device)
@@ -38,11 +42,22 @@ def evaluate(
 
             epoch_loss += loss.item()
             
-            pred_labels = torch.argmax(output, dim=1)
-            l = labels.cpu().tolist()
-            p = pred_labels.cpu().tolist()
+            if is_test:
+                pred_labels = torch.argmax(output, dim=1)
+                l = labels.cpu().tolist()
+                p = pred_labels.cpu().tolist()
+                
+                count=0
+                for i in range(len(p)):
+                    if p[i] == l[i]:
+                       count+=1
+                    labels_file.write(f"{l[i]} \t {p[i]} \n")
+
+                accuracy+=count     
+
+
             accuracy += len([i for i in range(len(p)) if p[i] == l[i]])/len(p)
             
     net_loss = epoch_loss / len(test_dataloader)
     accuracy = accuracy / len(test_dataloader)
-    return net_loss, accuracy, pred_labels, labels
+    return net_loss, accuracy

@@ -8,7 +8,7 @@ general:
   rank: 0
   device: "cuda"
   preprocess: False
-  load_trained_model_for_testing: False 
+  load_trained_model_for_testing: True 
 
 dataset:
   path_to_data: "/groups/claytonm/gauravs_data/clevrmath_data/data"
