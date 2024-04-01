@@ -39,14 +39,10 @@ def evaluate(
             epoch_loss += loss.item()
             
             pred_labels = torch.argmax(output, dim=1)
-            print("labels: ", labels)
-            print("pred_labels: ", pred_labels)
-            print("========"*4)
-
             l = labels.cpu().tolist()
             p = pred_labels.cpu().tolist()
             accuracy += len([i for i in range(len(p)) if p[i] == l[i]])
             
     net_loss = epoch_loss / len(test_dataloader)
     accuracy = accuracy / len(test_dataloader)
-    return net_loss, accuracy
+    return net_loss, accuracy, pred_labels, labels
