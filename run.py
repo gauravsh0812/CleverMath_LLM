@@ -168,7 +168,7 @@ def train_model(rank=None):
                     rank=rank,
                 )
 
-                val_loss, accuracy, pred_labels, labels = evaluate(
+                val_loss, accuracy = evaluate(
                     model,
                     cfg.dataset.path_to_data,
                     val_dataloader,
@@ -213,9 +213,6 @@ def train_model(rank=None):
                     print(
                         f"\t Val. Accuracy: {accuracy:.3f}"
                     )
-                    print("\t labels: ", labels)
-                    print("\t pred_labels: ", pred_labels)
-                    print("=============="*4)
 
                     loss_file.write(
                         f"Epoch: {epoch+1:02} | Time: {epoch_mins}m {epoch_secs}s\n"
@@ -257,7 +254,7 @@ def train_model(rank=None):
         )
     )
 
-    test_loss, accuracy, pred_labels, labels = evaluate(
+    test_loss, accuracy = evaluate(
         model,
         cfg.dataset.path_to_data,
         test_dataloader,
@@ -273,8 +270,6 @@ def train_model(rank=None):
         loss_file.write(
             f"| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} | Test Accuracy: {accuracy: .3f}"
         )
-        print("labels: ", labels)
-        print("pred_labels: ", pred_labels)
 
     # stopping time
     print(time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()))
