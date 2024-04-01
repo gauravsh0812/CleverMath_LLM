@@ -18,7 +18,7 @@ class Adaptor(nn.Module):
     
     def forward(self, x_clip, x_roberta):
 
-        xc = self.proj(x_clip.permute(0,2,1)).permute(0,2,1)
+        xc = self.proj_clip(x_clip.permute(0,2,1)).permute(0,2,1)
         xc = self.relu(self.lin1(xc))
         xc = self.relu(self.lin2(xc))
         xc = self.relu(self.lin3(xc))
