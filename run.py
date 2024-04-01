@@ -53,7 +53,8 @@ def define_model(max_len):
     DEC = RobertaEncoder()        
 
     ADA = Adaptor(cfg.training.adaptor.in_dim, 
-                  cfg.training.adaptor.features)
+                  cfg.training.adaptor.features,
+                  num_classes=cfg.training.general.num_classes)
 
     model = ClevrMath_model(ENC, 
                             DEC,

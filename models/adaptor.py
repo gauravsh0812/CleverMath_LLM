@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class Adaptor(nn.Module):
-    def __init__(self, in_dim, features):
+    def __init__(self, in_dim, features, num_classes):
         super(Adaptor, self).__init__()
 
         # features: [512, 256, 128, 64]
@@ -10,8 +10,9 @@ class Adaptor(nn.Module):
         self.lin2 = nn.Linear(features[0], features[1])
         self.lin3 = nn.Linear(features[1], features[2])
         self.lin4 = nn.Linear(features[2], features[3])
+        self.lin5 = nn.Linear(features[3], num_classes)
+        self.final = nn.Linear(num_classes*2, num_classes)
         self.proj = nn.Linear(50,19)
-        self.final = nn.Linear(features[-1]*2, features[-1])
         self.relu = nn.ReLU()
     
     def forward(self, x_clip, x_roberta):
@@ -21,18 +22,18 @@ class Adaptor(nn.Module):
         xc = self.relu(self.lin2(xc))
         xc = self.relu(self.lin3(xc))
         xc = self.relu(self.lin4(xc))
+        xc = self.relu(self.lin5(xc))
         
         xr = self.relu(self.lin1(x_roberta))
         xr = self.relu(self.lin2(xr))
         xr = self.relu(self.lin3(xr))
         xr = self.relu(self.lin4(xr))
+        xr = self.relu(self.lin5(xr))
 
         print(xc.shape, xr.shape)
         
         # x_roberta + x
         x = torch.cat((xc,xr), dim=-1)
-        print(x.shape)
         x = self.relu(self.final(x))
-        x = torch.flatten(x, start_dim=-2, end_dim=-1)
-        
-        return x   # (B, features[-1])
+        print(x.shape)
+        return x   # (B, 11)
