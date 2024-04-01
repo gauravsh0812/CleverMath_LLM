@@ -52,11 +52,11 @@ def train(
 
         labels = torch.argmax(labels, dim=1)
 
-        if i%100 == 0:
-            pred_labels = torch.argmax(output, dim=1)
-            print("labels: ", labels)
-            print("pred_labels: ", pred_labels)
-            print("========"*4)
+        # if i%100 == 0:
+        #     pred_labels = torch.argmax(output, dim=1)
+        #     print("labels: ", labels)
+        #     print("pred_labels: ", pred_labels)
+        #     print("========"*4)
 
         # exit()
         loss = criterion(output.contiguous().view(-1, output.shape[-1]), 
