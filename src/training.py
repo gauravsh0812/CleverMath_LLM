@@ -51,13 +51,12 @@ def train(
         # output: (B, 11, 19)
         # labels: (B, 11)
 
-        if i%100 == 0:
-            pred_labels = torch.argmax(output, dim=2)
-            max_indices = torch.argmax(pred_labels, dim=1)
-            one_hot_encoded = F.one_hot(max_indices, num_classes=11)
+        labels = torch.argmax(labels, dim=1)
 
+        if i%100 == 0:
+            pred_labels = torch.argmax(output, dim=1)
             print("labels: ", labels)
-            print("pred_labels: ", one_hot_encoded)
+            print("pred_labels: ", pred_labels)
             print("========"*4)
 
         # exit()
