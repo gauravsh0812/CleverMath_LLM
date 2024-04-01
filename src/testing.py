@@ -25,7 +25,7 @@ def evaluate(
                 _i = f"{data_path}/images/{int(im.item())}.png"
                 _imgs.append(_i)
 
-            output = model(imgs,
+            output = model(_imgs,
                            ids,
                            attns,
                            device)

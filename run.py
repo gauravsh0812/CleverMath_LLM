@@ -64,9 +64,7 @@ def define_model(max_len):
 
     model = ClevrMath_model(ENC, 
                             DEC,
-                            ADA,
-                            max_len,
-                            num_classes=11)
+                            ADA,)
 
     return model
 

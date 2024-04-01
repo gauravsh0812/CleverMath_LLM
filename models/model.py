@@ -7,9 +7,7 @@ class ClevrMath_model(nn.Module):
                  encoder, 
                  decoder,
                  adaptor,
-                 max_len,
-                 num_classes,
-                 
+
     ):
         super(ClevrMath_model, self).__init__()
         self.enc = encoder
