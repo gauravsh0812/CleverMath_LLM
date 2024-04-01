@@ -50,7 +50,7 @@ def train(
         # output: (B, 11, 19)
         # labels: (B, 11)
 
-        if i%10 == 0:
+        if i%50 == 0:
             pred_labels = torch.argmax(output, dim=2)
             # print(torch.max(pred_labels))
             # print("labels: ", labels)

@@ -22,4 +22,4 @@ class ClevrMath_model(nn.Module):
         output = self.adaptor(encoded_imgs,
                             last_hidden_roberta)  # (B, max_len, num_classes)
         
-        return output.permute(0,2,1)
+        return output
