@@ -42,22 +42,21 @@ def evaluate(
 
             epoch_loss += loss.item()
             
-            if is_test:
-                pred_labels = torch.argmax(output, dim=1)
-                l = labels.cpu().tolist()
-                p = pred_labels.cpu().tolist()
+            
+            pred_labels = torch.argmax(output, dim=1)
+            l = labels.cpu().tolist()
+            p = pred_labels.cpu().tolist()
+            
+            count=0
+            for i in range(len(p)):
+                if p[i] == l[i]:
+                    count+=1
                 
-                count=0
-                for i in range(len(p)):
-                    if p[i] == l[i]:
-                       count+=1
+                if is_test:
                     labels_file.write(f"{l[i]} \t\t {p[i]} \n")
 
-                accuracy+=count     
+            accuracy+= count / len(p)    
 
-
-            accuracy += len([i for i in range(len(p)) if p[i] == l[i]])/len(p)
-            
     net_loss = epoch_loss / len(test_dataloader)
     accuracy = accuracy / len(test_dataloader)
     return net_loss, accuracy
