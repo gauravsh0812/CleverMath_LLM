@@ -29,11 +29,9 @@ class Adaptor(nn.Module):
         xr = self.relu(self.lin3(xr))
         xr = self.relu(self.lin4(xr))
         xr = self.relu(self.lin5(xr))
-
-        print(xc.shape, xr.shape)
         
         # x_roberta + x
         x = torch.cat((xc,xr), dim=-1)
         x = self.relu(self.final(x))
-        print(x.shape)
-        return x   # (B, 11)
+        
+        return x   # (B, max_len, 11)
