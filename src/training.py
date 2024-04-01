@@ -54,6 +54,7 @@ def train(
         print("labels: ", labels)
         print("pred_labels: ", pred_labels)
 
+        exit()
         loss = criterion(output.contiguous().view(-1, output.shape[-1]), 
                          labels.contiguous().view(-1))
         
