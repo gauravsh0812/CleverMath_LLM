@@ -232,8 +232,7 @@ def train_model(rank=None):
 
             else:
                 print(
-                    f"Terminating the training process as the validation \
-                    loss hasn't been reduced from last {cfg.training.general.early_stopping} epochs."
+                    f"Terminating the training process as the validation loss hasn't been reduced from last {cfg.training.general.early_stopping} epochs."
                 )
                 break
 

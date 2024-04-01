@@ -47,10 +47,10 @@ def train(
 
         # print("output shape: ", output.shape)
 
-        # output: (B, 11, 19)
+        # output: (B, 11)
         # labels: (B, 11)
 
-        labels = torch.argmax(labels, dim=1)
+        labels = torch.argmax(labels, dim=1)  # (B,)
 
         # if i%100 == 0:
         #     pred_labels = torch.argmax(output, dim=1)
