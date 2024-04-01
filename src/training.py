@@ -53,7 +53,7 @@ def train(
         pred_labels = torch.argmax(output, dim=2)
         # print(torch.max(pred_labels))
         # print("labels: ", labels)
-        # print("pred_labels: ", pred_labels)
+        print("pred_labels: ", pred_labels)
 
         # exit()
         loss = criterion(output.contiguous().view(-1, output.shape[-1]), 
