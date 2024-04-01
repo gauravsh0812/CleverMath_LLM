@@ -175,7 +175,6 @@ def train_model(rank=None):
                     val_dataloader,
                     criterion,
                     device,
-                    clip_enc=cfg.training.model_type.clip_enc,
                 )
 
                 end_time = time.time()
