@@ -8,7 +8,6 @@ def evaluate(
     test_dataloader,
     criterion,
     device,
-    lmm_enc=False,
     is_test=False,
 ):
     model.eval()
@@ -22,12 +21,15 @@ def evaluate(
         
             _imgs = list()
             for im in imgs:
-                tnsr = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")
-                _imgs.append(tnsr)
-            imgs = torch.stack(_imgs).to(device)
+                _i = f"{data_path}/images/{int(im.item())}.png"
+                _imgs.append(_i)
 
-            output = model(imgs,ids,attns)
-
+            output = model(imgs,
+                           ids,
+                           attns,
+                           device)
+            
+            labels = torch.argmax(labels, dim=1)
             loss = criterion(
                             output.contiguous().view(-1,output.shape[-1]), 
                             labels.contiguous().view(-1)
@@ -35,27 +37,32 @@ def evaluate(
 
             epoch_loss += loss.item()
             
-            accuracy = None
-            if is_test:
-                # output: (B, 11, 11)
-                # labels: (B, 11)
-                test_labels = open("logs/test_labels.txt", "w")
-                test_preds = open("logs/test_preds.txt", "w")
-                N = output.shape[0]
-                correct = 0
-                for b in range(N):
-                    zl = labels[b,:]
-                    lbl = [i for i in range(len(zl)) if zl[i]==1.0][0]
+            pred_labels = torch.argmax(output, dim=1)
+            print("labels: ", labels)
+            print("pred_labels: ", pred_labels)
+            print("========"*4)
 
-                    zo = output[b,-1,:] # last time step (11)
-                    pred = torch.argmax(zo,dim=0).item()
+            # accuracy = None
+            # if is_test:
+            #     # output: (B, 11, 11)
+            #     # labels: (B, 11)
+            #     test_labels = open("logs/test_labels.txt", "w")
+            #     test_preds = open("logs/test_preds.txt", "w")
+            #     N = output.shape[0]
+            #     correct = 0
+            #     for b in range(N):
+            #         zl = labels[b,:]
+            #         lbl = [i for i in range(len(zl)) if zl[i]==1.0][0]
 
-                    test_labels.write(str(lbl) + "\n")
-                    test_preds.write(str(pred) + "\n")
+            #         zo = output[b,-1,:] # last time step (11)
+            #         pred = torch.argmax(zo,dim=0).item()
 
-                    if int(pred) == int(lbl): correct+=1
+            #         test_labels.write(str(lbl) + "\n")
+            #         test_preds.write(str(pred) + "\n")
 
-                accuracy = correct / N
+            #         if int(pred) == int(lbl): correct+=1
+
+            #     accuracy = correct / N
 
     net_loss = epoch_loss / len(test_dataloader)
-    return net_loss, accuracy
+    return net_loss#, accuracy
