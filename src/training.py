@@ -51,6 +51,7 @@ def train(
         # labels: (B, 11)
 
         pred_labels = torch.argmax(output, dim=2)
+        print(torch.max(pred_labels))
         print("labels: ", labels)
         print("pred_labels: ", pred_labels)
 
