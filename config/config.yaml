@@ -28,7 +28,7 @@ training:
     dropout: 0.1
     learning_rate: 0.0005
     weight_decay: 0.00001
-    betas: [0.9,0.8]
+    betas: [0.7,0.9]
     early_stopping: 8
     num_classes: 11
   
