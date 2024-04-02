@@ -2,11 +2,12 @@ import torch
 import torch.nn as nn
 
 class Adaptor(nn.Module):
-    def __init__(self, in_dim, features, max_len, num_classes):
+    def __init__(self, clip_in_dim, roberta_in_dim, features, max_len, num_classes):
         super(Adaptor, self).__init__()
 
         # features: [512, 256, 128, 64]
-        self.lin1 = nn.Linear(in_dim, features[0])
+        self.cliplin1 = nn.Linear(clip_in_dim, features[0])
+        self.roblin1 = nn.Linear(roberta_in_dim, features[0])
         self.lin2 = nn.Linear(features[0], features[1])
         self.lin3 = nn.Linear(features[1], features[2])
         self.lin4 = nn.Linear(features[2], features[3])

@@ -52,6 +52,7 @@ def define_model(max_len):
                             config=cfg.training.clip.configuration)
     DEC = RobertaEncoder()    
     ADA = Adaptor(cfg.training.clip.configuration.hidden_size, 
+                  cfg.training.roberta.in_dim,
                   cfg.training.adaptor.features,
                   max_len,
                   num_classes=cfg.training.general.num_classes,)

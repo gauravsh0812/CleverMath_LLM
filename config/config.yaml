@@ -43,6 +43,7 @@ training:
     features: [512,256,128,64]
 
   roberta:
+    in_dim: 768
     finetune: False
 
   clip:
