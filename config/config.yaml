@@ -52,7 +52,7 @@ training:
       intermediate_size: 1024
       projection_dim: 512
       num_hidden_layers: 6
-      num_attention_layers: 8
+      num_attention_heads: 8
       num_channels: 3
       image_size: 224
       patch_size: 32
