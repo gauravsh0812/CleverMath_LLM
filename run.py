@@ -190,7 +190,6 @@ def train_model(rank=None):
                     device,
                     ddp=cfg.general.ddp,
                     rank=rank,
-                    scheduler=scheduler,
                 )
 
                 val_loss, accuracy = evaluate(

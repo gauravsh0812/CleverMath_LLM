@@ -12,7 +12,6 @@ def train(
     device,
     ddp=False,
     rank=None,
-    
 ):
     # train mode is ON i.e. dropout and normalization tech. will be used
     model.train()
