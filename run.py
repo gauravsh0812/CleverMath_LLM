@@ -49,7 +49,7 @@ def epoch_time(start_time, end_time):
 def define_model(max_len):
     
     ENC = ClipVisionEncoder(finetune=cfg.training.clip.finetune,
-                            config=cfg.training.clip.configuration8)
+                            config=cfg.training.clip.configuration)
     DEC = RobertaEncoder()    
     ADA = Adaptor(cfg.training.clip.configuration.hidden_size, 
                   cfg.training.adaptor.features,
