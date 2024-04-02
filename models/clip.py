@@ -21,7 +21,7 @@ class ClipVisionEncoder(nn.Module):
         for image_path in image_paths:
             image = Image.open(image_path)
             inputs = self.processor(images=image, return_tensors="pt")
-            outputs = self.model(**inputs.to(device))
+            outputs = self.model(**inputs)
             last_hidden_state = outputs.last_hidden_state
             pooled_output = outputs.pooler_output  # pooled classes states
 
@@ -43,5 +43,5 @@ configuration={
       "patch_size": 32
       }
 
-cve = ClipVisionEncoder(finetune=True, config=configuration)
+cve = ClipVisionEncoder(finetune=True, config=configuration).to("cuda:0")
 cve(["/groups/claytonm/gauravs_data/clevrmath_data/data/images/13704.png"], "cuda")
