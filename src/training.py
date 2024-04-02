@@ -32,7 +32,7 @@ def train(
         
         _imgs = list()
         for im in imgs:
-            _i = f"{data_path}/image_tensors/{int(im.item())}.pt"
+            _i = f"{data_path}/images/{int(im.item())}.png"
             _imgs.append(_i)
         
         # setting gradients to zero

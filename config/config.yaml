@@ -44,3 +44,4 @@ training:
 
   clip:
     finetune: False
+    configuration: None
