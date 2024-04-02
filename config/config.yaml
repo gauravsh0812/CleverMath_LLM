@@ -37,7 +37,6 @@ training:
     verbose: True
     scheduler_step_size: 50
     scheduler_gamma: 0.5
-    
   
   adaptor:
     in_dim: 768
