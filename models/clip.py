@@ -44,4 +44,4 @@ configuration={
       }
 
 cve = ClipVisionEncoder(finetune=True, config=configuration).to("cuda:0")
-cve(["/groups/claytonm/gauravs_data/clevrmath_data/data/images/13704.png"], "cuda")
+cve(["/groups/claytonm/gauravs_data/clevrmath_data/data/images/13704.png"], "cuda:0")
