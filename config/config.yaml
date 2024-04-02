@@ -1,6 +1,6 @@
 general:
   seed: 42
-  wandb: False
+  wandb: True
   ddp: False
   ncpus: 8
   gpus: 0
