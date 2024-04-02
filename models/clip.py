@@ -32,14 +32,14 @@ class ClipVisionEncoder(nn.Module):
         return torch.stack(_hid).to(device), torch.stack(_pool).to(device)
 
 configuration={
-      hidden_size:512,
-      intermediate_size: 1024,
-      projection_dim: 512,
-      num_hidden_layers: 6,
-      num_attention_layers: 8,
-      num_channels: 3,
-      image_size: 224,
-      patch_size: 32
+      "hidden_size":512,
+      "intermediate_size": 1024,
+      "projection_dim": 512,
+      "num_hidden_layers": 6,
+      "num_attention_layers": 8,
+      "num_channels": 3,
+      "image_size": 224,
+      "patch_size": 32
       }
 
 cve = ClipVisionEncoder(finetune=True, config=configuration)
