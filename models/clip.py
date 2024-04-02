@@ -30,6 +30,17 @@ class ClipVisionEncoder(nn.Module):
         # hidden: (B, L, 768)
         # pooled: (B, 768)
         return torch.stack(_hid).to(device), torch.stack(_pool).to(device)
-    
-# cve = ClipVisionEncoder()
-# cve(["/groups/claytonm/gauravs_data/clevrmath_data/data/images/13704.png"], "cuda")
+
+configuration={
+      hidden_size:512,
+      intermediate_size: 1024,
+      projection_dim: 512,
+      num_hidden_layers: 6,
+      num_attention_layers: 8,
+      num_channels: 3,
+      image_size: 224,
+      patch_size: 32
+      }
+
+cve = ClipVisionEncoder(finetune=True, config=configuration)
+cve(["/groups/claytonm/gauravs_data/clevrmath_data/data/images/13704.png"], "cuda")

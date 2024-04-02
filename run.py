@@ -49,9 +49,9 @@ def epoch_time(start_time, end_time):
 def define_model(max_len):
     
     ENC = ClipVisionEncoder(finetune=cfg.training.clip.finetune,
-                            config=cfg.training.clip.configuration)
+                            config=cfg.training.clip.configuration8)
     DEC = RobertaEncoder()    
-    ADA = Adaptor(cfg.training.adaptor.in_dim, 
+    ADA = Adaptor(cfg.training.clip.configuration.hidden_size, 
                   cfg.training.adaptor.features,
                   max_len,
                   num_classes=cfg.training.general.num_classes,)
@@ -59,13 +59,13 @@ def define_model(max_len):
     # freezing the pre-trained models
     # only training the adaptor layer
     for param in ENC.parameters():
-        param.requires_grad = False
+        param.requires_grad = cfg.training.clip.finetune
 
     for param in DEC.parameters():
-        param.requires_grad = False
+        param.requires_grad = cfg.training.roberta.finetune
 
     for param in ADA.parameters():
-        param.requires_grad = True   
+        param.requires_grad = cfg.training.adaptor.finetune   
 
     model = ClevrMath_model(ENC, 
                             DEC,
