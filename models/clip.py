@@ -27,6 +27,7 @@ class ClipVisionEncoder(nn.Module):
 
             _hid.append(last_hidden_state.squeeze(0))
             _pool.append(pooled_output.squeeze(0))
+            print(last_hidden_state.shape,pooled_output.shape)
 
         # hidden: (B, L, 768)
         # pooled: (B, 768)
