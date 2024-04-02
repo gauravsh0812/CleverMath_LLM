@@ -9,6 +9,7 @@ class ClipVisionEncoder(nn.Module):
         super(ClipVisionEncoder, self).__init__()
         if finetune:
             configuration = CLIPVisionConfig(**config)
+            self.processor = CLIPImageProcessor.from_pretrained("openai/clip-vit-base-patch32")
             self.model = CLIPVisionModel(configuration)
         else:
             self.processor = CLIPImageProcessor.from_pretrained("openai/clip-vit-base-patch32")
