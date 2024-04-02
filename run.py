@@ -201,7 +201,7 @@ def train_model(rank=None):
                 )
 
                 if cfg.training.scheduler.isScheduler:
-                    scheduler.step()
+                    scheduler.step(val_loss)
 
                 if (cfg.general.wandb):
                     if (not cfg.general.ddp) or (cfg.general.ddp and rank == 0): 
