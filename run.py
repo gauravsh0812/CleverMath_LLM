@@ -155,6 +155,18 @@ def train_model(rank=None):
         betas=cfg.training.general.betas,
     )
 
+    if cfg.training.scheduler.isScheduler:
+        # scheduler
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+                    optimizer,
+                    'min',
+                    patience = cfg.training.scheduler.scheduler_step_size,
+                    factor=cfg.training.scheduler.scheduler_gamma,
+                    verbose=cfg.training.scheduler.verbose,
+        )
+    else:
+        scheduler = None
+
     best_valid_loss = float("inf")
     
     if (cfg.general.wandb):
@@ -178,6 +190,7 @@ def train_model(rank=None):
                     device,
                     ddp=cfg.general.ddp,
                     rank=rank,
+                    scheduler=scheduler,
                 )
 
                 val_loss, accuracy = evaluate(
@@ -187,6 +200,9 @@ def train_model(rank=None):
                     criterion,
                     device,
                 )
+
+                if cfg.training.scheduler.isScheduler:
+                    scheduler.step()
 
                 if (cfg.general.wandb):
                     if (not cfg.general.ddp) or (cfg.general.ddp and rank == 0): 
