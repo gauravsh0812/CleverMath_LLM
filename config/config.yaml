@@ -23,12 +23,12 @@ dataset:
 training:
   general:
     clip: 1 
-    batch_size: 16
+    batch_size: 32
     epochs: 10
-    dropout: 0.1
-    learning_rate: 0.0005
-    weight_decay: 0.00001
-    betas: [0.7,0.9]
+    dropout: 0.30000000000000004
+    learning_rate:  0.0005334026654546251
+    weight_decay: 0.00021519277485609046
+    betas: [0.6,0.6]
     early_stopping: 8
     num_classes: 11
   
@@ -49,11 +49,11 @@ training:
   clip:
     finetune: True
     configuration: 
-      hidden_size: 512
-      intermediate_size: 1024
-      projection_dim: 512
-      num_hidden_layers: 6
-      num_attention_heads: 8
+      hidden_size: 128
+      intermediate_size: 256
+      projection_dim: 384
+      num_hidden_layers: 7
+      num_attention_heads: 4
       num_channels: 3
       image_size: 224
       patch_size: 32
