@@ -76,34 +76,6 @@ def define_model(max_len):
 
     return model
 
-
-def train_model(train_dataloader,
-                model,
-                criterion,
-                device,
-                rank=None):
-
-    optimizer = torch.optim.AdamW(
-        params=model.parameters(),
-        lr=cfg.training.general.learning_rate,
-        weight_decay=cfg.training.general.weight_decay,
-        betas=cfg.training.general.betas,
-    )
-
-    for epoch in range(cfg.training.general.epochs):
-        # training and validation
-        train_loss = train(
-            model,
-            cfg.dataset.path_to_data, 
-            train_dataloader,
-            optimizer,
-            criterion,
-            cfg.training.general.clip,
-            device,
-            ddp=cfg.general.ddp,
-            rank=rank,
-        )
-
 def objective(trial):
     
     tcfg = cfg.training
@@ -133,6 +105,7 @@ def objective(trial):
         device = torch.device(f"cuda:{cfg.general.gpus}")
         (
             train_dataloader,
+            test_dataloader,
             val_dataloader,
             vocab,
             max_len,
@@ -142,20 +115,41 @@ def objective(trial):
     # intializing loss function
     criterion = torch.nn.CrossEntropyLoss(ignore_index=vocab["<pad>"])
 
-    # optimizer
-
-    mp.spawn(train_model, 
-            args=(trial, train_dataloader, model, criterion, device), 
-            join=True)
-
-    val_loss, accuracy = evaluate(
-        model,
-        cfg.dataset.path_to_data,
-        val_dataloader,
-        criterion,
-        device,
+    optimizer = torch.optim.AdamW(
+        params=model.parameters(),
+        lr=cfg.training.general.learning_rate,
+        weight_decay=cfg.training.general.weight_decay,
+        betas=cfg.training.general.betas,
     )
 
+    print("trial: ", trial.params.items())
+
+    for epoch in range(cfg.training.general.epochs):
+        # training and validation
+        train_loss = train(
+            model,
+            cfg.dataset.path_to_data, 
+            train_dataloader,
+            optimizer,
+            criterion,
+            cfg.training.general.clip,
+            device,
+            ddp=cfg.general.ddp,
+            rank=0,
+        )
+
+    val_loss, accuracy = evaluate(
+    model,
+    cfg.dataset.path_to_data,
+    val_dataloader,
+    criterion,
+    device,
+    )
+
+    trial.report(val_loss, epoch)
+    if trial.should_prune():
+        raise optuna.exceptions.TrialPruned()
+        
     return val_loss
 
 def tune():
