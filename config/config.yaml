@@ -1,6 +1,6 @@
 general:
   seed: 42
-  wandb: True
+  wandb: False
   ddp: False
   ncpus: 8
   gpus: 0
@@ -24,7 +24,7 @@ training:
   general:
     clip: 1 
     batch_size: 16
-    epochs: 50
+    epochs: 10
     dropout: 0.1
     learning_rate: 0.0005
     weight_decay: 0.00001
@@ -33,7 +33,7 @@ training:
     num_classes: 11
   
   scheduler:
-    isScheduler: True
+    isScheduler: False
     verbose: True
     scheduler_step_size: 2
     scheduler_gamma: 0.5
