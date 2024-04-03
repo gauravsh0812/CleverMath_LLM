@@ -84,7 +84,7 @@ def objective(trial):
     # parameters
     tcfg.general.learning_rate = trial.suggest_loguniform("learning_rate", 1e-5, 1e-2)
     tcfg.general.weight_decay = trial.suggest_loguniform("weight_decay", 1e-6, 1e-2)
-    tcfg.general.batch_size = trial.suggest_int("batch_size", low=32, high=128, step=8)
+    tcfg.general.batch_size = trial.suggest_int("batch_size", low=8, high=32, step=4)
     tcfg.general.dropout = trial.suggest_float("dropout", low=0.1, high=0.5, step=0.1)
     tcfg.general.beta_1 = trial.suggest_float("beta1", low=0.5, high=0.9, step=0.1)
     tcfg.general.beta_2 = trial.suggest_float("beta2", low=0.5, high=0.999, step=0.1)
@@ -155,7 +155,7 @@ def objective(trial):
 def tune():
 
     study = optuna.create_study(direction="minimize")
-    study.optimize(objective, n_trials=2)
+    study.optimize(objective, n_trials=20)
 
     pruned_trials = study.get_trials(
         deepcopy=False, states=[TrialState.PRUNED]
