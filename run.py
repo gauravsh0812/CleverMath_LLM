@@ -62,7 +62,7 @@ def define_model(max_len):
                   )
     
     PRO = Projector(
-        cfg.training.roberta.roberta_in_dim,
+        cfg.training.roberta.in_dim,
         cfg.training.projector.features,
         max_len, 
         cfg.training.general.num_classes,
