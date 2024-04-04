@@ -7,6 +7,7 @@ class ClipAdaptor(nn.Module):
 
         self.cliplin1 = nn.Linear(clip_in_dim, roberta_in_dim)
         self.proj_clip = nn.Linear(50,max_len)
+        self.final_lin = nn.Linear(roberta_in_dim*2, roberta_in_dim)
         self.relu = nn.ReLU()
     
     def forward(self, x_clip, x_roberta):
@@ -16,6 +17,7 @@ class ClipAdaptor(nn.Module):
         
         # x_roberta + x
         x = torch.cat((xc,x_roberta), dim=-1)  
+        x = self.final_lin(x)
         return x   # (B, max_len, 768)
 
 class Projector(nn.Module):
