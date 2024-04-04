@@ -26,9 +26,9 @@ training:
     batch_size: 16
     epochs: 50
     dropout: 0.1
-    learning_rate:  0.0002
-    weight_decay: 0.000001
-    betas: [0.7,0.9]
+    learning_rate:  0.001
+    weight_decay: 0.0001
+    betas: [0.9,0.999]
     early_stopping: 8
     num_classes: 11
   
