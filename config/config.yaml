@@ -27,8 +27,8 @@ training:
     epochs: 10
     dropout: 0.1
     learning_rate:  0.00010322082173593655
-    weight_decay: 2.270558595814128e-06
-    betas: [0.7,0.8]
+    weight_decay: 1e-5
+    betas: [0.7,0.9]
     early_stopping: 8
     num_classes: 11
   
