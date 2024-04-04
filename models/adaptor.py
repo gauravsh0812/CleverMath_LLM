@@ -30,8 +30,7 @@ class Projector(nn.Module):
         self.final_lin = nn.Linear(max_len*num_classes, num_classes)
         self.relu = nn.ReLU()
     
-    def forward(self, x):
-
+    def forward(self, xc):
         xc = self.relu(self.lin1(xc))
         xc = self.relu(self.lin2(xc))
         xc = self.relu(self.lin3(xc))
@@ -39,4 +38,4 @@ class Projector(nn.Module):
         xc = self.relu(self.lin5(xc))  # (B, max, 11)
         xc = torch.flatten(xc, start_dim=-2, end_dim=-1)
         xc = self.relu(self.final_lin(xc))
-        return x   # (B, 11)
+        return xc   # (B, 11)
