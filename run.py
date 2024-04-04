@@ -51,7 +51,12 @@ def define_model(max_len):
     ENC = ClipVisionEncoder(finetune=cfg.training.clip.finetune,
                             config=cfg.training.clip.configuration)
     DEC = RobertaEncoder()    
-    ADA = Adaptor(cfg.training.clip.configuration.hidden_size, 
+
+    if cfg.training.clip.finetune:
+        in_dim = cfg.training.clip.configuration.hidden_size
+    else:
+        in_dim = 768
+    ADA = Adaptor(in_dim, 
                   cfg.training.roberta.in_dim,
                   cfg.training.adaptor.features,
                   max_len,
