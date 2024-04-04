@@ -16,7 +16,7 @@ from preprocessing.create_dataloaders import data_loaders
 from models.clip import ClipVisionEncoder
 from models.roberta import RobertaEncoder
 from models.model import ClevrMath_model
-from models.adaptor import Adaptor
+from models.adaptor import ClipAdaptor, Projector
 from src.training import train
 from src.testing import evaluate
 
@@ -56,11 +56,17 @@ def define_model(max_len):
         in_dim = cfg.training.clip.configuration.hidden_size
     else:
         in_dim = 768
-    ADA = Adaptor(in_dim, 
+    ADA = ClipAdaptor(in_dim, 
                   cfg.training.roberta.in_dim,
-                  cfg.training.adaptor.features,
                   max_len,
-                  num_classes=cfg.training.general.num_classes,)
+                  )
+    
+    PRO = Projector(
+        cfg.training.roberta.roberta_in_dim,
+        cfg.training.projector.features,
+        max_len, 
+        cfg.training.general.num_classes,
+    )
 
     # freezing the pre-trained models
     # only training the adaptor layer
@@ -68,14 +74,12 @@ def define_model(max_len):
         param.requires_grad = cfg.training.clip.finetune
 
     for param in DEC.parameters():
-        param.requires_grad = cfg.training.roberta.finetune
-
-    for param in ADA.parameters():
-        param.requires_grad = cfg.training.adaptor.finetune   
+        param.requires_grad = cfg.training.roberta.finetune 
 
     model = ClevrMath_model(ENC, 
                             DEC,
-                            ADA,)
+                            ADA,
+                            PRO,)
 
     return model
 

@@ -38,8 +38,7 @@ training:
     scheduler_step_size: 2
     scheduler_gamma: 0.9
   
-  adaptor:
-    finetune: True
+  projector:
     features: [512,256,128,64]
 
   roberta:
