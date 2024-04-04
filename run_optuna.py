@@ -89,9 +89,9 @@ def objective(trial):
     tcfg.general.beta_1 = trial.suggest_float("beta1", low=0.5, high=0.9, step=0.1)
     tcfg.general.beta_2 = trial.suggest_float("beta2", low=0.5, high=0.999, step=0.1)
     
-    ccfg.hidden_size = trial.suggest_int("hidden_size", low=128, high=512, step=128)
-    ccfg.intermediate_size = trial.suggest_int("intermediate_size", low=128, high=512, step=128)
-    ccfg.projection_dim = trial.suggest_int("projection_dim", low=64, high=512, step=64)
+    ccfg.hidden_size = trial.suggest_int("hidden_size", low=128, high=1024, step=128)
+    ccfg.intermediate_size = trial.suggest_int("intermediate_size", low=128, high=2048, step=128)
+    ccfg.projection_dim = trial.suggest_int("projection_dim", low=64, high=1024, step=64)
     ccfg.num_hidden_layers = trial.suggest_int("num_hidden_layers", low=3, high=12, step=2)
     ccfg.num_attention_heads = trial.suggest_categorical("num_attention_heads", [2,4,8,16])
 
