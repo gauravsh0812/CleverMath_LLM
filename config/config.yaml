@@ -47,7 +47,7 @@ training:
     finetune: False
 
   clip:
-    finetune: True
+    finetune: False
     configuration: 
       hidden_size: 128
       intermediate_size: 1408
