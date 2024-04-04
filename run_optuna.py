@@ -146,15 +146,15 @@ def objective(trial):
     device,
     )
 
-    trial.report(val_loss, epoch)
+    trial.report(accuracy, epoch)
     if trial.should_prune():
         raise optuna.exceptions.TrialPruned()
         
-    return val_loss
+    return accuracy
 
 def tune():
 
-    study = optuna.create_study(direction="minimize")
+    study = optuna.create_study(direction="maximize")
     study.optimize(objective, n_trials=20)
 
     pruned_trials = study.get_trials(
