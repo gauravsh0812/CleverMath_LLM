@@ -35,8 +35,8 @@ training:
   scheduler:
     isScheduler: True
     verbose: True
-    scheduler_step_size: 2
-    scheduler_gamma: 0.5
+    scheduler_step_size: 3
+    scheduler_gamma: 0.995
   
   adaptor:
     features: [512,256,128,64]

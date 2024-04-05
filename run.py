@@ -175,13 +175,12 @@ def train_model(rank=None):
 
     if cfg.training.scheduler.isScheduler:
         # scheduler
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        scheduler = torch.optim.lr_scheduler.StepLR(
                     optimizer,
-                    'min',
-                    patience = cfg.training.scheduler.scheduler_step_size,
-                    factor=cfg.training.scheduler.scheduler_gamma,
-                    verbose=cfg.training.scheduler.verbose,
+                    step_size = cfg.training.scheduler.scheduler_step_size,
+                    gamma=cfg.training.scheduler.scheduler_gamma,
         )
+        
     else:
         scheduler = None
 
