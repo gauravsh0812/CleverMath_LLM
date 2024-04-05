@@ -52,7 +52,7 @@ def download_dataset(name):
         'dali-does/clevr-math',
         name=name,
         download_config=dl_config,
-        split='train[:{}]'.format(10000),
+        split='train[:{}]'.format(-1),
         cache_dir=raw_data_path
     )
     
@@ -60,7 +60,7 @@ def download_dataset(name):
         'dali-does/clevr-math',
         name=name,
         download_config=dl_config,
-        split='validation[:{}]'.format(2000),
+        split='validation[:{}]'.format(-1),
         cache_dir=raw_data_path
     )
     
@@ -68,7 +68,7 @@ def download_dataset(name):
         'dali-does/clevr-math',
         name=name,
         download_config=dl_config,
-        split='test[:{}]'.format(3000),
+        split='test[:{}]'.format(-1),
         cache_dir=raw_data_path
     )
 
