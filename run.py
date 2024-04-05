@@ -116,7 +116,7 @@ def train_model(rank=None):
                 val_dataloader,
                 vocab,
                 max_len,
-            ) = data_loaders()
+            ) = data_loaders(cfg.training.general.batch_size)
             model = define_model(max_len).to(device)
 
         elif cfg.general.ddp:
@@ -131,7 +131,7 @@ def train_model(rank=None):
                 val_dataloader,
                 vocab,
                 max_len,
-            ) = data_loaders()
+            ) = data_loaders(cfg.training.general.batch_size)
             model = define_model(max_len)
             model = DDP(
                 model.to(f"cuda:{rank}"),
