@@ -57,7 +57,6 @@ def define_model(max_len):
     else:
         in_dim = 768
     CLIPADA = ClipAdaptor(in_dim, 
-                  cfg.training.roberta.in_dim,
                   cfg.training.adaptor.features,
                   max_len,
                   )
