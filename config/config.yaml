@@ -33,10 +33,10 @@ training:
     num_classes: 11
   
   scheduler:
-    isScheduler: False
+    isScheduler: True
     verbose: True
     scheduler_step_size: 2
-    scheduler_gamma: 0.9
+    scheduler_gamma: 0.5
   
   adaptor:
     features: [512,256,128,64]
