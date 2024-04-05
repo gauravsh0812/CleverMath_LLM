@@ -67,7 +67,7 @@ def define_model(max_len):
     )
     
     PROJ = Projector(
-        cfg.training.projector.features,
+        cfg.training.adaptor.features,
         max_len, 
         cfg.training.general.num_classes,
     )
