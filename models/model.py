@@ -6,20 +6,22 @@ class ClevrMath_model(nn.Module):
     def __init__(self, 
                  encoder, 
                  decoder,
-                 adaptor,
+                 clipadaptor,
+                 robertaadaptor,
                  projector,
     ):
         super(ClevrMath_model, self).__init__()
         self.enc = encoder
-        self.adaptor = adaptor
+        self.clipadaptor = clipadaptor
+        self.robertaadaptor = robertaadaptor
         self.dec = decoder
         self.projector = projector
 
     def forward(self, imgs, ids, attns, device):
         encoded_imgs,pooled_layers = self.enc(imgs, device)  # (B, L=w*h, dim)
         last_hidden_roberta = self.dec(ids, attns) # (B, max_len, 768)        
-        output = self.adaptor(encoded_imgs,
-                            last_hidden_roberta)  # (B, max_len, 768)
-        output = self.projector(output) # (B,11)
+        clipoutput = self.clipadaptor(encoded_imgs)  # (B, max_len, 64)
+        roboutput = self.robertaadaptor(last_hidden_roberta) # (B, max, 64)
+        output = self.projector(clipoutput, roboutput) # (B,11)
         
         return output

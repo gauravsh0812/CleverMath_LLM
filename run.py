@@ -67,7 +67,7 @@ def define_model(max_len):
         cfg.training.adaptor.features,
     )
     
-    PRO = Projector(
+    PROJ = Projector(
         cfg.training.projector.features,
         max_len, 
         cfg.training.general.num_classes,
@@ -83,8 +83,9 @@ def define_model(max_len):
 
     model = ClevrMath_model(ENC, 
                             DEC,
-                            ADA,
-                            PRO,)
+                            CLIPADA,
+                            ROBADA,
+                            PROJ,)
 
     return model
 
