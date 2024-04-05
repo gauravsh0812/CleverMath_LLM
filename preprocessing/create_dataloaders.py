@@ -83,7 +83,7 @@ class My_pad_collate(object):
         )
 
     
-def data_loaders():
+def data_loaders(batch_size):
 
     print("creating dataloaders...")
     q = open(f"{cfg.dataset.path_to_data}/questions.lst").readlines()
@@ -159,7 +159,7 @@ def data_loaders():
         
     train_dataloader = DataLoader(
         imml_train,
-        batch_size=cfg.training.general.batch_size,
+        batch_size=batch_size,
         num_workers=cfg.dataset.num_workers,
         shuffle=shuffle,
         sampler=sampler,
@@ -180,7 +180,7 @@ def data_loaders():
 
     val_dataloader = DataLoader(
         imml_val,
-        batch_size=cfg.training.general.batch_size,
+        batch_size=batch_size,
         num_workers=cfg.dataset.num_workers,
         shuffle=shuffle,
         sampler=sampler,
@@ -200,7 +200,7 @@ def data_loaders():
 
     test_dataloader = DataLoader(
         imml_test,
-        batch_size=cfg.training.general.batch_size,
+        batch_size=batch_size,
         num_workers=cfg.dataset.num_workers,
         shuffle=shuffle,
         sampler=None,
