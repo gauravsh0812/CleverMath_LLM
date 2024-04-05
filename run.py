@@ -16,7 +16,7 @@ from preprocessing.create_dataloaders import data_loaders
 from models.clip import ClipVisionEncoder
 from models.roberta import RobertaEncoder
 from models.model import ClevrMath_model
-from models.adaptor import ClipAdaptor, Projector
+from models.adaptor import ClipAdaptor, Projector, RobertaAdaptor
 from src.training import train
 from src.testing import evaluate
 
@@ -56,13 +56,18 @@ def define_model(max_len):
         in_dim = cfg.training.clip.configuration.hidden_size
     else:
         in_dim = 768
-    ADA = ClipAdaptor(in_dim, 
+    CLIPADA = ClipAdaptor(in_dim, 
                   cfg.training.roberta.in_dim,
+                  cfg.training.adaptor.features,
                   max_len,
                   )
     
-    PRO = Projector(
+    ROBADA = RobertaAdaptor(
         cfg.training.roberta.in_dim,
+        cfg.training.adaptor.features,
+    )
+    
+    PRO = Projector(
         cfg.training.projector.features,
         max_len, 
         cfg.training.general.num_classes,

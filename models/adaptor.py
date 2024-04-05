@@ -2,42 +2,54 @@ import torch
 import torch.nn as nn
 
 class ClipAdaptor(nn.Module):
-    def __init__(self, clip_in_dim, roberta_in_dim, max_len):
+    def __init__(self, clip_in_dim, features, max_len):
         super(ClipAdaptor, self).__init__()
 
-        self.cliplin1 = nn.Linear(clip_in_dim, roberta_in_dim)
+        self.cliplin1 = nn.Linear(clip_in_dim, features[0])
+        self.cliplin2 = nn.Linear(features[0], features[1])
+        self.cliplin3 = nn.Linear(features[1], features[2])
+        self.cliplin4 = nn.Linear(features[2], features[3])
         self.proj_clip = nn.Linear(50,max_len)
-        self.final_lin = nn.Linear(roberta_in_dim*2, roberta_in_dim)
-        self.relu = nn.ReLU()
-    
-    def forward(self, x_clip, x_roberta):
-
-        xc = self.proj_clip(x_clip.permute(0,2,1)).permute(0,2,1)
-        xc = self.relu(self.cliplin1(xc))
-        
-        # x_roberta + x
-        x = torch.cat((xc,x_roberta), dim=-1)  
-        x = self.final_lin(x)
-        return x   # (B, max_len, 768)
-
-class Projector(nn.Module):
-
-    def __init__(self, roberta_in_dim, features, max_len, num_classes):
-        super(Projector, self).__init__()
-        self.lin1 = nn.Linear(roberta_in_dim, features[0])
-        self.lin2 = nn.Linear(features[0], features[1])
-        self.lin3 = nn.Linear(features[1], features[2])
-        self.lin4 = nn.Linear(features[2], features[3])
-        self.lin5 = nn.Linear(features[3], num_classes)
-        self.final_lin = nn.Linear(max_len*num_classes, num_classes)
         self.relu = nn.ReLU()
     
     def forward(self, xc):
-        xc = self.relu(self.lin1(xc))
-        xc = self.relu(self.lin2(xc))
-        xc = self.relu(self.lin3(xc))
-        xc = self.relu(self.lin4(xc))
-        xc = self.relu(self.lin5(xc))  # (B, max, 11)
-        xc = torch.flatten(xc, start_dim=-2, end_dim=-1)
-        xc = self.relu(self.final_lin(xc))
-        return xc   # (B, 11)
+
+        xc = self.relu(self.cliplin1(xc))
+        xc = self.relu(self.cliplin2(xc))
+        xc = self.relu(self.cliplin3(xc))
+        xc = self.relu(self.cliplin4(xc))
+        xc = self.relu(self.proj_clip(xc.permute(0,2,1))).permute(0,2,1)
+        
+        return xc # (B,19, 64)
+
+class RobertaAdaptor(nn.Module):
+    def __init__(self, roberta_in_dim, features):
+        super(RobertaAdaptor, self).__init__()
+
+        self.roblin1 = nn.Linear(roberta_in_dim, features[0])
+        self.roblin2 = nn.Linear(features[0], features[1])
+        self.roblin3 = nn.Linear(features[1], features[2])
+        self.roblin4 = nn.Linear(features[2], features[3])
+        self.relu = nn.ReLU()
+    
+    def forward(self, xr):
+        xr = self.relu(self.roblin1(xr))
+        xr = self.relu(self.roblin2(xr))
+        xr = self.relu(self.roblin3(xr))
+        xr = self.relu(self.roblin4(xr))
+        
+        return xr # (B,19, 64)
+
+class Projector(nn.Module):
+
+    def __init__(self, features, max_len, num_classes):
+        super(Projector, self).__init__()
+        self.final_lin1 = nn.Linear(features[-1]*2, features[-1])
+        self.final_lin2 = nn.Linear(features[-1]*max_len, num_classes)
+
+    def forward(self, xc, xr):
+        # x_roberta + x
+        x = torch.cat((xc,xr), dim=-1)  
+        x = self.final_lin1(x)
+        x = self.final_lin2(x)
+        return x   # (B, 11)
