@@ -98,7 +98,6 @@ def rearrange_dataset(dataset):
 
     print("re-arranging the dataset...")
     count = 0
-    qtns, lbls, tmps = list(),list(),list()
 
     # opening files in "w" mode
     questions = open(f"{cfg.dataset.path_to_data}/questions.lst","w")
