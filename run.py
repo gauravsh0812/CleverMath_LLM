@@ -176,12 +176,10 @@ def train_model(rank=None):
     if cfg.training.scheduler.isScheduler:
         # scheduler
         print("scheduler ON...")
-        scheduler = torch.optim.lr_scheduler.MultiStepLR(
+        scheduler = torch.optim.lr_scheduler.StepLR(
                     optimizer,
-                    milestones=[2,4],
-                    gamma=0.9
-                    # step_size = cfg.training.scheduler.scheduler_step_size,
-                    # gamma=cfg.training.scheduler.scheduler_gamma,
+                    step_size = cfg.training.scheduler.scheduler_step_size,
+                    gamma=cfg.training.scheduler.scheduler_gamma,
         )
 
     else:
