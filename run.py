@@ -175,6 +175,7 @@ def train_model(rank=None):
 
     if cfg.training.scheduler.isScheduler:
         # scheduler
+        print("scheduler ON...")
         scheduler = torch.optim.lr_scheduler.MultiStepLR(
                     optimizer,
                     milestones=[13,20],
