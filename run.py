@@ -178,7 +178,7 @@ def train_model(rank=None):
         print("scheduler ON...")
         scheduler = torch.optim.lr_scheduler.MultiStepLR(
                     optimizer,
-                    milestones=[13,20],
+                    milestones=[2,4],
                     gamma=0.9
                     # step_size = cfg.training.scheduler.scheduler_step_size,
                     # gamma=cfg.training.scheduler.scheduler_gamma,
