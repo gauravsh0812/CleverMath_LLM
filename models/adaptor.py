@@ -10,7 +10,7 @@ class ClipAdaptor(nn.Module):
         self.cliplin3 = nn.Linear(features[1], features[2])
         self.cliplin4 = nn.Linear(features[2], features[3])
         self.proj_clip = nn.Linear(50,max_len)
-        self.relu = nn.ReLU()
+        self.gelu = nn.ReLU()
     
     def forward(self, xc):
 
@@ -30,13 +30,13 @@ class RobertaAdaptor(nn.Module):
         self.roblin2 = nn.Linear(features[0], features[1])
         self.roblin3 = nn.Linear(features[1], features[2])
         self.roblin4 = nn.Linear(features[2], features[3])
-        self.relu = nn.ReLU()
+        self.gelu = nn.GELU()
     
     def forward(self, xr):
-        xr = self.relu(self.roblin1(xr))
-        xr = self.relu(self.roblin2(xr))
-        xr = self.relu(self.roblin3(xr))
-        xr = self.relu(self.roblin4(xr))
+        xr = self.gelu(self.roblin1(xr))
+        xr = self.gelu(self.roblin2(xr))
+        xr = self.gelu(self.roblin3(xr))
+        xr = self.gelu(self.roblin4(xr))
         
         return xr # (B,19, 64)
 
@@ -46,12 +46,14 @@ class Projector(nn.Module):
         super(Projector, self).__init__()
         self.final_lin1 = nn.Linear(features[-1]*2, features[-1])
         self.final_lin2 = nn.Linear(features[-1]*max_len, num_classes)
+        self.gelu = nn.GELU()
+        self.norm = nn.BatchNorm1d(num_classes)
 
     def forward(self, xc, xr):
         # x_roberta + x
         x = torch.cat((xc,xr), dim=-1)  
-        x = self.final_lin1(x)
+        x = self.gelu(self.final_lin1(x))
         x = torch.flatten(x, start_dim=-2, end_dim=-1)
-        x = self.final_lin2(x)  # (B, 11)
+        x = self.gelu(self.norm(self.final_lin2(x)))  # (B, 11)
         
         return x   # (B, 11)
