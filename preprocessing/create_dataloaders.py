@@ -40,8 +40,8 @@ class Img2MML_dataset(Dataset):
         qtn = self.dataframe.iloc[index, 1]
         img = self.dataframe.iloc[index, 0] 
         lbl = self.dataframe.iloc[index,2]
-        
-        return img,qtn,lbl
+        tmp = self.dataframe.iloc[index,-1]
+        return img,qtn,lbl,tmp
         
 
 class My_pad_collate(object):
