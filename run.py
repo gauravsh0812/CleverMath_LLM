@@ -278,7 +278,7 @@ def train_model(rank=None):
                         f"\t Val. Loss: {val_loss:.3f} |  Val. PPL: {math.exp(val_loss):7.3f}\n"
                     )
                     loss_file.write(
-                        f"\t Val. Accuracy: {accuracy:.3f}"
+                        f"\t Val. Accuracy: {accuracy:.3f}\n"
                     )
 
             else:
