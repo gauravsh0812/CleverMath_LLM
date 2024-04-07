@@ -20,7 +20,7 @@ def train(
 
     tset = tqdm(iter(train_dataloader))
 
-    for i, (imgs, ids, attns, labels,_) in enumerate(tset):
+    for i, (imgs, ids, attns, labels, _) in enumerate(tset):
         # ids (qtn input ids from tokenizer): (B, max_len) after padding by tokenizer
         # attn: qtn_attn_mask for padding by tokenizer: (B, max_len)
         # img: (B, in_channel, H, W)
