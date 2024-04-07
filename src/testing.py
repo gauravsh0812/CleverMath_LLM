@@ -19,7 +19,7 @@ def evaluate(
         labels_file.write("True \t Pred \n")
 
     with torch.no_grad():
-        for i, (imgs, ids, attns, labels) in enumerate(test_dataloader):
+        for i, (imgs, ids, attns, labels, tmps) in enumerate(test_dataloader):
             ids = ids.to(device)
             attns = attns.to(device)
             labels = labels.to(device, dtype=torch.long)
@@ -48,15 +48,16 @@ def evaluate(
             p = pred_labels.cpu().tolist()
             
             count=0
+
             for i in range(len(p)):
-                if p[i] == l[i]:
+                if p[i] == l[i] == tmps[i]:
                     count+=1
-                
+                        
                 if is_test:
-                    labels_file.write(f"{l[i]} \t\t {p[i]} \n")
+                    labels_file.write(f"{tmps[i]} \t\t {l[i]} \t\t {p[i]} \n")    
+    
+            accuracy+= count / len(p)
 
-            accuracy+= count / len(p)    
-
-    net_loss = epoch_loss / len(test_dataloader)
-    accuracy = accuracy / len(test_dataloader)
-    return net_loss, accuracy
+        net_loss = epoch_loss / len(test_dataloader)
+        accuracy = accuracy / len(test_dataloader)
+        return net_loss, accuracy   

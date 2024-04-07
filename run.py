@@ -19,6 +19,7 @@ from models.model import ClevrMath_model
 from models.adaptor import ClipAdaptor, Projector, RobertaAdaptor
 from src.training import train
 from src.testing import evaluate
+from src.testing_accuracy import test_categorized_accuracy
 
 
 with open("config/config.yaml") as f:
@@ -343,4 +344,5 @@ if __name__ == "__main__":
 
     else:
         train_model()
+        test_categorized_accuracy()
         

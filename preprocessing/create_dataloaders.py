@@ -51,7 +51,7 @@ class My_pad_collate(object):
         self.tokenizer = RobertaTokenizer.from_pretrained("FacebookAI/roberta-base")
 
     def __call__(self, batch):
-        _img, _qtns, _lbls = zip(*batch)
+        _img, _qtns, _lbls, _tmps = zip(*batch)
 
         padded_tokenized_qtns = self.tokenizer(
                                 _qtns, 
@@ -80,8 +80,8 @@ class My_pad_collate(object):
             input_ids.to(self.device),
             attn_masks.to(self.device),
             _lbls.to(self.device),
+            _tmps,
         )
-
     
 def data_loaders(batch_size):
 
@@ -92,7 +92,7 @@ def data_loaders(batch_size):
 
     assert len(q) == len(l) == len(t)
 
-    image_num = range(0,len(q))
+    image_num = range(0, 1000)#len(q))
 
     # split the image_num into train, test, validate
     train_val_images, test_images = train_test_split(
@@ -109,14 +109,15 @@ def data_loaders(batch_size):
                 ("<sos> " + q[num].strip() + " <eos>") for num in t_images
             ],
             "LABEL": [l[num] for num in t_images],
+            "TEMPLATE": [t[num] for num in t_images],
         }
     
         if t_idx == 0:
-            train = pd.DataFrame(qi_data, columns=["IMG", "QUESTION", "LABEL"])
+            train = pd.DataFrame(qi_data, columns=["IMG", "QUESTION", "LABEL", "TEMPLATE"])
         elif t_idx == 1:
-            test = pd.DataFrame(qi_data, columns=["IMG", "QUESTION", "LABEL"])
+            test = pd.DataFrame(qi_data, columns=["IMG", "QUESTION", "LABEL", "TEMPLATE"])
         else:
-            val = pd.DataFrame(qi_data, columns=["IMG", "QUESTION", "LABEL"])
+            val = pd.DataFrame(qi_data, columns=["IMG", "QUESTION", "LABEL", "TEMPLATE"])
     
     
     print(f"saving dataset files to {cfg.dataset.path_to_data}/ folder...")
