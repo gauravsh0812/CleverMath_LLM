@@ -10,7 +10,7 @@ class ClipAdaptor(nn.Module):
         self.cliplin3 = nn.Linear(features[1], features[2])
         self.cliplin4 = nn.Linear(features[2], features[3])
         self.proj_clip = nn.Linear(50,max_len)
-        self.gelu = nn.ReLU()
+        self.relu = nn.ReLU()
     
     def forward(self, xc):
 
