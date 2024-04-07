@@ -108,7 +108,7 @@ def data_loaders(batch_size):
             "QUESTION": [
                 ("<sos> " + q[num].strip() + " <eos>") for num in t_images
             ],
-            "LABEL": [l[num] for num in t_images],
+            "LABEL": [l[num].strip().replace("\n","") for num in t_images],
             "TEMPLATE": [t[num].strip().replace("\n","") for num in t_images],
         }
     
