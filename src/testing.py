@@ -15,8 +15,8 @@ def evaluate(
     accuracy = 0
 
     if is_test:
-        labels_file = open("logs/lables.txt","w")
-        labels_file.write("True \t Pred \n")
+        labels_file = open("logs/labels.txt","w")
+        labels_file.write("Templates \t True \t Pred \n")
 
     with torch.no_grad():
         for i, (imgs, ids, attns, labels, tmps) in enumerate(test_dataloader):
