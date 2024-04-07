@@ -49,7 +49,9 @@ class Projector(nn.Module):
 
     def forward(self, xc, xr):
         # x_roberta + x
-        x = torch.cat((xc,xr), dim=-1)          
+        x = torch.cat((xc,xr), dim=-1)  
+        x = self.final_lin1(x)
         x = torch.flatten(x, start_dim=-2, end_dim=-1)
         x = self.final_lin2(x)  # (B, 11)
+        
         return x   # (B, 11)
