@@ -50,7 +50,7 @@ def evaluate(
             count=0
 
             for i in range(len(p)):
-                if p[i] == l[i] == tmps[i]:
+                if p[i] == l[i]:
                     count+=1
                         
                 if is_test:
