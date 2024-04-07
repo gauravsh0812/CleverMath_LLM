@@ -51,6 +51,7 @@ class My_pad_collate(object):
         self.tokenizer = RobertaTokenizer.from_pretrained("FacebookAI/roberta-base")
 
     def __call__(self, batch):
+        print("batch:  ", print(batch))
         _img, _qtns, _lbls, _tmps = zip(*batch)
 
         padded_tokenized_qtns = self.tokenizer(
