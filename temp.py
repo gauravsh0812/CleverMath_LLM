@@ -4,7 +4,8 @@ from PIL import Image
 from torchvision import transforms
 from multiprocessing import Pool
 
-_path = "/groups/claytonm/gauravs_data/clevrmath_data/"
+# _path = "/groups/claytonm/gauravs_data/clevrmath_data/"
+_path = "data"
 
 def getting_image_tensors():
     """
