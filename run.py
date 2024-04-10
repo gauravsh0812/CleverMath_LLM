@@ -92,6 +92,7 @@ def define_model(max_len):
         param.requires_grad = False
 
     model = ClevrMath_model(ENC, 
+                            VIT,
                             DEC,
                             ENCADA,
                             ROBADA,
