@@ -59,14 +59,10 @@ class MaskRCNN(nn.Module):
 def main():
     m = MaskRCNN()
     tnsrs = os.listdir(f"{cfg.dataset.path_to_data}/image_tensors")
-
-    print("Do you want create/re-create the maskrcnn directory? yes or no.")
-    isTrue = input()
     
-    if isTrue == "yes":
-        os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/")
-        os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/masks")
-        os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/scores")
+    os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/")
+    os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/masks")
+    os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/scores")
 
     for im in tnsrs:
         _i = torch.load(f"{cfg.dataset.path_to_data}/image_tensors/{im}")[1:]
