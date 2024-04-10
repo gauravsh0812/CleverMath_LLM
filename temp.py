@@ -5,7 +5,7 @@ from torchvision import transforms
 from multiprocessing import Pool
 
 # _path = "/groups/claytonm/gauravs_data/clevrmath_data/"
-_path = "data"
+_path = "/home/gauravs/data/clevrmath_data"
 
 def getting_image_tensors():
     """
