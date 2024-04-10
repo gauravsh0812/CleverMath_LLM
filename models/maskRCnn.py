@@ -10,21 +10,12 @@ import os
 with open("config/config.yaml") as f:
         cfg = Box(yaml.safe_load(f))
 
-tnsrs = os.listdir(f"{cfg.dataset.path_to_data}/image_tensors")
-
-print("Do you want create/re-create the maskrcnn directory? yes or no.")
-isTrue = input()
-if isTrue == "yes":
-    base = os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/")
-    masks = os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/masks")
-    scores = os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/scores")
-
 class MaskRCNN(nn.Module):
-    def __init__(self,top_n):
+    def __init__(self,):
         super(MaskRCNN, self).__init__()
         self.cnn = torchvision.models.detection.maskrcnn_resnet50_fpn(pretrained=True)
         self.cnn.eval()
-        self.top_n = top_n
+        
     
     def forward(self,_x, im):
         _x = self.cnn([_x])    
@@ -66,7 +57,17 @@ class MaskRCNN(nn.Module):
 
 
 def main():
-    m = MaskRCNN(cfg.training.maskrcnn.top_n)
+    m = MaskRCNN()
+    tnsrs = os.listdir(f"{cfg.dataset.path_to_data}/image_tensors")
+
+    print("Do you want create/re-create the maskrcnn directory? yes or no.")
+    isTrue = input()
+    
+    if isTrue == "yes":
+        os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/")
+        os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/masks")
+        os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/scores")
+
     for im in tnsrs:
         _i = torch.load(f"{cfg.dataset.path_to_data}/image_tensors/{im}")[1:]
         y = m([_i], im)
