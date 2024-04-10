@@ -20,7 +20,7 @@ class ClevrMath_model(nn.Module):
         self.projector = projector
 
     def forward(self, imgs, ids, attns, device):
-        masks = self.enc(imgs, device)  # (B, top_n, w,h)
+        masks = self.enc(imgs)  # (B, top_n, w,h)
         vit_masks = self.vit_encoder(masks) # (B, n_patch, emd_dim)
         vit_imgs = self.vit_encoder(imgs)   # (B, n_patch, emb_dim)
         vit_output = torch.cat((vit_masks, vit_imgs), dim=-1) # (B, n_patches, 2*emb_dim)
