@@ -60,9 +60,12 @@ class MaskRCNN(nn.Module):
 m = MaskRCNN()
 tnsrs = os.listdir(f"{cfg.dataset.path_to_data}/image_tensors")
 
-os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/")
-os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/masks")
-os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/scores")
+paths = [f"{cfg.dataset.path_to_data}/maskrcnn/",
+         f"{cfg.dataset.path_to_data}/maskrcnn/masks",
+         f"{cfg.dataset.path_to_data}/maskrcnn/scores"]
+for _p in paths:
+     if not os.path.exists(_p):
+        os.mkdir(_p)
 
 for im in tnsrs:
     _i = torch.load(f"{cfg.dataset.path_to_data}/image_tensors/{im}")[1:]
