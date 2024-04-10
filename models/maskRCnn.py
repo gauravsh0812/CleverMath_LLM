@@ -15,12 +15,12 @@ class MaskRCNN(nn.Module):
         super(MaskRCNN, self).__init__()
         self.cnn = torchvision.models.detection.maskrcnn_resnet50_fpn(pretrained=True)
         self.cnn.eval()
-        
     
     def forward(self,_x, im):
         _x = self.cnn([_x])    
         scores = _x[0]['scores']
         masks = _x[0]['masks']      # (n_masks, 1, w,h)
+        print(masks.shape)
         torch.save(scores, f"{cfg.dataset.path_to_data}/maskrcnn/scores/{im}")
         torch.save(masks, f"{cfg.dataset.path_to_data}/maskrcnn/masks/{im}")
 
