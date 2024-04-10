@@ -3,9 +3,9 @@ import torch.nn as nn
 import yaml
 from box import Box
 import os
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
+# import numpy as np 
+# import matplotlib.pyplot as plt
+# import matplotlib.patches as patches
 
 with open("config/config.yaml") as f:
         cfg = Box(yaml.safe_load(f))
@@ -68,28 +68,28 @@ def main():
         y = m([_i], im)
         # plot(y)
 
-def plot(y):
-    # Visualize the results
-    fig, ax = plt.subplots(1)
-    ax.imshow(plt.imread("data/images/200.png"))
+# def plot(y):
+#     # Visualize the results
+#     fig, ax = plt.subplots(1)
+#     ax.imshow(plt.imread("data/images/200.png"))
 
-    # Draw bounding boxes
-    print("box shape: ", y['boxes'].shape)
-    for box in y['boxes']:
-        box = box.detach().numpy()
-        rect = patches.Rectangle((box[0], box[1]), box[2] - box[0], box[3] - box[1], linewidth=1, edgecolor='r', facecolor='none')
-        ax.add_patch(rect)
+#     # Draw bounding boxes
+#     print("box shape: ", y['boxes'].shape)
+#     for box in y['boxes']:
+#         box = box.detach().numpy()
+#         rect = patches.Rectangle((box[0], box[1]), box[2] - box[0], box[3] - box[1], linewidth=1, edgecolor='r', facecolor='none')
+#         ax.add_patch(rect)
 
 
-    # Draw masks
-    print("masks shape: ", y['masks'].shape)
-    for mask in y['masks']:
-        mask = mask.detach().numpy()
-        # mask = mask.squeeze().numpy()
-        mask = np.where(mask > 0.5, 1, 0) # Thresholding the mask
-        ax.imshow(mask, cmap='gray', alpha=0.5)
+#     # Draw masks
+#     print("masks shape: ", y['masks'].shape)
+#     for mask in y['masks']:
+#         mask = mask.detach().numpy()
+#         # mask = mask.squeeze().numpy()
+#         mask = np.where(mask > 0.5, 1, 0) # Thresholding the mask
+#         ax.imshow(mask, cmap='gray', alpha=0.5)
 
-    plt.show()
+#     plt.show()
 
 if "__init__" == "__main__":
     main()
