@@ -22,7 +22,7 @@ def getting_image_tensors():
     if not os.path.exists(f"{_path}/image_tensors"):
         os.mkdir(f"{_path}/image_tensors")
 
-    with Pool(20) as pool:
+    with Pool(100) as pool:
         result = pool.map(preprocess_images, images) 
 
 def preprocess_images(img):

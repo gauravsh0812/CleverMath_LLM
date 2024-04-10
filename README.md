@@ -26,7 +26,7 @@ To get image tensors, make sure to set "get_image_tensors" True in config file.
 ### Training
 First we need to get the masks and scores.
 ```
-python models/maskRCnn.py
+python models/create_masks.py
 ```
 ```
 python run.py
