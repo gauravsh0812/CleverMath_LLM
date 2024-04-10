@@ -4,7 +4,7 @@ inspired from https://github.com/jankrepl/mildlyoverfitted/blob/master/github_ad
 
 import torch 
 import torch.nn as nn
-from model.grenc_trdec_model.position_encoding import PositionalEncoding # Positional_features
+from models.positional_encoding import PositionalEncoding # Positional_features
 
 class PatchEmbed(nn.Module):
     """
