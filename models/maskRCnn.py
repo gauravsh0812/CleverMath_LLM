@@ -17,7 +17,7 @@ class MaskRCNN(nn.Module):
         self.cnn.eval()
     
     def forward(self,_x, im):
-        _x = self.cnn([_x])    
+        _x = self.cnn(_x)    
         scores = _x[0]['scores']
         masks = _x[0]['masks']      # (n_masks, 1, w,h)
         print(_x)
