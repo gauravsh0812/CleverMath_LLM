@@ -66,7 +66,7 @@ for _p in paths:
      if not os.path.exists(_p):
         os.mkdir(_p)
 
-for im in tnsrs[:10]:
+for im in tnsrs[:1000]:
     _i = torch.load(f"{cfg.dataset.path_to_data}/image_tensors/{im}")[1:]
     y = m([_i], im)
     # plot(y)
