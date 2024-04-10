@@ -16,9 +16,10 @@ class MaskRCNN(nn.Module):
         # boxes = [] 
         # labels = []
         final_masks = []
-        for _x in imgs:
-            print("imgs shape: ", imgs.shape)
-            _x = self.cnn([_x[1:]])    
+        for i in range(imgs.shape[0]):
+            _x = imgs[i,:,:,:]
+            print(_x.shape)
+            _x = self.cnn([])    
             scores = _x[0]['scores'].tolist()
             masks = _x[0]['masks']      # (n_masks, 1, w,h)
             # print("masks shape: ", masks.shape)
