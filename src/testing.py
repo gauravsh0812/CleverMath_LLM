@@ -60,4 +60,4 @@ def evaluate(
 
         net_loss = epoch_loss / len(test_dataloader)
         accuracy = accuracy / len(test_dataloader)
-        return net_loss, accuracy   
+        return net_loss, accuracy  

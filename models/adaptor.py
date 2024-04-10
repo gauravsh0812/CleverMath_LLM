@@ -1,15 +1,15 @@
 import torch 
 import torch.nn as nn
 
-class ClipAdaptor(nn.Module):
-    def __init__(self, clip_in_dim, features, max_len):
-        super(ClipAdaptor, self).__init__()
+class ENCAdaptor(nn.Module):
+    def __init__(self, enc_in_dim, features, top_n, max_len):
+        super(ENCAdaptor, self).__init__()
 
-        self.cliplin1 = nn.Linear(clip_in_dim, features[0])
+        self.cliplin1 = nn.Linear(enc_in_dim, features[0])
         self.cliplin2 = nn.Linear(features[0], features[1])
         self.cliplin3 = nn.Linear(features[1], features[2])
-        self.cliplin4 = nn.Linear(features[2], features[3])
-        self.proj_clip = nn.Linear(50,max_len)
+        self.cliplin4 = nn.Linear(features[2], features[3])        
+        self.fin = nn.Linear(top_n, max_len)
         self.relu = nn.ReLU()
     
     def forward(self, xc):
@@ -18,9 +18,9 @@ class ClipAdaptor(nn.Module):
         xc = self.relu(self.cliplin2(xc))
         xc = self.relu(self.cliplin3(xc))
         xc = self.relu(self.cliplin4(xc))
-        xc = self.relu(self.proj_clip(xc.permute(0,2,1))).permute(0,2,1)
+        xc = self.fin(xc.permute(0,2,1)).permute(0,2,1)
         
-        return xc # (B,19, 64)
+        return xc   # (B,max_len, 64)
 
 class RobertaAdaptor(nn.Module):
     def __init__(self, roberta_in_dim, features):

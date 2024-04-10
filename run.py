@@ -13,10 +13,11 @@ import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 from preprocessing.create_dataloaders import data_loaders
-from models.clip import ClipVisionEncoder
+from models.maskRCnn import MaskRCNN
 from models.roberta import RobertaEncoder
 from models.model import ClevrMath_model
-from models.adaptor import ClipAdaptor, Projector, RobertaAdaptor
+from models.vit import VisionTransformer
+from models.adaptor import ENCAdaptor, Projector, RobertaAdaptor
 from src.training import train
 from src.testing import evaluate
 from src.testing_accuracy import test_categorized_accuracy
@@ -49,24 +50,33 @@ def epoch_time(start_time, end_time):
 
 def define_model(max_len):
     
-    ENC = ClipVisionEncoder(finetune=cfg.training.clip.finetune,
-                            config=cfg.training.clip.configuration)
-    DEC = RobertaEncoder()    
-
-    if cfg.training.clip.finetune:
-        in_dim = cfg.training.clip.configuration.hidden_size
-    else:
-        in_dim = 768
-    CLIPADA = ClipAdaptor(in_dim, 
-                  cfg.training.adaptor.features,
-                  max_len,
-                  )
+    ENC = MaskRCNN(cfg.training.maskrcnn.top_n)
+    VIT = VisionTransformer(
+        [cfg.dataset.image_width, cfg.dataset.image_height],
+        cfg.training.vit.patch_size,
+        cfg.training.maskrcnn.top_n,
+        cfg.training.vit.embed_dim,
+        cfg.training.vit.depth,
+        cfg.training.vit.n_heads,
+        cfg.training.vit.mlp_ratio,
+        cfg.training.vit.qkv_bias,
+        cfg.training.general.dropout,
+    )
     
+    
+    DEC = RobertaEncoder()    
     ROBADA = RobertaAdaptor(
         cfg.training.roberta.in_dim,
         cfg.training.adaptor.features,
     )
     
+    ENCADA = ENCAdaptor(
+        cfg.training.vit.embed_dim * 2,
+        cfg.training.adaptor.features,
+        cfg.training.maskrcnn.top_n,
+        max_len,
+    )
+
     PROJ = Projector(
         cfg.training.adaptor.features,
         max_len, 
@@ -76,14 +86,14 @@ def define_model(max_len):
     # freezing the pre-trained models
     # only training the adaptor layer
     for param in ENC.parameters():
-        param.requires_grad = cfg.training.clip.finetune
+        param.requires_grad = False
 
     for param in DEC.parameters():
-        param.requires_grad = cfg.training.roberta.finetune 
+        param.requires_grad = False
 
     model = ClevrMath_model(ENC, 
                             DEC,
-                            CLIPADA,
+                            ENCADA,
                             ROBADA,
                             PROJ,)
 

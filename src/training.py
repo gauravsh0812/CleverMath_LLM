@@ -32,9 +32,11 @@ def train(
         
         _imgs = list()
         for im in imgs:
-            _i = f"{data_path}/images/{int(im.item())}.png"
+            _i = f"{data_path}/image_tensors/{int(im.item())}.pt"
             _imgs.append(_i)
         
+        _imgs = torch.stack(_imgs)
+
         # setting gradients to zero
         optimizer.zero_grad()
 
@@ -45,20 +47,10 @@ def train(
             device
         )
 
-        # print("output shape: ", output.shape)
-
         # output: (B, 11)
         # labels: (B, 11)
 
         labels = torch.argmax(labels, dim=1)  # (B,)
-
-        # if i%100 == 0:
-        #     pred_labels = torch.argmax(output, dim=1)
-        #     print("labels: ", labels)
-        #     print("pred_labels: ", pred_labels)
-        #     print("========"*4)
-
-        # exit()
         loss = criterion(output.contiguous().view(-1, output.shape[-1]), 
                          labels.contiguous().view(-1))
         

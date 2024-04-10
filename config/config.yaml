@@ -8,7 +8,7 @@ general:
   rank: 0
   device: "cuda"
   preprocess: False
-  load_trained_model_for_testing: True 
+  load_trained_model_for_testing: False   
 
 dataset:
   path_to_data: "/groups/claytonm/gauravs_data/clevrmath_data/"
@@ -41,18 +41,16 @@ training:
   adaptor:
     features: [512,256,128,64]
 
+  maskrcnn:
+    top_n: 5
+
+  vit:
+    patch_size: 4
+    nheads: 8
+    emb_dim: 768
+    depth: 4
+    mlp_ratio: 4
+    qkv_bias: True
+
   roberta:
     in_dim: 768
-    finetune: False
-
-  clip:
-    finetune: False
-    configuration: 
-      hidden_size: 128
-      intermediate_size: 1408
-      projection_dim: 192
-      num_hidden_layers: 3
-      num_attention_heads: 4
-      num_channels: 3
-      image_size: 224
-      patch_size: 32
