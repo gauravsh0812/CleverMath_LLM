@@ -20,7 +20,7 @@ class MaskRCNN(nn.Module):
         _x = self.cnn([_x])    
         scores = _x[0]['scores']
         masks = _x[0]['masks']      # (n_masks, 1, w,h)
-        print(masks.shape)
+        print(_x)
         torch.save(scores, f"{cfg.dataset.path_to_data}/maskrcnn/scores/{im}")
         torch.save(masks, f"{cfg.dataset.path_to_data}/maskrcnn/masks/{im}")
 
