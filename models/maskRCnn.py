@@ -20,7 +20,6 @@ class MaskRCNN(nn.Module):
         _x = self.cnn(_x)    
         scores = _x[0]['scores']
         masks = _x[0]['masks']      # (n_masks, 1, w,h)
-        print(_x)
         torch.save(scores, f"{cfg.dataset.path_to_data}/maskrcnn/scores/{im}")
         torch.save(masks, f"{cfg.dataset.path_to_data}/maskrcnn/masks/{im}")
 
@@ -67,7 +66,7 @@ for _p in paths:
      if not os.path.exists(_p):
         os.mkdir(_p)
 
-for im in tnsrs:
+for im in tnsrs[:10]:
     _i = torch.load(f"{cfg.dataset.path_to_data}/image_tensors/{im}")[1:]
     y = m([_i], im)
     # plot(y)
