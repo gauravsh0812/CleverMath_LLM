@@ -56,18 +56,18 @@ class MaskRCNN(nn.Module):
         # return masks # (B, n_masks, w,h)
 
 
-def main():
-    m = MaskRCNN()
-    tnsrs = os.listdir(f"{cfg.dataset.path_to_data}/image_tensors")
-    
-    os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/")
-    os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/masks")
-    os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/scores")
 
-    for im in tnsrs:
-        _i = torch.load(f"{cfg.dataset.path_to_data}/image_tensors/{im}")[1:]
-        y = m([_i], im)
-        # plot(y)
+m = MaskRCNN()
+tnsrs = os.listdir(f"{cfg.dataset.path_to_data}/image_tensors")
+
+os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/")
+os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/masks")
+os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/scores")
+
+for im in tnsrs:
+    _i = torch.load(f"{cfg.dataset.path_to_data}/image_tensors/{im}")[1:]
+    y = m([_i], im)
+    # plot(y)
 
 # def plot(y):
 #     # Visualize the results
@@ -91,6 +91,3 @@ def main():
 #         ax.imshow(mask, cmap='gray', alpha=0.5)
 
 #     plt.show()
-
-if "__init__" == "__main__":
-    main()
