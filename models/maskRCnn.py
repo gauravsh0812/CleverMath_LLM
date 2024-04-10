@@ -11,9 +11,13 @@ with open("config/config.yaml") as f:
         cfg = Box(yaml.safe_load(f))
 
 tnsrs = os.listdir(f"{cfg.dataset.path_to_data}/image_tensors")
-masks = os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/masks")
-scores = os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/scores")
 
+print("Do you want create/re-create the maskrcnn directory? yes or no.")
+isTrue = input()
+if isTrue == "yes":
+    base = os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/")
+    masks = os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/masks")
+    scores = os.mkdir(f"{cfg.dataset.path_to_data}/maskrcnn/scores")
 
 class MaskRCNN(nn.Module):
     def __init__(self,top_n):
