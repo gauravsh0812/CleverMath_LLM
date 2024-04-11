@@ -290,7 +290,7 @@ def train_model(rank=None):
 
         print(
             "best model saved as:  ",
-            f"trained_models/clip_roberta_adaptor_best_model.pt",
+            f"trained_models/{cfg.model_name}.pt",
         )
 
     if cfg.general.ddp:

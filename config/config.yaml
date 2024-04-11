@@ -1,3 +1,5 @@
+model_name: clip_roberta_adaptor_V2_gelu
+
 general:
   seed: 42
   wandb: False
