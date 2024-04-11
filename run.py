@@ -22,7 +22,7 @@ from src.testing import evaluate
 from src.testing_accuracy import test_categorized_accuracy
 
 
-with open("config/config.yaml") as f:
+with open("config/config_48.yaml") as f:
     cfg = Box(yaml.safe_load(f))
 
 def set_random_seed(SEED):
