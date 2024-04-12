@@ -42,6 +42,7 @@ training:
   
   adaptor:
     features: [512,256,128,64]
+    vit_features: [256,128,64]
 
   maskrcnn:
     top_n: 8
@@ -50,7 +51,7 @@ training:
     in_chn: 3
     patch_size: 10
     n_heads: 8
-    embed_dim: 512
+    embed_dim: 256
     depth: 4
     mlp_ratio: 4
     qkv_bias: True

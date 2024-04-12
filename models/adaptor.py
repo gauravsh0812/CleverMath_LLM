@@ -8,7 +8,9 @@ class ENCAdaptor(nn.Module):
         self.cliplin1 = nn.Linear(enc_in_dim, features[0])
         self.cliplin2 = nn.Linear(features[0], features[1])
         self.cliplin3 = nn.Linear(features[1], features[2])
-        self.cliplin4 = nn.Linear(features[2], features[3])        
+        if len(features)==4:
+            self.layer4 = True
+            self.cliplin4 = nn.Linear(features[2], features[3])        
         self.fin = nn.Linear(n_patches, max_len)
         self.relu = nn.ReLU()
     
@@ -17,7 +19,8 @@ class ENCAdaptor(nn.Module):
         xc = self.relu(self.cliplin1(xc))
         xc = self.relu(self.cliplin2(xc))
         xc = self.relu(self.cliplin3(xc))
-        xc = self.relu(self.cliplin4(xc))
+        if self.layer4:
+            xc = self.relu(self.cliplin4(xc))
         xc = self.fin(xc.permute(0,2,1)).permute(0,2,1)
         
         return xc   # (B,max_len, 64)

@@ -80,7 +80,7 @@ def define_model(max_len):
 
     ENCADA = ENCAdaptor(
         cfg.training.vit.embed_dim * 2,
-        cfg.training.adaptor.features,
+        cfg.training.adaptor.vit_features,
         n_patches,
         max_len,
     )
