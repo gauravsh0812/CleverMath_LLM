@@ -23,7 +23,7 @@ dataset:
 training:
   general:
     clip: 1 
-    batch_size: 4
+    batch_size: 8
     epochs: 1
     dropout: 0.1
     learning_rate: 0.001
@@ -45,7 +45,7 @@ training:
     top_n: 3
 
   vit:
-    patch_size: 4
+    patch_size: 10
     n_heads: 8
     embed_dim: 256
     depth: 4
