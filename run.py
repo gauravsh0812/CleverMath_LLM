@@ -133,7 +133,7 @@ def train_model(rank=None):
 
         elif cfg.general.ddp:
             # create default process group
-            dist.init_process_group("nccl", rank=rank, world_size=world_size)
+            dist.init_process_group("nccl", rank=rank, world_size=cfg.general.world_size)
             # add rank to config
             cfg.general.rank = rank
             device = f"cuda:{rank}"
