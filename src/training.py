@@ -31,7 +31,7 @@ def train(
 
         _imgs = list()
         for im in imgs:
-            _i = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")
+            _i = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")[1:] # 4D --> 3D
             _imgs.append(_i)
         img_tnsrs = torch.stack(_imgs)
         
