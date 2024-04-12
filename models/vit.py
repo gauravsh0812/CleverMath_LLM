@@ -213,6 +213,7 @@ class VisionTransformer(nn.Module):
     def forward(self, x):
 
         # x: (B, top_n, w, h)
+        print("x shape: ", x.shape)
         x = self.patch_embed(x)    # (B, n_patches, emb_dim)
         x = x.permute(1,0,2)   # (n_patches, B, emb_dim)
         x = x + self.patch_pe(x)  
