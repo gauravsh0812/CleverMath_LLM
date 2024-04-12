@@ -2,14 +2,14 @@ import torch
 import torch.nn as nn
 
 class ENCAdaptor(nn.Module):
-    def __init__(self, enc_in_dim, features, top_n, max_len):
+    def __init__(self, enc_in_dim, features, n_patches, max_len):
         super(ENCAdaptor, self).__init__()
 
         self.cliplin1 = nn.Linear(enc_in_dim, features[0])
         self.cliplin2 = nn.Linear(features[0], features[1])
         self.cliplin3 = nn.Linear(features[1], features[2])
         self.cliplin4 = nn.Linear(features[2], features[3])        
-        self.fin = nn.Linear(top_n, max_len)
+        self.fin = nn.Linear(n_patches, max_len)
         self.relu = nn.ReLU()
     
     def forward(self, xc):

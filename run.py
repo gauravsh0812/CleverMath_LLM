@@ -68,10 +68,12 @@ def define_model(max_len):
         cfg.training.adaptor.features,
     )
     
+    n_patches = (cfg.dataset.image_width/10) *(cfg.dataset.image_height/10)
+
     ENCADA = ENCAdaptor(
         cfg.training.vit.embed_dim * 2,
         cfg.training.adaptor.features,
-        cfg.training.maskrcnn.top_n,
+        n_patches,
         max_len,
     )
 
