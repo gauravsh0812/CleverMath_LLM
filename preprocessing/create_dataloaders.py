@@ -92,7 +92,10 @@ def data_loaders(batch_size):
 
     assert len(q) == len(l) == len(t)
 
-    image_num = range(0, len(q))
+    no_masks = open("logs/no_mask_file.lst").readlines()
+    no_masks = [int(nm.split(".")[0]) for nm in no_masks]
+
+    image_num = [i for i in range(len(q)) if i not in no_masks]
 
     # split the image_num into train, test, validate
     train_val_images, test_images = train_test_split(
@@ -102,7 +105,7 @@ def data_loaders(batch_size):
         train_val_images, test_size=0.1, random_state=42
     )
 
-    for t_idx, t_images in enumerate([train_images, test_images, val_images]):
+    for t_idx, t_images in enumerate([train_images, test_images, val_images]):    
         qi_data = {
             "IMG": [num for num in t_images],
             "QUESTION": [
