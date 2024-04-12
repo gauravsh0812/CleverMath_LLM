@@ -96,7 +96,7 @@ def data_loaders(batch_size):
     no_masks = [int(nm.replace("\n","").strip().split(".")[0]) for nm in no_masks]
     print("images with no masks: ", no_masks)
 
-    image_num = [i for i in range(len(q)) if i not in no_masks][:5000]
+    image_num = [i for i in range(len(q)) if i not in no_masks][:8000]
 
     # split the image_num into train, test, validate
     train_val_images, test_images = train_test_split(
