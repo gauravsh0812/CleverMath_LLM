@@ -43,6 +43,7 @@ class ClevrMath_model(nn.Module):
                 final_masks.append(masks)
 
             else:
+                print("_mask shape: ", _mask.shape)
                 delta = self.top_n - _mask.shape[0] 
                 top_n_scores = sorted(_score, reverse=True)[:self.top_n]
                 for _s in top_n_scores:
