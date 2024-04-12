@@ -28,12 +28,19 @@ def train(
         ids = ids.to(device)
         attns = attns.to(device)
         labels = labels.to(device, dtype=torch.long)
+
+        _imgs = list()
+        for im in imgs:
+            _i = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")
+            _imgs.append(_i)
+        img_tnsrs = torch.stack(_imgs)
         
         # setting gradients to zero
         optimizer.zero_grad()
 
         output = model(
             imgs,
+            img_tnsrs,
             ids,
             attns,
             device
