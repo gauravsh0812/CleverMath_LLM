@@ -49,18 +49,22 @@ def epoch_time(start_time, end_time):
 
 def define_model(max_len):
     
-    VIT = VisionTransformer(
-        [cfg.dataset.image_width, cfg.dataset.image_height],
-        cfg.training.vit.patch_size,
-        cfg.training.maskrcnn.top_n,
-        cfg.training.vit.embed_dim,
-        cfg.training.vit.depth,
-        cfg.training.vit.n_heads,
-        cfg.training.vit.mlp_ratio,
-        cfg.training.vit.qkv_bias,
-        cfg.training.general.dropout,
-    )
-    
+    def _vit(in_channels):
+        VIT = VisionTransformer(
+            [cfg.dataset.image_width, cfg.dataset.image_height],
+            cfg.training.vit.patch_size,
+            in_channels,
+            cfg.training.vit.embed_dim,
+            cfg.training.vit.depth,
+            cfg.training.vit.n_heads,
+            cfg.training.vit.mlp_ratio,
+            cfg.training.vit.qkv_bias,
+            cfg.training.general.dropout,
+        )
+        return VIT
+
+    MASKVIT = _vit(cfg.training.maskrnn.top_n)
+    IMGVIT = _vit(cfg.training.vit.in_chn)    
     
     DEC = RobertaEncoder()    
     ROBADA = RobertaAdaptor(
@@ -92,7 +96,8 @@ def define_model(max_len):
     for param in DEC.parameters():
         param.requires_grad = False
 
-    model = ClevrMath_model(VIT,
+    model = ClevrMath_model(MASKVIT,
+                            IMGVIT,
                             DEC,
                             ENCADA,
                             ROBADA,

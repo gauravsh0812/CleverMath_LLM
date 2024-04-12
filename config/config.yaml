@@ -45,6 +45,7 @@ training:
     top_n: 5
 
   vit:
+    in_chn: 3
     patch_size: 10
     n_heads: 8
     embed_dim: 512

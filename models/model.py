@@ -4,7 +4,8 @@ import torch.nn as nn
 class ClevrMath_model(nn.Module):
 
     def __init__(self,  
-                 vit_encoder,
+                 mask_vit_encoder,
+                 img_vit_encoder,
                  decoder,
                  encadaptor,
                  robertaadaptor,
@@ -13,7 +14,8 @@ class ClevrMath_model(nn.Module):
                  mask_path,
     ):
         super(ClevrMath_model, self).__init__()
-        self.vit_encoder = vit_encoder
+        self.mask_vit_encoder = mask_vit_encoder
+        self.img_vit_encoder = img_vit_encoder
         self.encadaptor = encadaptor
         self.robertaadaptor = robertaadaptor
         self.dec = decoder
@@ -65,11 +67,11 @@ class ClevrMath_model(nn.Module):
 
     def forward(self, imgs, img_tnsrs, ids, attns, device):
         masks = self.get_masks(imgs).to(device)  # (B, top_n, w,h)
-        print("masks shape: ", masks.shape)
-        vit_masks = self.vit_encoder(masks) # (B, n_patch, emd_dim)
-        print("vit masks shae: ", vit_masks.shape)
-        print("img_tnsrs shaoe: ", img_tnsrs.shape)
-        vit_imgs = self.vit_encoder(img_tnsrs)   # (B, n_patch, emb_dim)
+        # print("masks shape: ", masks.shape)
+        vit_masks = self.mask_vit_encoder(masks) # (B, n_patch, emd_dim)
+        # print("vit masks shae: ", vit_masks.shape)
+        # print("img_tnsrs shaoe: ", img_tnsrs.shape)
+        vit_imgs = self.img_vit_encoder(img_tnsrs)   # (B, n_patch, emb_dim)
         vit_output = torch.cat((vit_masks, vit_imgs), dim=-1) # (B, n_patches, 2*emb_dim)
         encoutput = self.encadaptor(vit_output)  # (B, max_len, 64)
 
