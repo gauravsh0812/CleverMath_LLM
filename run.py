@@ -96,7 +96,6 @@ def define_model(max_len):
 
     return model
 
-
 def train_model(rank=None):
 
     if (cfg.general.wandb):
