@@ -33,7 +33,7 @@ def train(
         for im in imgs:
             _i = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")[1:] # 4D --> 3D
             _imgs.append(_i)
-        img_tnsrs = torch.stack(_imgs)
+        img_tnsrs = torch.stack(_imgs).to(device)
         
         # setting gradients to zero
         optimizer.zero_grad()
