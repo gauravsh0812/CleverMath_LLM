@@ -26,10 +26,13 @@ def evaluate(
         
             _imgs = list()
             for im in imgs:
-                _i = f"{data_path}/images/{int(im.item())}.png"
+                _i = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")[1:] # 4D --> 3D
                 _imgs.append(_i)
 
-            output = model(_imgs,
+            img_tnsrs = torch.stack(_imgs).to(device)
+
+            output = model(imgs,
+                           img_tnsrs,
                            ids,
                            attns,
                            device)
