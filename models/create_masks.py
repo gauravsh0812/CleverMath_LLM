@@ -10,6 +10,8 @@ import os
 with open("config/config.yaml") as f:
         cfg = Box(yaml.safe_load(f))
 
+no_masks_file = open("logs/no_mask_images.lst","w")
+
 class MaskRCNN(nn.Module):
     def __init__(self,):
         super(MaskRCNN, self).__init__()
@@ -20,8 +22,11 @@ class MaskRCNN(nn.Module):
         _x = self.cnn(_x)    
         scores = _x[0]['scores']
         masks = _x[0]['masks']      # (n_masks, 1, w,h)
-        torch.save(scores, f"{cfg.dataset.path_to_data}/maskrcnn/scores/{im}")
-        torch.save(masks, f"{cfg.dataset.path_to_data}/maskrcnn/masks/{im}")
+        if masks.shape[0] > 0:
+            torch.save(scores, f"{cfg.dataset.path_to_data}/maskrcnn/scores/{im}")
+            torch.save(masks, f"{cfg.dataset.path_to_data}/maskrcnn/masks/{im}")
+        else:
+             no_masks_file.write(f"{im} \n")    
 
 m = MaskRCNN()
 tnsrs = os.listdir(f"{cfg.dataset.path_to_data}/image_tensors")
