@@ -29,7 +29,7 @@ class ClevrMath_model(nn.Module):
         for im in imgs:
             im = int(im.item())
             _mask = torch.load(f"{self.mask_path}/{im}.pt")
-            _score = torch.load(f"{self.score_path}/{im}.pt")
+            _score = torch.load(f"{self.score_path}/{im}.pt").tolist()
 
             top_masks = []
 
@@ -61,6 +61,7 @@ class ClevrMath_model(nn.Module):
 
     def forward(self, imgs, ids, attns, device):
         masks = self.get_masks(imgs)  # (B, top_n, w,h)
+        print(masks.shape)
         exit()
         vit_masks = self.vit_encoder(masks) # (B, n_patch, emd_dim)
         vit_imgs = self.vit_encoder(imgs)   # (B, n_patch, emb_dim)
