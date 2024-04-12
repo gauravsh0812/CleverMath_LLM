@@ -45,7 +45,7 @@ training:
     vit_features: [256,128,64]
 
   maskrcnn:
-    top_n: 8
+    top_n: 5
 
   vit:
     in_chn: 3
