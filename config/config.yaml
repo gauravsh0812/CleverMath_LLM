@@ -15,6 +15,7 @@ dataset:
   path_to_data: "/groups/claytonm/gauravs_data/clevrmath_data"
   get_image_tensors: True
   shuffle: True
+  num_samples: 8000
   vocab_freq: 5
   num_workers: 0
   pin_memory: False
