@@ -46,10 +46,13 @@ class ClevrMath_model(nn.Module):
                 print("_mask shape: ", _mask.shape)
                 delta = self.top_n - _mask.shape[0] 
                 top_n_scores = sorted(_score, reverse=True)[:self.top_n]
+                print("top n scores: ", top_n_scores)
                 for _s in top_n_scores:
                     top_n_index = _score.index(_s)
                     top_n_mask = _mask[top_n_index,:,:,:] #(1,1,w,h)
                     top_masks.append(top_n_mask)      
+                
+                print("top_masks shape: ", top_masks.shape)
 
                 masks = torch.stack(top_masks).squeeze(1)  # (mask_shape[0], 1, w,h)          
                 zeros = torch.zeros(delta,masks.shape[-2],masks.shape[-1])  
