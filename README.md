@@ -22,12 +22,12 @@ python preprocessing/preprocess_raw_data.py
 ``` 
 To get image tensors, make sure to set "get_image_tensors" True in config file.
 
-
-### Training
-First we need to get the masks and scores.
+To use MaskRCNN, we need to get the masks and scores for all images.
 ```
 python models/create_masks.py
 ```
+
+### Training
 ```
 python run.py
 ```

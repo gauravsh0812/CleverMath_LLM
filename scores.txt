@@ -1,0 +1,10 @@
+Clip Roberta Adaptor V2 Gelu -- config 48
+
+General Accuracies:
+
+Total >> 0.47733
+
+addition >> 0.62447
+subtraction >> 0.43234
+Adversarial >> 0.33333
+Sub-Multihop >> 0.405
