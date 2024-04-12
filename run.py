@@ -322,7 +322,7 @@ def train_model(rank=None):
     # loading pre_tained_model
     model.load_state_dict(
         torch.load(
-            f"trained_models/{cfg.model.name}.pt"
+            f"trained_models/{cfg.model_name}.pt"
         )
     )
 
