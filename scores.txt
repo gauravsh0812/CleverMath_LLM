@@ -8,3 +8,10 @@ addition >> 0.62447
 subtraction >> 0.43234
 Adversarial >> 0.33333
 Sub-Multihop >> 0.405
+
+
+
+
+
+/home/gauravs/data/clevrmath_data
+"/groups/claytonm/gauravs_data/clevrmath_data"
