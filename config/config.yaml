@@ -42,7 +42,7 @@ training:
     features: [512,256,128,64]
 
   maskrcnn:
-    top_n: 5
+    top_n: 2
 
   vit:
     patch_size: 4
