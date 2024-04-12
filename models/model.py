@@ -29,6 +29,7 @@ class ClevrMath_model(nn.Module):
         final_masks = []
 
         for im in imgs:
+            print("====================>>> img: ", im)
             im = int(im.item())
             _mask = torch.load(f"{self.mask_path}/{im}.pt")
             _score = torch.load(f"{self.score_path}/{im}.pt").tolist()
