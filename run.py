@@ -63,7 +63,7 @@ def define_model(max_len):
         )
         return VIT
 
-    MASKVIT = _vit(cfg.training.maskrnn.top_n)
+    MASKVIT = _vit(cfg.training.maskrcnn.top_n)
     IMGVIT = _vit(cfg.training.vit.in_chn)    
     
     DEC = RobertaEncoder()    
