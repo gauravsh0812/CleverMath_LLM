@@ -18,6 +18,7 @@ class ENCAdaptor(nn.Module):
         xc = self.relu(self.cliplin2(xc))
         xc = self.relu(self.cliplin3(xc))
         xc = self.relu(self.cliplin4(xc))
+        print("xc shape: ", xc.shape)
         xc = self.fin(xc.permute(0,2,1)).permute(0,2,1)
         
         return xc   # (B,max_len, 64)
