@@ -47,7 +47,7 @@ training:
   vit:
     patch_size: 10
     n_heads: 8
-    embed_dim: 256
+    embed_dim: 512
     depth: 4
     mlp_ratio: 4
     qkv_bias: True
