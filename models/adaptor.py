@@ -9,8 +9,8 @@ class ENCAdaptor(nn.Module):
         self.cliplin2 = nn.Linear(features[0], features[1])
         self.cliplin3 = nn.Linear(features[1], features[2])
         if len(features)==4:
+            self.cliplin4 = nn.Linear(features[2], features[3])
             self.features = features
-            self.cliplin4 = nn.Linear(features[2], features[3])        
         self.fin = nn.Linear(n_patches, max_len)
         self.relu = nn.ReLU()
     
