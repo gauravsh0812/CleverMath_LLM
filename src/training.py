@@ -23,25 +23,17 @@ def train(
     for i, (imgs, ids, attns, labels, _) in enumerate(tset):
         # ids (qtn input ids from tokenizer): (B, max_len) after padding by tokenizer
         # attn: qtn_attn_mask for padding by tokenizer: (B, max_len)
-        # img: (B, in_channel, H, W)
         # label: (B,11) --  since total number of classes are 0-10 (one-hot encoded)
 
         ids = ids.to(device)
         attns = attns.to(device)
         labels = labels.to(device, dtype=torch.long)
         
-        _imgs = list()
-        for im in imgs:
-            _i = torch.load(f"{data_path}/image_tensors/{int(im.item())}.pt")
-            _imgs.append(_i)
-        
-        _imgs = torch.stack(_imgs)
-
         # setting gradients to zero
         optimizer.zero_grad()
 
         output = model(
-            _imgs,
+            imgs,
             ids,
             attns,
             device

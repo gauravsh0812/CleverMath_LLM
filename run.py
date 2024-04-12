@@ -13,7 +13,6 @@ import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 from preprocessing.create_dataloaders import data_loaders
-from models.maskRCnn import MaskRCNN
 from models.roberta import RobertaEncoder
 from models.model import ClevrMath_model
 from models.vit import VisionTransformer
@@ -50,7 +49,6 @@ def epoch_time(start_time, end_time):
 
 def define_model(max_len):
     
-    ENC = MaskRCNN(cfg.training.maskrcnn.top_n)
     VIT = VisionTransformer(
         [cfg.dataset.image_width, cfg.dataset.image_height],
         cfg.training.vit.patch_size,
@@ -85,18 +83,16 @@ def define_model(max_len):
 
     # freezing the pre-trained models
     # only training the adaptor layer
-    for param in ENC.parameters():
-        param.requires_grad = False
-
     for param in DEC.parameters():
         param.requires_grad = False
 
-    model = ClevrMath_model(ENC, 
-                            VIT,
+    model = ClevrMath_model(VIT,
                             DEC,
                             ENCADA,
                             ROBADA,
-                            PROJ,)
+                            PROJ,
+                            cfg.training.maskrcnn.top_n,
+                            cfg.dataset.path_to_data,)
 
     return model
 

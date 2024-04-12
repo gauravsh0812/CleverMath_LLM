@@ -23,39 +23,6 @@ class MaskRCNN(nn.Module):
         torch.save(scores, f"{cfg.dataset.path_to_data}/maskrcnn/scores/{im}")
         torch.save(masks, f"{cfg.dataset.path_to_data}/maskrcnn/masks/{im}")
 
-        # print("masks shape: ", masks.shape)
-            
-        # top_masks = []
-
-        # if masks.shape[0] >= self.top_n:
-        #     top_n_scores = sorted(scores, reverse=True)[:self.top_n]
-        #     for _s in top_n_scores:
-        #         top_n_index = scores.index(_s)
-        #         top_n_mask = masks[top_n_index,:,:,:] #(1,1,w,h)
-        #         top_masks.append(top_n_mask)        
-        #     masks = torch.stack(top_masks).squeeze(1)  # (top_n,w,h)
-        #     final_masks.append(masks)
-        #     # print("stacked masks shape: ", masks.shape)
-
-        # else:
-        #     delta = self.top_n - masks.shape[0] 
-        #     top_n_scores = sorted(scores, reverse=True)[:self.top_n]
-        #     for _s in top_n_scores:
-        #         top_n_index = scores.index(_s)
-        #         top_n_mask = masks[top_n_index,:,:,:] #(1,1,w,h)
-        #         top_masks.append(top_n_mask)      
-
-        #     masks = torch.stack(top_masks).squeeze(1)  # (mask_shape[0], 1, w,h)          
-        #     zeros = torch.zeros(delta,masks.shape[-2],masks.shape[-1])  
-        #     masks = torch.cat((masks, zeros), dim=0)  #(top_n,1,w,h)
-        #     final_masks.append(masks)
-        #     # print("stacked 2 masks shape: ", masks.shape)
-        
-        # final_masks = torch.stack(final_masks)
-        # return masks # (B, n_masks, w,h)
-
-
-
 m = MaskRCNN()
 tnsrs = os.listdir(f"{cfg.dataset.path_to_data}/image_tensors")
 
@@ -69,9 +36,9 @@ for _p in paths:
 for im in tnsrs:
     _i = torch.load(f"{cfg.dataset.path_to_data}/image_tensors/{im}")[1:]
     y = m([_i], im)
-    # plot(y)
+    
 
-# def plot(y):
+
 #     # Visualize the results
 #     fig, ax = plt.subplots(1)
 #     ax.imshow(plt.imread("data/images/200.png"))
