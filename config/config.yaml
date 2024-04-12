@@ -34,7 +34,7 @@ training:
     num_classes: 11
   
   scheduler:
-    isScheduler: False
+    isScheduler: True
     verbose: True
     scheduler_step_size: 5
     scheduler_gamma: 0.5
