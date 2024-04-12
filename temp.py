@@ -5,8 +5,9 @@ _p = "/groups/claytonm/gauravs_data/clevrmath_data/maskrcnn/masks"
 nos = []
 
 for i in os.listdir(_p):
-    _i = os.path.join(_p,_i)
+    _i = os.path.join(_p,i)
     n = torch.load(_i).shape[0]
     if n == 0:
         print(n)
         nos.append(n)
+print(len(nos))
