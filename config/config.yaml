@@ -28,31 +28,31 @@ training:
     batch_size: 16
     epochs: 50
     dropout: 0.1
-    learning_rate: 0.0001
-    weight_decay: 0.00001
-    betas: [0.8,0.7]
+    learning_rate: 0.001
+    weight_decay: 0.00005
+    betas: [0.9,0.999]
     early_stopping: 8
     num_classes: 11
   
   scheduler:
     isScheduler: True
     verbose: True
-    scheduler_step_size: 8
+    scheduler_step_size: 5
     scheduler_gamma: 0.5
   
   adaptor:
     features: [512,256,128,64]
-    vit_features: [256,128,64]
+    vit_features: [512,256,128,64]
 
   maskrcnn:
-    top_n: 5
+    top_n: 10
 
   vit:
     in_chn: 3
     patch_size: 10
     n_heads: 8
-    embed_dim: 256
-    depth: 4
+    embed_dim: 512
+    depth: 6
     mlp_ratio: 4
     qkv_bias: True
 
