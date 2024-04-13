@@ -50,9 +50,9 @@ training:
   vit:
     in_chn: 3
     patch_size: 10
-    n_heads: 8
+    n_heads: 4
     embed_dim: 512
-    depth: 6
+    depth: 3
     mlp_ratio: 4
     qkv_bias: True
 
