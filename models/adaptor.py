@@ -48,7 +48,7 @@ class Projector(nn.Module):
         self.final_lin2 = nn.Linear(features[-1], num_classes)
         self.gelu = nn.GELU()
         self.norm = nn.BatchNorm1d(num_classes)
-        self.pool = nn.AvgPool1D(kernel=1)
+        self.pool = nn.AvgPool1d(kernel=1)
 
     def forward(self, xc, xr, attn):
         # x_roberta + x
