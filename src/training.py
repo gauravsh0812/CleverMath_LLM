@@ -55,7 +55,7 @@ def train(
         print(output.shape, labels.shape)
 
         loss = criterion(output.contiguous().view(-1, output.shape[-1]), 
-                         labels.contiguous().view(-1))
+                         labels.contiguous())
         
         loss.backward()
 
