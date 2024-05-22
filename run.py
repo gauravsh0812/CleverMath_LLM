@@ -55,7 +55,7 @@ def define_model(max_len):
                             config=cfg.training.clip.configuration)
     DEC = RobertaEncoder()    
 
-    POS = PositionalEncoding(768,50)
+    POS = PositionalEncoding(64,19)
     ATTN = Self_Attention(50)
 
     if cfg.training.clip.finetune:
