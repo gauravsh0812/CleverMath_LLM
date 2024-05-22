@@ -49,10 +49,14 @@ class Projector(nn.Module):
         self.gelu = nn.GELU()
         self.norm = nn.BatchNorm1d(num_classes)
 
-    def forward(self, xc, xr):
+    def forward(self, xc, xr, pos_enc, attn):
         # x_roberta + x
         x = torch.cat((xc,xr), dim=-1)  
         x = self.gelu(self.final_lin1(x))
+        x = pos_enc(x)
+        print("x shape: ", x.shape)
+        exit()
+        x = attn(x)
         x = torch.flatten(x, start_dim=-2, end_dim=-1)
         x = self.gelu(self.norm(self.final_lin2(x)))  # (B, 11)
         

@@ -16,6 +16,8 @@ from preprocessing.create_dataloaders import data_loaders
 from models.clip import ClipVisionEncoder
 from models.roberta import RobertaEncoder
 from models.model import ClevrMath_model
+from models.positional_encoding import PositionalEncoding
+from models.self_attention import Self_Attention
 from models.adaptor import ClipAdaptor, Projector, RobertaAdaptor
 from src.training import train
 from src.testing import evaluate
@@ -53,6 +55,9 @@ def define_model(max_len):
                             config=cfg.training.clip.configuration)
     DEC = RobertaEncoder()    
 
+    POS = PositionalEncoding(768,50)
+    ATTN = Self_Attention(50)
+
     if cfg.training.clip.finetune:
         in_dim = cfg.training.clip.configuration.hidden_size
     else:
@@ -83,6 +88,8 @@ def define_model(max_len):
 
     model = ClevrMath_model(ENC, 
                             DEC,
+                            POS,
+                            ATTN,
                             CLIPADA,
                             ROBADA,
                             PROJ,)
