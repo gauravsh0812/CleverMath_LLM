@@ -34,7 +34,7 @@ def evaluate(
                            attns,
                            device)
             
-            labels = torch.argmax(labels, dim=1)
+            # labels = torch.argmax(labels, dim=1)
             loss = criterion(
                             output.contiguous().view(-1,output.shape[-1]), 
                             labels.contiguous().view(-1)
@@ -42,7 +42,7 @@ def evaluate(
 
             epoch_loss += loss.item()
             
-            
+            labels = torch.argmax(labels, dim=1)
             pred_labels = torch.argmax(output, dim=1)
             l = labels.cpu().tolist()
             p = pred_labels.cpu().tolist()

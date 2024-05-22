@@ -50,7 +50,7 @@ def train(
         # output: (B, 11)
         # labels: (B, 11)
 
-        labels = torch.argmax(labels, dim=1)  # (B,)
+        # labels = torch.argmax(labels, dim=1)  # (B,)
 
         print(output.shape, labels.shape)
 
