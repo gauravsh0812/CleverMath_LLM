@@ -86,15 +86,6 @@ def define_model(max_len):
 
     for param in DEC.parameters():
         param.requires_grad = cfg.training.roberta.finetune 
-    
-
-    lora_config = LoraConfig(
-        r=8,
-        lora_alpha=16,
-        target_modules=["vision_model.encoder.layers"],
-        lora_dropout=0.1,
-        bias="none",
-    )
 
     model = ClevrMath_model(ENC, 
                             DEC,
@@ -103,6 +94,19 @@ def define_model(max_len):
                             CLIPADA,
                             ROBADA,
                             PROJ,)
+
+    
+    for name, param in model.named_parameters():
+        print(f"Parameter: {name}, Size: {param.size()}, Type: {type(param.data)}, Value: {param.data[:2]}")
+    
+    exit()
+    lora_config = LoraConfig(
+        r=8,
+        lora_alpha=16,
+        target_modules=["vision_model.encoder.layers"],
+        lora_dropout=0.1,
+        bias="none",
+    )
 
     model = get_peft_model(model, lora_config)
     model.print_trainable_parameters()
