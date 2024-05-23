@@ -45,7 +45,7 @@ def train(
             device
         )
 
-        print("output shape: ", output.shape)
+        # print("output shape: ", output.shape)
 
         # output: (B, 11)
         # labels: (B, 11)
