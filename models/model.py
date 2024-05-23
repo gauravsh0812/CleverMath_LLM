@@ -26,6 +26,6 @@ class ClevrMath_model(nn.Module):
         last_hidden_roberta = self.dec(ids, attns) # (B, max_len, 768)        
         clipoutput = self.clipadaptor(encoded_imgs)  # (B, max_len, 64)
         roboutput = self.robertaadaptor(last_hidden_roberta) # (B, max, 64)
-        output = self.projector(clipoutput, roboutput, self.attn) # (B,11)
+        output = self.projector(clipoutput, roboutput, self.attn) # (B,11,64)
         
         return output
