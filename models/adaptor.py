@@ -56,6 +56,7 @@ class Projector(nn.Module):
         x = torch.cat((xc,xr), dim=1)  
         x = self.gelu(self.final_lin1(x.permute(0,2,1))).permute(0,2,1)  # (B, 19, 64)
         x = attn(x)
+        x = torch.flatten(x, -2,-1)
         x = self.lin(x)
         x = self.pool(x)  # (B, 11) 
         return x   # (B, 11)
