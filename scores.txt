@@ -4,3 +4,12 @@ add: 67.5
 sub: 44.47
 adv: 37.15
 sub multihop: 40
+
+
+Acc: 50.5
+
+add: 67.7
+sub: 44.15
+adv: 32.7
+sub-mul: 46.5
+
