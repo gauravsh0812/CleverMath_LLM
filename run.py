@@ -19,6 +19,7 @@ from models.model import ClevrMath_model
 from models.positional_encoding import PositionalEncoding
 from models.self_attention import Self_Attention
 from models.adaptor import ClipAdaptor, Projector, RobertaAdaptor
+from peft import LoraConfig, get_peft_model
 from src.training import train
 from src.testing import evaluate
 from src.testing_accuracy import test_categorized_accuracy
@@ -85,6 +86,15 @@ def define_model(max_len):
 
     for param in DEC.parameters():
         param.requires_grad = cfg.training.roberta.finetune 
+    
+
+    lora_config = LoraConfig(
+        r=8,
+        lora_alpha=16,
+        target_modules=["vision_model.encoder.layers"],
+        lora_dropout=0.1,
+        bias="none",
+    )
 
     model = ClevrMath_model(ENC, 
                             DEC,
@@ -93,6 +103,9 @@ def define_model(max_len):
                             CLIPADA,
                             ROBADA,
                             PROJ,)
+
+    model = get_peft_model(model, lora_config)
+    model.print_trainable_parameters()
 
     return model
 
