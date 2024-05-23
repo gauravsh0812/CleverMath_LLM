@@ -100,7 +100,6 @@ def define_model(max_len):
         print(f"Module Name: {name}")
         print(submodule)
         
-    exit()
     lora_config = LoraConfig(
         r=8,
         lora_alpha=16,
