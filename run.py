@@ -99,11 +99,12 @@ def define_model(max_len):
     for name, submodule in model.named_children():
         print(f"Module Name: {name}")
         print(submodule)
-        
+    
+    # tuning only CLIP Vision modules
     lora_config = LoraConfig(
         r=8,
         lora_alpha=16,
-        target_modules=["vision_model.encoder.layers"],
+        target_modules=["q_proj","k_proj","v_proj","o_proj"],
         lora_dropout=0.1,
         bias="none",
     )
