@@ -96,9 +96,10 @@ def define_model(max_len):
                             PROJ,)
 
     
-    for name, param in model.named_parameters():
-        print(name)
-    
+    for name, submodule in model.named_children():
+        print(f"Module Name: {name}")
+        print(submodule)
+        
     exit()
     lora_config = LoraConfig(
         r=8,
