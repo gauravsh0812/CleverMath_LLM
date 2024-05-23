@@ -30,13 +30,13 @@ training:
     learning_rate: 0.001
     weight_decay: 0.00001
     betas: [0.9,0.7]
-    early_stopping: 8
+    early_stopping: 12
     num_classes: 11
   
   scheduler:
     isScheduler: True
     verbose: True
-    scheduler_step_size: 5
+    scheduler_step_size: 10
     scheduler_gamma: 0.5
   
   adaptor:
