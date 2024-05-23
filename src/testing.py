@@ -42,7 +42,6 @@ def evaluate(
 
             epoch_loss += loss.item()
             
-            labels = torch.argmax(labels, dim=1)
             pred_labels = torch.argmax(output, dim=1)
             l = labels.cpu().tolist()
             p = pred_labels.cpu().tolist()
