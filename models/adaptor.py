@@ -48,13 +48,13 @@ class Projector(nn.Module):
         self.final_lin2 = nn.Linear(features[-1], max_len)
         self.gelu = nn.GELU()
         self.norm = nn.BatchNorm1d(num_classes)
-        self.lin = nn.Linear(max_len*features[-1], num_classes)
+        self.lin = nn.Linear(num_classes*features[-1], num_classes)
         self.pool = nn.AvgPool1d(kernel_size=1)
 
     def forward(self, xc, xr, attn):
         # x_roberta + x
         x = torch.cat((xc,xr), dim=1)  
-        x = self.gelu(self.final_lin1(x.permute(0,2,1))).permute(0,2,1)  # (B, 19, 64)
+        x = self.gelu(self.final_lin1(x.permute(0,2,1))).permute(0,2,1)  # (B, 11 64)
         x = attn(x)
         print(x.shape)
         x = torch.flatten(x, -2,-1)
