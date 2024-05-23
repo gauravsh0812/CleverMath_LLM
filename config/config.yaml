@@ -1,5 +1,4 @@
 model_name: clip_roberta_adaptor_V2_gelu
-
 general:
   seed: 42
   wandb: False
@@ -10,7 +9,7 @@ general:
   rank: 0
   device: "cuda"
   preprocess: False
-  load_trained_model_for_testing: True 
+  load_trained_model_for_testing: False 
 
 dataset:
   path_to_data: "/groups/claytonm/gauravs_data/clevrmath_data/"
@@ -25,11 +24,11 @@ dataset:
 training:
   general:
     clip: 1 
-    batch_size: 16
+    batch_size: 20
     epochs: 50
     dropout: 0.1
     learning_rate: 0.001
-    weight_decay: 0.00003
+    weight_decay: 0.00001
     betas: [0.9,0.8]
     early_stopping: 8
     num_classes: 11
@@ -37,8 +36,8 @@ training:
   scheduler:
     isScheduler: True
     verbose: True
-    scheduler_step_size: 8
-    scheduler_gamma: 0.9
+    scheduler_step_size: 5
+    scheduler_gamma: 0.5
   
   adaptor:
     features: [512,256,128,64]
