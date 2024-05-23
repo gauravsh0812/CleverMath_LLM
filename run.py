@@ -97,7 +97,7 @@ def define_model(max_len):
 
     
     for name, param in model.named_parameters():
-        print(f"Parameter: {name}, Size: {param.size()}, Type: {type(param.data)}, Value: {param.data[:2]}")
+        print(name)
     
     exit()
     lora_config = LoraConfig(
