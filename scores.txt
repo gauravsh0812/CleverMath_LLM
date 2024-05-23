@@ -1,0 +1,6 @@
+Accuracy: 50.2
+
+add: 67.5
+sub: 44.47
+adv: 37.15
+sub multihop: 40
