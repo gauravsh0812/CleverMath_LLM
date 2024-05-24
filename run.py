@@ -104,7 +104,8 @@ def define_model(max_len):
     lora_config = LoraConfig(
         r=8,
         lora_alpha=16,
-        target_modules=["q_proj","k_proj","v_proj","o_proj"],
+        target_modules=["q_proj","k_proj","v_proj","o_proj",
+                        "query","key","value"],
         lora_dropout=0.1,
         bias="none",
     )
