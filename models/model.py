@@ -41,6 +41,7 @@ class ClevrMath_model(nn.Module):
     def forward(self, imgs, qtn_attns, qtn_ids):
 
         # image embedding
+        imgs = imgs.to(self.device)
         features = self.encoded_img(imgs)
         if torch.isnan(features).any():
             print("features contains NaN:", torch.isnan(features).any())
