@@ -33,7 +33,7 @@ def train(
         _imgs = list()
         for im in imgs:
             _i = f"{data_path}/image_tensors/{int(im.item())}.pt"
-            _imgs.append(torch.load(_i))
+            _imgs.append(torch.load(_i)[:3,:,:])
         
         _imgs = torch.stack(_imgs)
         
