@@ -1,3 +1,5 @@
+Clip Roberta Adaptor
+
 Accuracy: 50.2
 
 add: 67.5
@@ -13,3 +15,12 @@ sub: 44.15
 adv: 32.7
 sub-mul: 46.5
 
+====================
+Visual Embed GPT2
+
+Acc: 
+
+add: 
+sub: 
+adv: 
+sub-mul: 

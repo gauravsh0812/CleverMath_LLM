@@ -13,12 +13,7 @@ import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 from preprocessing.create_dataloaders import data_loaders
-from models.clip import ClipVisionEncoder
-from models.roberta import RobertaEncoder
 from models.model import ClevrMath_model
-from models.positional_encoding import PositionalEncoding
-from models.self_attention import Self_Attention
-from models.adaptor import ClipAdaptor, Projector, RobertaAdaptor
 from src.training import train
 from src.testing import evaluate
 from src.testing_accuracy import test_categorized_accuracy
@@ -49,50 +44,9 @@ def epoch_time(start_time, end_time):
     elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
     return elapsed_mins, elapsed_secs
 
-def define_model(max_len):
-    
-    ENC = ClipVisionEncoder(finetune=cfg.training.clip.finetune,
-                            config=cfg.training.clip.configuration)
-    DEC = RobertaEncoder()    
-
-    POS = PositionalEncoding(64,19)
-    ATTN = Self_Attention(64)
-
-    if cfg.training.clip.finetune:
-        in_dim = cfg.training.clip.configuration.hidden_size
-    else:
-        in_dim = 768
-    CLIPADA = ClipAdaptor(in_dim, 
-                  cfg.training.adaptor.features,
-                  max_len,
-                  )
-    
-    ROBADA = RobertaAdaptor(
-        cfg.training.roberta.in_dim,
-        cfg.training.adaptor.features,
-    )
-    
-    PROJ = Projector(
-        cfg.training.adaptor.features,
-        max_len, 
-        cfg.training.general.num_classes,
-    )
-
-    # freezing the pre-trained models
-    # only training the adaptor layer
-    for param in ENC.parameters():
-        param.requires_grad = cfg.training.clip.finetune
-
-    for param in DEC.parameters():
-        param.requires_grad = cfg.training.roberta.finetune 
-
-    model = ClevrMath_model(ENC, 
-                            DEC,
-                            POS,
-                            ATTN,
-                            CLIPADA,
-                            ROBADA,
-                            PROJ,)
+def define_model(device):
+    model = ClevrMath_model(device,
+                            cfg.training.general.num_classes)
 
     return model
 
@@ -130,7 +84,7 @@ def train_model(rank=None):
                 vocab,
                 max_len,
             ) = data_loaders(cfg.training.general.batch_size)
-            model = define_model(max_len).to(device)
+            model = define_model(device).to(device)
 
         elif cfg.general.ddp:
             # create default process group
@@ -145,7 +99,7 @@ def train_model(rank=None):
                 vocab,
                 max_len,
             ) = data_loaders(cfg.training.general.batch_size)
-            model = define_model(max_len)
+            model = define_model(device)
             model = DDP(
                 model.to(f"cuda:{rank}"),
                 device_ids=[rank],
@@ -165,7 +119,7 @@ def train_model(rank=None):
             vocab,
             max_len,
         ) = data_loaders()
-        model = define_model(max_len).to(device)
+        model = define_model(device).to(device)
 
     print("MODEL: ")
     print(f"The model has {count_parameters(model)} trainable parameters")
