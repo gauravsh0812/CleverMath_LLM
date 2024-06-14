@@ -45,8 +45,7 @@ class ClevrMath_model(nn.Module):
         features = self.encoded_img(imgs)
         if torch.isnan(features).any():
             print("features contains NaN:", torch.isnan(features).any())
-
-        exit()
+            
         features = torch.flatten(features,2,-1)          
         visual_embeds = self.visual_embedder(features.permute(0,2,1)).to(self.device)
         visual_token_type_ids = torch.ones(visual_embeds.shape[:-1], dtype=torch.long).to(self.device)
