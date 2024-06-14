@@ -14,11 +14,11 @@ for i in range(n):
     f = f.unsqueeze(0)
 
     features = model.features(f)
-    print(features.shape)
+    # print(features.shape)
     if torch.isnan(features).any():
         print("features contains NaN:", torch.isnan(features).any())
 
     features = encoded_img(f)
-    print(features.shape)
+    # print(features.shape)
     if torch.isnan(features).any():
         print("features contains NaN:", torch.isnan(features).any())
