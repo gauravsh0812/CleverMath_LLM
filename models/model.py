@@ -14,18 +14,30 @@ class ClevrMath_model(nn.Module):
         resnet18 = models.resnet18(pretrained=True)
         self.encoded_img = nn.Sequential(*(list(resnet18.children())[:-2]))
 
+        for param in self.encoded_img.parameters():
+            param.requires_grad = False
+
         # encoded image embedding
         VB_config = VisualBertConfig.from_pretrained("uclanlp/visualbert-vqa-coco-pre")
         VB_config.visual_embedding_dim = 512
         visualbert = VisualBertModel(config=VB_config)
         self.visual_embedder = visualbert.embeddings.visual_projection
 
+        for param in self.visual_embedder.parameters():
+            param.requires_grad = False
+
         # qtn embedding
         gpt = GPT2Model.from_pretrained("openai-community/gpt2")
         self.word_embeddings = gpt.wte
+        
+        for param in self.word_embeddings.parameters():
+            param.requires_grad = False
 
         # final_embedding
         self.decoder = GPT2Model.from_pretrained("openai-community/gpt2")
+
+        for param in self.decoder.parameters():
+            param.requires_grad = False
 
         # pooling
         self.pool = nn.AdaptiveAvgPool1d(1)
@@ -45,7 +57,7 @@ class ClevrMath_model(nn.Module):
         features = self.encoded_img(imgs)
         if torch.isnan(features).any():
             print("features contains NaN:", torch.isnan(features).any())
-            
+
         features = torch.flatten(features,2,-1)          
         visual_embeds = self.visual_embedder(features.permute(0,2,1)).to(self.device)
         visual_token_type_ids = torch.ones(visual_embeds.shape[:-1], dtype=torch.long).to(self.device)
