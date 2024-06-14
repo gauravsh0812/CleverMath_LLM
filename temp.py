@@ -16,7 +16,7 @@ print(features.shape)
 if torch.isnan(features).any():
     print("features contains NaN:", torch.isnan(features).any())
 
-features = encoded_img.features(f)
+features = encoded_img(f)
 print(features.shape)
 if torch.isnan(features).any():
     print("features contains NaN:", torch.isnan(features).any())
