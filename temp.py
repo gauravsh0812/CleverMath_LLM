@@ -10,3 +10,5 @@ f = f.unsqueeze(0)
 
 features = model.features(f)
 print(features.shape)
+if torch.isnan(features).any():
+    print("features contains NaN:", torch.isnan(features).any())
