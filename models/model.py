@@ -82,13 +82,20 @@ class ClevrMath_model(nn.Module):
 
         if torch.isnan(embeds).any():
             print("Embeds contains NaN:", torch.isnan(embeds).any())
+        if torch.isnan(attns).any():
+            print("atns contains NaN:", torch.isnan(attns).any())
+        if torch.isnan(token_ids).any():
+                    print("token_ids contains NaN:", torch.isnan(token_ids).any())
+        if torch.isnan(pos_ids).any():
+                    print("pos_ids contains NaN:", torch.isnan(pos_ids).any())
+
 
         # decoding
         output = self.decoder(
             inputs_embeds=embeds,
             attention_mask=attns,
-            # token_type_ids=token_ids,
-            # position_ids=pos_ids,
+            token_type_ids=token_ids,
+            position_ids=pos_ids,
         )
         output = output.last_hidden_state
 
