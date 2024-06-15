@@ -87,8 +87,8 @@ class ClevrMath_model(nn.Module):
         output = self.decoder(
             inputs_embeds=embeds,
             attention_mask=attns,
-            token_type_ids=token_ids,
-            position_ids=pos_ids,
+            # token_type_ids=token_ids,
+            # position_ids=pos_ids,
         )
         output = output.last_hidden_state
 
