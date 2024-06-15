@@ -105,11 +105,12 @@ class ClevrMath_model(nn.Module):
         # )
         # output = output.last_hidden_state
         print("Decoder output:", output.shape)
-        exit()
+        
 
         if torch.isnan(output).any():
             print("NaNs detected in model output")
-            
+        
+        exit()    
         output = self.pool(output.permute(0,2,1)).permute(0,2,1)
         output = torch.flatten(output, -2, -1)
         output = self.layer(output) # (B, num_classes)
