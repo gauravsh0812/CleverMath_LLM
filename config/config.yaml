@@ -1,4 +1,4 @@
-model_name: clip_roberta_adaptor_V2_gelu
+model_name: visual_embedding
 general:
   seed: 42
   wandb: False
