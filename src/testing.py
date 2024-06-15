@@ -26,13 +26,14 @@ def evaluate(
         
             _imgs = list()
             for im in imgs:
-                _i = f"{data_path}/images/{int(im.item())}.png"
-                _imgs.append(_i)
+                _i = f"{data_path}/image_tensors/{int(im.item())}.pt"
+                _imgs.append(torch.load(_i)[:3,:,:])
+            
+            _imgs = torch.stack(_imgs)
 
             output = model(_imgs,
                            ids,
-                           attns,
-                           device)
+                           attns,)
             
             labels = torch.argmax(labels, dim=1)
             loss = criterion(
