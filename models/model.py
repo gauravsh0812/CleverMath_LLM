@@ -35,7 +35,11 @@ class ClevrMath_model(nn.Module):
 
         # final_embedding
         # self.decoder = GPT2Model.from_pretrained("openai-community/gpt2")
-        # self.decoder = nn.LSTM()
+        self.decoder = nn.LSTM(input_size=169,
+                               hidden_size=64,
+                               batch_first=True,
+                               num_layers=1,
+                               dropout=0.1,)
 
         # for param in self.decoder.parameters():
         #     param.requires_grad = False
@@ -81,11 +85,6 @@ class ClevrMath_model(nn.Module):
         token_ids = torch.cat((qtn_token_ids, visual_token_type_ids), dim=1).to(self.device)
         pos_ids = torch.cat((qtn_position_id, visual_position_id), dim=1).to(self.device)
 
-        print(embeds.shape,
-              attns.shape,
-              token_ids.shape,
-              pos_ids.shape)
-
         if torch.isnan(embeds).any():
             print("Embeds contains NaN:", torch.isnan(embeds).any())
         if torch.isnan(attns).any():
@@ -95,9 +94,8 @@ class ClevrMath_model(nn.Module):
         if torch.isnan(pos_ids).any():
             print("pos_ids contains NaN:", torch.isnan(pos_ids).any())
 
-        exit()
         # decoding
-        output = nn.LSTM()
+        output = self.decoder(embeds)
         # output = self.decoder(
         #     inputs_embeds=embeds,
         #     attention_mask=attns,
