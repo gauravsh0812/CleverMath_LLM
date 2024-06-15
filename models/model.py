@@ -95,7 +95,8 @@ class ClevrMath_model(nn.Module):
             print("pos_ids contains NaN:", torch.isnan(pos_ids).any())
 
         # decoding
-        output = self.decoder(torch.Tensor(embeds).permute(0,2,1)).permute(0,2,1)
+        output = self.decoder(torch.Tensor(embeds).permute(0,2,1))
+        output = torch.Tensor(output).permute(0,2,1)
         # output = self.decoder(
         #     inputs_embeds=embeds,
         #     attention_mask=attns,
