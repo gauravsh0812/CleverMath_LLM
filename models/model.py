@@ -35,10 +35,10 @@ class ClevrMath_model(nn.Module):
 
         # final_embedding
         # self.decoder = GPT2Model.from_pretrained("openai-community/gpt2")
-        self.decoder = nn.LSTM()
+        # self.decoder = nn.LSTM()
 
-        for param in self.decoder.parameters():
-            param.requires_grad = False
+        # for param in self.decoder.parameters():
+        #     param.requires_grad = False
 
         # pooling
         self.pool = nn.AdaptiveAvgPool1d(1)
