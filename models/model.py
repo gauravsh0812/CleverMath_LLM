@@ -171,11 +171,11 @@ class Self_Attention(nn.Module):
         
         return attention_output       
 
-class Endoscopic_model(nn.Module):
+class ClevrMath_model(nn.Module):
 
     def __init__(self, max_len, ans_vocab):
 
-        super(Endoscopic_model, self).__init__()
+        super(ClevrMath_model, self).__init__()
         self.clipenc = ClipVisionEncoder()
         self.robenc = RobertaEncoder()
         self.lisaadaptor = LisaAdaptor(
