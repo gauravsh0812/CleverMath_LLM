@@ -142,8 +142,8 @@ class GPT2(nn.Module):
         x = self.lin3(x)    # (B, max, 64)
         x = self.attn(x)  # (B, max, 64)
 
-        x = torch.cat((x,xr), dim=1)  # (B, max*2, 768)
-        x = self.gelu(self.norm(self.lin2(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 768)
+        x = torch.cat((x,xr), dim=1)  # (B, max*2, 64)
+        x = self.gelu(self.norm(self.lin2(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 64)
 
         outputs = self.model(input_embeds=x)
         last_hidden_states = outputs.last_hidden_state # (B, L, 768)
