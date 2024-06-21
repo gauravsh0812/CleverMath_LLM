@@ -122,12 +122,12 @@ class Projector(nn.Module):
 
     def __init__(self, features, max_len, num_classes):
         super(Projector, self).__init__()
-        if self.fusion == "concat":
-            self.final_lin1 = nn.Linear(max_len*2, max_len)
-            self.attn = Self_Attention(features[-1])
-            self.final_lin3 = nn.Linear(features[-1], num_classes)
-            self.norm = nn.BatchNorm1d(features[-1])
-            self.pool = nn.AdaptiveAvgPool1d(1)
+        
+        self.final_lin1 = nn.Linear(max_len*2, max_len)
+        self.attn = Self_Attention(features[-1])
+        self.final_lin3 = nn.Linear(features[-1], num_classes)
+        self.norm = nn.BatchNorm1d(features[-1])
+        self.pool = nn.AdaptiveAvgPool1d(1)
 
         self.gelu = nn.GELU()
     
