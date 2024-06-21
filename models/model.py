@@ -99,7 +99,6 @@ class LisaAdaptor(nn.Module):
     def __init__(self, lisa_in_dim, features, max_len):
         super(LisaAdaptor, self).__init__()
         
-        print(lisa_in_dim, features, max_len)
         self.lisalin1 = nn.Linear(lisa_in_dim, features[0])
         self.lisalin2 = nn.Linear(features[0], features[1])
         self.lisalin3 = nn.Linear(features[1], features[2])
@@ -212,6 +211,8 @@ class ClevrMath_model(nn.Module):
             qtn_attns,
             device,
         ):
+        
+        print(imgs)
         
         lisa_tnsr = lisa(imgs)   # (B, 320, 480)
         encoded_imgs = self.clipenc(imgs, device)  # (B, L=w*h, dim)
