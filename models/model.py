@@ -148,6 +148,7 @@ class GPT2(nn.Module):
         x = torch.cat((x,xr), dim=1)  # (B, max*2, 64)
         x = self.gelu(self.norm2(self.lin2(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 64)
 
+        print(self.model.conifg)
         outputs = self.model(inputs_embeds=x)
         last_hidden_states = outputs.last_hidden_state # (B, L, 768)
 
