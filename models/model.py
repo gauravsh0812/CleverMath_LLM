@@ -97,7 +97,7 @@ class RobertaAdaptor(nn.Module):
 
 class LisaAdaptor(nn.Module):
     def __init__(self, lisa_in_dim, features, max_len):
-        super(ClipAdaptor, self).__init__()
+        super(LisaAdaptor, self).__init__()
 
         self.lisalin1 = nn.Linear(lisa_in_dim, features[0])
         self.lisalin2 = nn.Linear(features[0], features[1])
