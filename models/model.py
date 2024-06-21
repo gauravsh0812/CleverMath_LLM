@@ -134,6 +134,8 @@ class GPT2(nn.Module):
         x = torch.cat((xl,xc), dim=1)  # (B, 100, 768)
         x = self.gelu(self.norm(self.lin1(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 768)
         x = self.attn(x)  # (B, max, 768)
+        print(x.shape)
+
         x = torch.cat((x,xr), dim=1)  # (B, max*2, 768)
         x = self.gelu(self.norm(self.lin2(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 768)
 
