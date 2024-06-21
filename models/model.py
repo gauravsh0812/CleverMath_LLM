@@ -124,6 +124,8 @@ class GPT2(nn.Module):
     def __init__(self,max_len, features):
         super(GPT2, self).__init__()
         self.model = GPT2Model.from_pretrained("openai-community/gpt2")
+        self.model.config.n_embd = 64
+        
         self.lin1 = nn.Linear(50*2, max_len)
         self.lin2 = nn.Linear(max_len*2, max_len)
         self.lin3 = nn.Sequential(
