@@ -20,10 +20,10 @@ class ClipVisionEncoder(nn.Module):
         self.processor = CLIPImageProcessor.from_pretrained("openai/clip-vit-base-patch32")
         self.model = CLIPVisionModel.from_pretrained("openai/clip-vit-base-patch32")
 
-    def forward(self, image_paths, device):
-
+    def forward(self, imgs, device):
         _hid = list()
-        for image_path in image_paths:
+        for i in imgs:
+            image_path = f"{cfg.dataset.path_to_data}/images/{int(i.item())}.png"
             image = Image.open(image_path)
             inputs = self.processor(images=image, return_tensors="pt").to(device)
             outputs = self.model(**inputs)
@@ -37,8 +37,7 @@ class ClipVisionEncoder(nn.Module):
 def lisa(imgs):
     tnsrs = []
     for i in imgs:
-        i = os.path.basename(i).split(".")[0]
-        tnsr = torch.load(f"{cfg.dataset.path_to_data}/lisa/masked_image_tensors/{i}.pt")
+        tnsr = torch.load(f"{cfg.dataset.path_to_data}/lisa/masked_image_tensors/{int(i.item())}.pt")
         tnsrs.append(tnsr)
     
     return torch.stack(tnsrs)
@@ -211,8 +210,6 @@ class ClevrMath_model(nn.Module):
             qtn_attns,
             device,
         ):
-        
-        print(imgs)
         
         lisa_tnsr = lisa(imgs)   # (B, 320, 480)
         encoded_imgs = self.clipenc(imgs, device)  # (B, L=w*h, dim)
