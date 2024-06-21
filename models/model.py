@@ -175,7 +175,7 @@ class Self_Attention(nn.Module):
 
 class ClevrMath_model(nn.Module):
 
-    def __init__(self, max_len, ans_vocab):
+    def __init__(self, device, max_len, num_classes):
 
         super(ClevrMath_model, self).__init__()
         self.clipenc = ClipVisionEncoder()
@@ -197,7 +197,7 @@ class ClevrMath_model(nn.Module):
         self.projector = Projector(
                                 cfg.training.adaptor.features,
                                 max_len, 
-                                len(ans_vocab),
+                                num_classes,
                             )
         for param in self.clipenc.parameters():
             param.requires_grad = False

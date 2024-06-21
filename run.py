@@ -44,7 +44,7 @@ def epoch_time(start_time, end_time):
     elapsed_secs = int(elapsed_time - (elapsed_mins * 60))
     return elapsed_mins, elapsed_secs
 
-def define_model(device):
+def define_model(device, max_len, ans_vocab):
     model = ClevrMath_model(device,
                             cfg.training.general.num_classes)
 
@@ -84,7 +84,7 @@ def train_model(rank=None):
                 vocab,
                 max_len,
             ) = data_loaders(cfg.training.general.batch_size)
-            model = define_model(device).to(device)
+            model = define_model(device, max_len, cfg.training.general.num_classes).to(device)
 
         elif cfg.general.ddp:
             # create default process group
@@ -99,7 +99,7 @@ def train_model(rank=None):
                 vocab,
                 max_len,
             ) = data_loaders(cfg.training.general.batch_size)
-            model = define_model(device)
+            model = define_model(device, max_len, cfg.training.general.num_classes)
             model = DDP(
                 model.to(f"cuda:{rank}"),
                 device_ids=[rank],
@@ -119,7 +119,7 @@ def train_model(rank=None):
             vocab,
             max_len,
         ) = data_loaders()
-        model = define_model(device).to(device)
+        model = define_model(device, max_len, cfg.training.general.num_classes).to(device)
 
     print("MODEL: ")
     print(f"The model has {count_parameters(model)} trainable parameters")
