@@ -212,7 +212,7 @@ class ClevrMath_model(nn.Module):
         super(ClevrMath_model, self).__init__()
         self.clipenc = ClipVisionEncoder()
         self.robenc = RobertaEncoder()
-        self.gpt2 = GPT2(max_len)
+        self.gpt2 = GPT2(max_len, cfg.training.adaptor.features,)
         self.lisaadaptor = LisaAdaptor(
                                 768,
                                 cfg.training.adaptor.features,
