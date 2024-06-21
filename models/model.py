@@ -124,7 +124,6 @@ class GPT2(nn.Module):
     def __init__(self,max_len, features):
         super(GPT2, self).__init__()
         self.model = GPT2Model.from_pretrained("openai-community/gpt2")
-        self.model.config.n_embd = 64
         
         self.lin1 = nn.Linear(50*2, max_len)
         self.lin2 = nn.Linear(max_len*2, max_len)
@@ -136,22 +135,22 @@ class GPT2(nn.Module):
         )
         self.gelu = nn.GELU()
         self.norm1 = nn.BatchNorm1d(768)
-        self.norm2 = nn.BatchNorm1d(64)
-        self.attn = Self_Attention(64)
+        self.norm2 = nn.BatchNorm1d(768)
+        self.attn = Self_Attention(768)
 
     def forward(self,xl,xc,xr):
         x = torch.cat((xl,xc), dim=1)  # (B, 100, 768)
         x = self.gelu(self.norm1(self.lin1(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 768)
-        x = self.lin3(x)    # (B, max, 64)
-        x = self.attn(x)  # (B, max, 64)
+        # x = self.lin3(x)    # (B, max, 64)
+        x = self.attn(x)  # (B, max, 768)
 
-        x = torch.cat((x,xr), dim=1)  # (B, max*2, 64)
+        x = torch.cat((x,xr), dim=1)  # (B, max*2, 768)
         x = self.gelu(self.norm2(self.lin2(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 64)
 
         print(x.shape)
         outputs = self.model(inputs_embeds=x)
         last_hidden_states = outputs.last_hidden_state # (B, L, 768)
-
+        
         return last_hidden_states
 
 class Projector(nn.Module):
@@ -259,8 +258,8 @@ class ClevrMath_model(nn.Module):
         # clipoutput = self.clipadaptor(encoded_imgs)  # (B, max_len, 64)
         # visionoutput = self.projector(lisaoutput, clipoutput)
 
-        roboutput = self.robertaadaptor(last_hidden_roberta) # (B, max, 64)
-        gptoutput = self.gpt2(lisa_tnsr, encoded_imgs, roboutput)
+        # roboutput = self.robertaadaptor(last_hidden_roberta) # (B, max, 64)
+        gptoutput = self.gpt2(lisa_tnsr, encoded_imgs, last_hidden_roberta)
 
         print("gptoutput shape: ", gptoutput.shape)
         exit()
