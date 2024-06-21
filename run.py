@@ -207,11 +207,11 @@ def train_model(rank=None):
                     if (not cfg.general.ddp) or (cfg.general.ddp and rank == 0):
                         torch.save(
                             model.state_dict(),
-                            f"trained_models/clip_roberta_adaptor_best_model.pt",
+                            f"trained_models/lisa_clip_roberta_adaptor_best_model.pt",
                         )
 
                         if (cfg.general.wandb):
-                            wandb.save(f"trained_models/clip_roberta_adaptor_best_model.pt")
+                            wandb.save(f"trained_models/lisa_clip_roberta_adaptor_best_model.pt")
                 else:
                     count_es += 1
 
@@ -261,12 +261,12 @@ def train_model(rank=None):
 
     print(
         "loading best saved model: ",
-        f"trained_models/clip_roberta_adaptor_best_model.pt",
+        f"trained_models/lis_clip_roberta_adaptor_best_model.pt",
     )
     # loading pre_tained_model
     model.load_state_dict(
         torch.load(
-            f"trained_models/clip_roberta_adaptor_best_model.pt"
+            f"trained_models/lisa_clip_roberta_adaptor_best_model.pt"
         )
     )
 
