@@ -173,7 +173,7 @@ class Self_Attention(nn.Module):
 
 class ClevrMath_model(nn.Module):
 
-    def __init__(self, device, max_len, num_classes):
+    def __init__(self, max_len, num_classes):
 
         super(ClevrMath_model, self).__init__()
         self.clipenc = ClipVisionEncoder()
@@ -211,7 +211,7 @@ class ClevrMath_model(nn.Module):
             device,
         ):
         
-        lisa_tnsr = lisa(imgs)   # (B, 320, 480)
+        lisa_tnsr = lisa(imgs).to(device)   # (B, 320, 480)
         encoded_imgs = self.clipenc(imgs, device)  # (B, L=w*h, dim)
         last_hidden_roberta = self.robenc(qtn_ids, qtn_attns) # (B, max_len, 768)   
 

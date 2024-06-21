@@ -45,7 +45,7 @@ def epoch_time(start_time, end_time):
     return elapsed_mins, elapsed_secs
 
 def define_model(device, max_len):
-    model = ClevrMath_model(device,
+    model = ClevrMath_model(
                             max_len,
                             cfg.training.general.num_classes)
 
