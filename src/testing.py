@@ -24,14 +24,14 @@ def evaluate(
             attns = attns.to(device)
             labels = labels.to(device, dtype=torch.long)
         
-            _imgs = list()
-            for im in imgs:
-                _i = f"{data_path}/image_tensors/{int(im.item())}.pt"
-                _imgs.append(torch.load(_i)[:3,:,:])
+            # _imgs = list()
+            # for im in imgs:
+            #     _i = f"{data_path}/image_tensors/{int(im.item())}.pt"
+            #     _imgs.append(torch.load(_i)[:3,:,:])
             
-            _imgs = torch.stack(_imgs)
+            # _imgs = torch.stack(_imgs)
 
-            output = model(_imgs,
+            output = model(imgs,
                            ids,
                            attns,device)
             
