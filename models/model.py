@@ -128,6 +128,7 @@ class GPT2(nn.Module):
         self.lin2 = nn.Linear(max_len*2, max_len)
         self.gelu = nn.GELU()
         self.norm = nn.BatchNorm1d(768)
+        self.attn = Self_Attention(768)
 
     def forward(self,xl,xc,xr):
         x = torch.cat((xl,xc), dim=1)  # (B, 100, 768)
