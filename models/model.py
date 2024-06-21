@@ -8,6 +8,7 @@ from transformers import (
     CLIPImageProcessor, 
     CLIPVisionModel, 
     RobertaModel,
+    GPT2Model,
 )
 
 with open("config/config.yaml") as f:
@@ -119,6 +120,25 @@ class LisaAdaptor(nn.Module):
         
         return xc # (B,max_len, 64)
 
+class GPT2(nn.Module):
+    def __init__(self,max_len):
+        super(GPT2, self).__init__()
+        self.model = GPT2Model.from_pretrained("openai-community/gpt2")
+        self.lin1 = nn.Linear(50*2, max_len)
+        self.lin2 = nn.Linear(max_len*2, max_len)
+
+    def forward(self,xl,xc,xr):
+        x = torch.cat((xl,xc), dim=1)  # (B, 100, 768)
+        x = self.gelu(self.norm(self.lin1(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 768)
+        x = self.attn(x)  # (B, max, 768)
+        x = torch.cat((x,xr), dim=1)  # (B, max*2, 768)
+        x = self.gelu(self.norm(self.lin2(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 768)
+
+        outputs = self.model(input_embeds=x)
+        last_hidden_states = outputs.last_hidden_state # (B, L, 768)
+
+        return last_hidden_states
+
 class Projector(nn.Module):
 
     def __init__(self, features, max_len, num_classes):
@@ -181,6 +201,7 @@ class ClevrMath_model(nn.Module):
         super(ClevrMath_model, self).__init__()
         self.clipenc = ClipVisionEncoder()
         self.robenc = RobertaEncoder()
+        self.gpt2 = GPT2(max_len)
         self.lisaadaptor = LisaAdaptor(
                                 768,
                                 cfg.training.adaptor.features,
@@ -219,11 +240,15 @@ class ClevrMath_model(nn.Module):
         encoded_imgs = self.clipenc(imgs, device)  # (B, L=w*h, dim)
         last_hidden_roberta = self.robenc(qtn_ids, qtn_attns) # (B, max_len, 768)   
 
-        lisaoutput = self.lisaadaptor(lisa_tnsr)    # (B, max_len, 64) 
-        clipoutput = self.clipadaptor(encoded_imgs)  # (B, max_len, 64)
-        visionoutput = self.projector(lisaoutput, clipoutput)
+        # lisaoutput = self.lisaadaptor(lisa_tnsr)    # (B, max_len, 64) 
+        # clipoutput = self.clipadaptor(encoded_imgs)  # (B, max_len, 64)
+        # visionoutput = self.projector(lisaoutput, clipoutput)
 
         roboutput = self.robertaadaptor(last_hidden_roberta) # (B, max, 64)
-        projoutput = self.projector(visionoutput, roboutput, pool=True) # (B,num_classes)
-        
-        return projoutput
+        gptoutput = self.gpt2(lisa_tnsr, encoded_imgs, roboutput)
+
+        print("gptoutput shape: ", gptoutput.shape)
+        exit()
+        # projoutput = self.projector(visionoutput, roboutput, pool=True) # (B,num_classes)
+
+        return gptoutput
