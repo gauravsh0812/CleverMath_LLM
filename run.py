@@ -252,7 +252,7 @@ def train_model(rank=None):
 
         print(
             "best model saved as:  ",
-            f"trained_models/{cfg.model_name}.pt",
+            f"trained_models/lisa_clip_roberta_adaptor_best_model.pt",
         )
 
     if cfg.general.ddp:
@@ -262,7 +262,7 @@ def train_model(rank=None):
 
     print(
         "loading best saved model: ",
-        f"trained_models/lis_clip_roberta_adaptor_best_model.pt",
+        f"trained_models/lisa_clip_roberta_adaptor_best_model.pt",
     )
     # loading pre_tained_model
     model.load_state_dict(
