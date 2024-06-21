@@ -126,6 +126,8 @@ class GPT2(nn.Module):
         self.model = GPT2Model.from_pretrained("openai-community/gpt2")
         self.lin1 = nn.Linear(50*2, max_len)
         self.lin2 = nn.Linear(max_len*2, max_len)
+        self.gelu = nn.GELU()
+        self.norm = nn.BatchNorm1d(768)
 
     def forward(self,xl,xc,xr):
         x = torch.cat((xl,xc), dim=1)  # (B, 100, 768)
