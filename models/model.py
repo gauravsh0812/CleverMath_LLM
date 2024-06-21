@@ -37,7 +37,7 @@ class ClipVisionEncoder(nn.Module):
 def lisa(imgs):
     tnsrs = []
     for i in imgs:
-        tnsr = torch.load(f"{cfg.dataset.path_to_data}/lisa/masked_image_tensors/{int(i.item())}.pt")
+        tnsr = torch.load(f"{cfg.dataset.path_to_data}/lisa/masked_images_tensors/{int(i.item())}.pt")
         tnsrs.append(tnsr)
     
     return torch.stack(tnsrs)
