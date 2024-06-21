@@ -112,6 +112,7 @@ class LisaAdaptor(nn.Module):
         xc = self.relu(self.lisalin2(xc))
         xc = self.relu(self.lisalin3(xc))
         xc = self.relu(self.lisalin4(xc))
+        print("lisa shape: ", xc.shape)
         xc = self.relu(self.proj_lisa(xc.permute(0,2,1))).permute(0,2,1)
         
         return xc # (B,max_len, 64)
