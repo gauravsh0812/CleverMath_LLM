@@ -121,20 +121,26 @@ class LisaAdaptor(nn.Module):
         return xc # (B,max_len, 64)
 
 class GPT2(nn.Module):
-    def __init__(self,max_len):
+    def __init__(self,max_len, features):
         super(GPT2, self).__init__()
         self.model = GPT2Model.from_pretrained("openai-community/gpt2")
         self.lin1 = nn.Linear(50*2, max_len)
         self.lin2 = nn.Linear(max_len*2, max_len)
+        self.lin3 = nn.Sequential(
+              nn.Linear(768, features[0]), nn.BatchNorm1d(max_len), nn.GELU(),
+              nn.Linear(features[0], features[1]), nn.BatchNorm1d(max_len), nn.GELU(),
+              nn.Linear(features[1], features[2]), nn.BatchNorm1d(max_len), nn.GELU(),
+              nn.Linear(features[2], features[3]), nn.BatchNorm1d(max_len), nn.GELU(),
+        )
         self.gelu = nn.GELU()
         self.norm = nn.BatchNorm1d(768)
-        self.attn = Self_Attention(768)
+        self.attn = Self_Attention(64)
 
     def forward(self,xl,xc,xr):
         x = torch.cat((xl,xc), dim=1)  # (B, 100, 768)
         x = self.gelu(self.norm(self.lin1(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 768)
-        x = self.attn(x)  # (B, max, 768)
-        print(x.shape)
+        x = self.lin3(x)    # (B, max, 64)
+        x = self.attn(x)  # (B, max, 64)
 
         x = torch.cat((x,xr), dim=1)  # (B, max*2, 768)
         x = self.gelu(self.norm(self.lin2(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 768)
