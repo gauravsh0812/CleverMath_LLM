@@ -103,7 +103,7 @@ class LisaAdaptor(nn.Module):
         self.lisalin2 = nn.Linear(features[0], features[1])
         self.lisalin3 = nn.Linear(features[1], features[2])
         self.lisalin4 = nn.Linear(features[2], features[3])
-        self.proj_lisa = nn.Linear(50,max_len)
+        # self.proj_lisa = nn.Linear(50,max_len)
         self.relu = nn.ReLU()
     
     def forward(self, xc):
@@ -113,7 +113,7 @@ class LisaAdaptor(nn.Module):
         xc = self.relu(self.lisalin3(xc))
         xc = self.relu(self.lisalin4(xc))
         print("lisa shape: ", xc.shape)
-        xc = self.relu(self.proj_lisa(xc.permute(0,2,1))).permute(0,2,1)
+        # xc = self.relu(self.proj_lisa(xc.permute(0,2,1))).permute(0,2,1)
         
         return xc # (B,max_len, 64)
 
