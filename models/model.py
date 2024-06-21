@@ -146,12 +146,10 @@ class GPT2(nn.Module):
 
         x = torch.cat((x,xr), dim=1)  # (B, max*2, 768)
         x = self.gelu(self.norm2(self.lin2(x.permute(0,2,1)))).permute(0,2,1)  # (B, max, 64)
-
-        print(x.shape)
         outputs = self.model(inputs_embeds=x)
         last_hidden_states = outputs.last_hidden_state # (B, L, 768)
-        
-        return last_hidden_states
+
+        return self.lin3(last_hidden_states)
 
 class Projector(nn.Module):
 
@@ -172,8 +170,9 @@ class Projector(nn.Module):
         x = self.attn(x)  # (B, max, 64)
         return x
 
-    def forward(self, xc, xr, pool=False):
-        x = self.combine(xc,xr)
+    # def forward(self, xc, xr, pool=False):
+    def forward(self,x,pool=False):
+        # x = self.combine(xc,xr)
         
         if pool:
             x = self.pool(x.permute(0,2,1)).permute(0,2,1)  # (B, max_len=1, 64)
@@ -259,10 +258,9 @@ class ClevrMath_model(nn.Module):
         # visionoutput = self.projector(lisaoutput, clipoutput)
 
         # roboutput = self.robertaadaptor(last_hidden_roberta) # (B, max, 64)
-        gptoutput = self.gpt2(lisa_tnsr, encoded_imgs, last_hidden_roberta)
-
-        print("gptoutput shape: ", gptoutput.shape)
-        exit()
+        gptoutput = self.gpt2(lisa_tnsr, encoded_imgs, last_hidden_roberta)  # (B, max, 64)
         # projoutput = self.projector(visionoutput, roboutput, pool=True) # (B,num_classes)
-
-        return gptoutput
+        projoutput = self.projector(gptoutput, pool=True)
+        print(projoutput.shape)
+        exit()
+        return projoutput
