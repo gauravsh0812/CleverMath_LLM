@@ -44,6 +44,7 @@ def train(
             _imgs,
             ids,
             attns,
+            device
         )
 
         # print("output shape: ", output.shape)

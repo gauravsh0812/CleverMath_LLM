@@ -33,7 +33,7 @@ def evaluate(
 
             output = model(_imgs,
                            ids,
-                           attns,)
+                           attns,device)
             
             labels = torch.argmax(labels, dim=1)
             loss = criterion(
