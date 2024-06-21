@@ -20,10 +20,14 @@ class ClipVisionEncoder(nn.Module):
         self.processor = CLIPImageProcessor.from_pretrained("openai/clip-vit-base-patch32")
         self.model = CLIPVisionModel.from_pretrained("openai/clip-vit-base-patch32")
 
-    def forward(self, imgs, device):
+    def forward(self, imgs, device, lisa=False):
         _hid = list()
         for i in imgs:
-            image_path = f"{cfg.dataset.path_to_data}/images/{int(i.item())}.png"
+            if lisa:
+                image_path = f"{cfg.dataset.path_to_data}/lisa/masked_images/{int(i.item())}_masked_img_0.jpg"
+            else:
+                image_path = f"{cfg.dataset.path_to_data}/images/{int(i.item())}.png"
+            
             image = Image.open(image_path)
             inputs = self.processor(images=image, return_tensors="pt").to(device)
             outputs = self.model(**inputs)
@@ -34,13 +38,13 @@ class ClipVisionEncoder(nn.Module):
         # hidden: (B, L, 768)
         return torch.stack(_hid).to(device)#, torch.stack(_pool).to(device)
 
-def lisa(imgs):
-    tnsrs = []
-    for i in imgs:
-        tnsr = torch.load(f"{cfg.dataset.path_to_data}/lisa/masked_images_tensors/{int(i.item())}.pt")
-        tnsrs.append(tnsr)
+# def lisa(imgs):
+#     tnsrs = []
+#     for i in imgs:
+#         tnsr = torch.load(f"{cfg.dataset.path_to_data}/lisa/masked_images_tensors/{int(i.item())}.pt")
+#         tnsrs.append(tnsr)
     
-    return torch.stack(tnsrs)
+#     return torch.stack(tnsrs)
 
 class RobertaEncoder(nn.Module):
 
@@ -111,7 +115,6 @@ class LisaAdaptor(nn.Module):
         xc = self.relu(self.lisalin2(xc))
         xc = self.relu(self.lisalin3(xc))
         xc = self.relu(self.lisalin4(xc))
-        print("lisa shape: ", xc.shape)
         xc = self.relu(self.proj_lisa(xc.permute(0,2,1))).permute(0,2,1)
         
         return xc # (B,max_len, 64)
@@ -179,7 +182,7 @@ class ClevrMath_model(nn.Module):
         self.clipenc = ClipVisionEncoder()
         self.robenc = RobertaEncoder()
         self.lisaadaptor = LisaAdaptor(
-                                480,
+                                768,
                                 cfg.training.adaptor.features,
                                 max_len,
                             )
@@ -211,7 +214,8 @@ class ClevrMath_model(nn.Module):
             device,
         ):
         
-        lisa_tnsr = lisa(imgs).to(device)   # (B, 320, 480)
+        # lisa_tnsr = lisa(imgs).to(device)   # (B, 320, 480)
+        lisa_tnsr = self.clipenc(imgs, device, lisa=True)  # (B, L, dim)
         encoded_imgs = self.clipenc(imgs, device)  # (B, L=w*h, dim)
         last_hidden_roberta = self.robenc(qtn_ids, qtn_attns) # (B, max_len, 768)   
 
