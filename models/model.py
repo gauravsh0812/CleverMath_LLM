@@ -261,6 +261,4 @@ class ClevrMath_model(nn.Module):
         gptoutput = self.gpt2(lisa_tnsr, encoded_imgs, last_hidden_roberta)  # (B, max, 64)
         # projoutput = self.projector(visionoutput, roboutput, pool=True) # (B,num_classes)
         projoutput = self.projector(gptoutput, pool=True)
-        print(projoutput.shape)
-        exit()
         return projoutput
