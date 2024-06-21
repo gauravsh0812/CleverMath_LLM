@@ -29,14 +29,14 @@ training:
     dropout: 0.1
     learning_rate: 0.001
     weight_decay: 0.00001
-    betas: [0.9,0.7]
-    early_stopping: 12
+    betas: [0.9,0.8]
+    early_stopping: 8
     num_classes: 11
   
   scheduler:
     isScheduler: True
     verbose: True
-    scheduler_step_size: 10
+    scheduler_step_size: 5
     scheduler_gamma: 0.5
   
   adaptor:
