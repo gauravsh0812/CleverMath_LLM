@@ -16,7 +16,7 @@ adv: 32.7
 sub-mul: 46.5
 
 ====================
-Visual Embed GPT2
+Vit-Vit generative model
 
 Acc: 
 
